@@ -1,0 +1,1176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://anhoder.github.io</id>
+    <title>anhoder的进阶日志</title>
+    <updated>2021-04-05T16:12:58.579Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://anhoder.github.io"/>
+    <link rel="self" href="https://anhoder.github.io/atom.xml"/>
+    <subtitle>一川烟草，满城风絮。</subtitle>
+    <logo>https://anhoder.github.io/images/avatar.png</logo>
+    <icon>https://anhoder.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2021, anhoder的进阶日志</rights>
+    <entry>
+        <title type="html"><![CDATA[一个utools插件——hasids加解密]]></title>
+        <id>https://anhoder.github.io/post/YMhNrwxuT/</id>
+        <link href="https://anhoder.github.io/post/YMhNrwxuT/">
+        </link>
+        <updated>2021-03-22T12:07:53.000Z</updated>
+        <summary type="html"><![CDATA[<p>工作中用到了hashids加密算法，开发测试时经常需要对某个ID或hashid进行加密、解密，为了提高效率，周末花了点时间基于<code>otp</code>封装了一个utools插件——<code>hashids</code>。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>工作中用到了hashids加密算法，开发测试时经常需要对某个ID或hashid进行加密、解密，为了提高效率，周末花了点时间基于<code>otp</code>封装了一个utools插件——<code>hashids</code>。</p>
+<!-- more -->
+<p>utools是什么就不多说了，这里主要说一下<code>hashids</code>插件的使用。</p>
+<blockquote>
+<p>GitHub地址: <a href="https://github.com/anhoder/utools-hashids">https://github.com/anhoder/utools-hashids</a></p>
+</blockquote>
+<h2 id="添加hashids配置">添加hashids配置</h2>
+<p>hashids加解密需要配置salt及最小长度，可以使用以下关键字进去添加配置的步骤:</p>
+<ul>
+<li>hadd</li>
+<li>hash-add</li>
+<li>hash添加配置</li>
+</ul>
+<figure data-type="image" tabindex="1"><img src="https://anhoder.github.io/post-images/1617624599510.png" alt="添加配置" loading="lazy"></figure>
+<p>进入之后，依次输入<code>名称</code>-<code>salt</code>-<code>最小长度</code>即可保存配置。</p>
+<blockquote>
+<p>如果有多个环境配置，多次添加即可，<strong>名称不可重复</strong>。</p>
+</blockquote>
+<h2 id="hashids加密">hashids加密</h2>
+<p>hashids加密有两种方式进入，一种是使用关键字：</p>
+<ul>
+<li>haen</li>
+<li>hash-encode</li>
+<li>hash编码</li>
+</ul>
+<p>进入之后，输入你想要加密的ID，列表中会显示你已有配置的加密结果，回车即可复制，如：</p>
+<figure data-type="image" tabindex="2"><img src="https://anhoder.github.io/post-images/1617626324547.png" alt="hashids加密" loading="lazy"></figure>
+<p>另外一种方法是直接在<code>utools</code>的主输入框内输入需要加密的ID，选择<code>hash编码</code>进入，回车即可复制。</p>
+<blockquote>
+<ol>
+<li>如果你开启了utools的右键超级面板，就更方便了，只需要长按右键你的ID，选择<code>hash编码</code>即可。</li>
+<li>如果你需要删除配置，在进入之后使用<code>control</code>+<code>enter</code>或<code>command</code>+<code>enter</code>即可删除选中的配置项。</li>
+</ol>
+</blockquote>
+<h2 id="hashids解密">hashids解密</h2>
+<p>解密和加密差不多，就不赘述了，关键字：</p>
+<ul>
+<li>hade</li>
+<li>hash-decode</li>
+<li>hash解码</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[PHP中一些好用的技巧]]></title>
+        <id>https://anhoder.github.io/post/O933qcq8E/</id>
+        <link href="https://anhoder.github.io/post/O933qcq8E/">
+        </link>
+        <updated>2021-02-28T12:06:47.000Z</updated>
+        <summary type="html"><![CDATA[<p>这里主要介绍一些我知道的PHP的使用技巧。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>这里主要介绍一些我知道的PHP的使用技巧。</p>
+<!-- more -->
+<h2 id="1-php内置的web-server">1、PHP内置的Web Server</h2>
+<p>首先，有个问题：</p>
+<blockquote>
+<p>如果你需要快速启动一个HTTP服务来调试PHP代码，你会怎么做？</p>
+</blockquote>
+<p><em>启动php-fpm或php-cgi进程监听9000端口，然后使用Nginx将Http请求通过FastCGI接口转发给php-fpm或php-cgi进程？</em></p>
+<p>这不失为一种方法，但是并不算方便。</p>
+<p>其实，PHP 5.4.0后就提供了一个内置的Web服务器，你可以执行这个命令来启动它:</p>
+<pre><code class="language-sh">php -S 127.0.0.1:8080 a.php
+</code></pre>
+<p>然后就通过 http://127.0.0.1:8080 来进行访问了。</p>
+<h2 id="2-执行php代码时生成debug信息">2、执行PHP代码时生成debug信息</h2>
+<blockquote>
+<p>在执行PHP代码时，你会用什么方法进行调试？</p>
+</blockquote>
+<p><em>var_dump、print_r直接输出？</em></p>
+<p>除了直接输出，你还可以使用debug模式配合IDE来进行调试。在执行PHP代码时，加上<code>-e</code>参数，同时IDE开启debug监听（需要安装xdebug或yasd等调试类扩展，推荐yasd，它可以调试swoole协程）:</p>
+<pre><code class="language-sh">php -e a.php
+
+php -e artisan test:test
+</code></pre>
+<p>这样你就可以使用IDE的debug功能来调试你的PHP命令了。除此之外，还可以配合PHP的内置Web服务器一起使用：</p>
+<pre><code class="language-sh">php -e -S 127.0.0.1:8080 a.php
+</code></pre>
+<h2 id="3-数组迭代">3、数组迭代</h2>
+<blockquote>
+<p>需要获取这个数组所有层级的子元素，你会怎么做？</p>
+<pre><code class="language-php">$arr = [
+  'key1' =&gt; 'value1',
+  'key2' =&gt; [
+      'key3' =&gt; 'value2',
+      'key4' =&gt; [
+          'value3',
+          'value4',
+      ]
+  ],
+  'key5' =&gt; 'value5'
+];
+</code></pre>
+</blockquote>
+<p><em>使用递归？</em></p>
+<p>没错，可以使用递归。你也可以选择另外一种方式：</p>
+<pre><code class="language-php">$arr = [
+    'key1' =&gt; 'value1',
+    'key2' =&gt; [
+        'key3' =&gt; 'value2',
+        'key4' =&gt; [
+            'value3',
+            'value4',
+        ]
+    ],
+    'key5' =&gt; 'value5'
+];
+
+$it = new RecursiveArrayIterator($arr);
+$recursiveIt = new RecursiveIteratorIterator($it);
+foreach ($recursiveIt as $v) {
+    var_dump($v);
+}
+</code></pre>
+<h2 id="4-目录迭代">4、目录迭代</h2>
+<blockquote>
+<p>需要获取一个目录下所有层级的所有文件，你会怎么做？</p>
+</blockquote>
+<p><em>这样使用dir迭代？</em></p>
+<pre><code class="language-php">function test($dir) {
+    $dirHandle = dir($dir);
+    while ($item = $dirHandle-&gt;read()) {
+        if ($item == '.' || $item == '..') continue;
+        $path = &quot;{$dir}/{$item}&quot;;
+        if (is_dir($path)) {
+            test($path);
+        } else {
+            var_dump($item);
+        }
+    }
+}
+</code></pre>
+<p>你还可以用更简单的方法，同样也是PHP内置的迭代器:</p>
+<pre><code class="language-php">$it = new RecursiveDirectoryIterator('./');
+$reIt = new RecursiveIteratorIterator($it);
+
+foreach ($reIt as $value) {
+    var_dump($value);
+}
+</code></pre>
+<h2 id="5-访问对象的私有属性">5、访问对象的私有属性</h2>
+<blockquote>
+<p>在使用一个库的对象时，想要访问该对象的私有属性，你会怎么做？</p>
+</blockquote>
+<p><em>?</em></p>
+<p>可以使用<code>Closure</code>类的静态方法<code>bind</code>或非静态方法<code>bindTo</code>将函数绑定到该类的作用域下：</p>
+<pre><code class="language-php">class A {
+    private $name = 'The name of A';
+}
+
+$a = new A();
+
+// 方法一
+$closure = Closure::bind(function () use ($a) {
+    var_dump($a-&gt;name);
+}, null, A::class);
+
+// 方法二，通过this访问
+//$closure = Closure::bind(function () {
+//    var_dump($this-&gt;name);
+//}, $a, A::class);
+
+$closure();
+</code></pre>
+<h2 id="6-fastcgi_request_finish">6、fastcgi_request_finish</h2>
+<p>fastcgi_request_finish函数是PHP提供的在CGI模式下可用的方法。</p>
+<p>调用此方法会将响应数据立即发送给用户，但不中断后续代码执行。例如：</p>
+<pre><code class="language-php">echo 123;
+echo 456;
+
+fastcgi_finish_request(); // 此时将响应发送给用户
+
+echo 789;
+
+file_put_contents('a.txt', '789');
+</code></pre>
+<p>以上代码在CGI模式下执行，你会得到123456的响应数据，并且会生成a.txt文件，内容为789。</p>
+<p>这个方法的主要用途就是跳过与响应无关的数据处理，提前返回数据给客户端，提高用户体验。</p>
+<blockquote>
+<p>仅在CGI模式下可用，其他模式下会报方法不存在的错误</p>
+<p>Laravel中Response的send方法也是用到了这个函数</p>
+</blockquote>
+<h2 id="7-续">7、续...</h2>
+<p><em>后续补充...</em></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[中文手写体Excalidraw]]></title>
+        <id>https://anhoder.github.io/post/8QqIK9WTM/</id>
+        <link href="https://anhoder.github.io/post/8QqIK9WTM/">
+        </link>
+        <updated>2021-01-23T12:06:00.000Z</updated>
+        <content type="html"><![CDATA[<!-- more -->
+<h2 id="excalidraw">Excalidraw</h2>
+<p>Excalidraw是一个开源的、用于绘制手绘风格草图的项目，GitHub地址为<a href="https://github.com/excalidraw/excalidraw">https://github.com/excalidraw/excalidraw</a>，用它制作的草图效果如下：</p>
+<figure data-type="image" tabindex="1"><img src="media/16113747917262/%E8%8D%89%E5%9B%BE.png" alt="草图" loading="lazy"></figure>
+<p>看起来还不错，但是由于这个项目诞生于国外，所以并不支持中文字体：</p>
+<figure data-type="image" tabindex="2"><img src="media/16113747917262/%E8%8D%89%E5%9B%BE2.png" alt="草图2" loading="lazy"></figure>
+<p>几个汉字可以说是格格不入了😂。</p>
+<h2 id="替换字体">替换字体</h2>
+<p>于是，我找了一些免费的手写字体尝试替换进去，最后找到一个效果还不错的——沐瑶随心手写体。</p>
+<figure data-type="image" tabindex="3"><img src="media/16113747917262/%E8%8D%89%E5%9B%BE3.png" alt="草图3" loading="lazy"></figure>
+<p>沐瑶随心手写体是完全免费，即使是商用。</p>
+<blockquote>
+<p>沐瑶是作者女儿的名字 WoW<br>
+字体下载地址: <a href="https://www.zcool.com.cn/work/ZMjg5MjAwMDQ=.html">https://www.zcool.com.cn/work/ZMjg5MjAwMDQ=.html</a></p>
+</blockquote>
+<h2 id="使用">使用</h2>
+<p>如果你想要使用的话，可以访问: <a href="https://danlanhai.gitee.io/excalidraw/">https://danlanhai.gitee.io/excalidraw/</a>或<a href="https://anhoder.github.io/excalidraw/">https://anhoder.github.io/excalidraw/</a>。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[自己写个包——PHP8 Attribute收集器]]></title>
+        <id>https://anhoder.github.io/post/dm-3SDHLz/</id>
+        <link href="https://anhoder.github.io/post/dm-3SDHLz/">
+        </link>
+        <updated>2021-01-17T12:05:04.000Z</updated>
+        <summary type="html"><![CDATA[<p>PHP8发布已经有一段时间了，新增了不少特性，其中我觉得比较好用的：一个是函数可以指定参数名传参，另外一个就是<strong>注解Attribute</strong>。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>PHP8发布已经有一段时间了，新增了不少特性，其中我觉得比较好用的：一个是函数可以指定参数名传参，另外一个就是<strong>注解Attribute</strong>。</p>
+<!-- more -->
+<h2 id="注解">注解</h2>
+<p>在PHP8之前，PHP语法上是不支持注解的，只能通过反射来获取类、方法或属性的注释，然后通过解析注释来获取需要的元数据。最具代表性的就是注解包<a href="https://github.com/doctrine/annotations">doctrine/annotations</a>，很多框架都有在用。</p>
+<p>使用方法：</p>
+<pre><code class="language-php">use Doctrine\Common\Annotations\Annotation\Attribute;
+use Doctrine\Common\Annotations\Annotation\Attributes;
+use Doctrine\Common\Annotations\Annotation\Target;
+
+/**
+ * @Annotation
+ * @Target(&quot;CLASS&quot;)
+ * @Attributes({
+ *     @Attribute(&quot;name&quot;, type=&quot;string&quot;, required=true),
+ *     @Attribute(&quot;age&quot;, type=&quot;int&quot;)
+ * })
+ */
+class Student
+{
+    /**
+     * @var string
+     */
+    private $name;
+    
+    /**
+     * @var int
+     */
+    private $age
+}
+
+/**
+ * @Student(name=&quot;anhoder&quot;, age=18)
+ */
+class Anhoder
+{
+    
+}
+</code></pre>
+<p>而在PHP8中，注解Attribute是这样的：</p>
+<pre><code class="language-php">#[Attribute(Attribute::TARGET_CLASS)]
+class Student
+{
+    public function __construct(private string $name, private int $age)
+    {
+    }
+}
+
+#[Student('anhoder', 18)]
+class Anhoder
+{
+
+}
+</code></pre>
+<h2 id="收集注解attribute">收集注解Attribute</h2>
+<p>PHP8的Attribute数据也需要通过反射来手动获取：</p>
+<pre><code class="language-php">$reflection = new ReflectionClass(Anhoder::class);
+var_dump($reflection-&gt;getAttributes());
+// array(1) {
+//   [0]=&gt;
+//   object(ReflectionAttribute)#3 (0) {
+//   }
+// }
+</code></pre>
+<p>我们可以实现一个Attribute收集器，用于自动收集项目中或其他composer包中的注解信息。</p>
+<h3 id="1-获取所有包的根目录及namespace">1. 获取所有包的根目录及namespace</h3>
+<p>通过composer提供的ClassLoader自动加载类，我们获取到所有包的命名空间及对应的根目录：</p>
+<pre><code class="language-php">// 获取Composer的自动加载类
+function getComposerLoader()
+{
+    $loaders = spl_autoload_functions();
+
+    foreach ($loaders as $loader) {
+        if (is_array($loader) &amp;&amp; isset($loader[0]) &amp;&amp; $loader[0] instanceof ClassLoader) {
+            return $loader[0];
+        }
+    }
+    
+    throw new NotFoundException('Composer class loader');
+}
+
+$composerLoader = getComposerLoader();
+
+// 获取命令空间及目录
+$composerLoader-&gt;getPrefixesPsr4();
+</code></pre>
+<h3 id="2-加载每个包下的annotationconfig类">2. 加载每个包下的AnnotationConfig类</h3>
+<p>我们约定：在每个需要收集注解的包下，都放一个AnnotationConfig类，并实现AnnotationConfigInterface接口。用于获取该包下需要扫描的目录及命名空间。例如：</p>
+<pre><code class="language-php">class AnnotationConfig implements AnnotationConfigInterface
+{
+
+    /**
+     * @inheritDoc
+     */
+    public static function getAnnotationConfigs(): array
+    {
+
+        return [
+            'scanDirs' =&gt; [
+                __NAMESPACE__ =&gt; __DIR__,
+            ],
+        ];
+    }
+}
+</code></pre>
+<p>在以上约定条件下，我们需要遍历第一步获取到的根目录，判断其目录下是否有AnnotationConfig类，若有则调用getAnnotationConfigs方法获取其配置。</p>
+<h3 id="3-解析-收集注解">3. 解析、收集注解</h3>
+<p>最后一步，就是遍历每个目录下的文件及其对应的类，然后通过反射获取到类、方法、属性及常量的注解信息，并将这些信息存入容器数组中。</p>
+<pre><code class="language-php">$namespace = rtrim($namespace, '\\');
+$iterator = new RecursiveDirectoryIterator($dir);
+
+foreach ($iterator as $splFileInfo) {
+    $basename = $splFileInfo-&gt;getBasename();
+    
+    if (!$splFileInfo-&gt;isFile() || $splFileInfo-&gt;getExtension() != 'php') {
+        // not php file
+        continue;
+    }
+
+    // PHP File
+    $className = $splFileInfo-&gt;getBasename('.' . $splFileInfo-&gt;getExtension());
+    $class = &quot;{$namespace}\\{$className}&quot;;
+    if (class_exists($class)) {
+        $reflection = new ReflectionClass($class);
+        $attributes = $reflection-&gt;getAttributes();
+    }
+}
+</code></pre>
+<h2 id="封装为composer包">封装为composer包</h2>
+<p>以上代码都是简单的示例，实际还需要考虑更多，所以我将其做成了一个composer包——<a href="https://github.com/anhoder/annotations-collector">anhoder/annotations-collector</a>。简单的使用：</p>
+<ol>
+<li>
+<p>安装</p>
+<pre><code class="language-sh">composer require anhoder/annotations-collector
+</code></pre>
+</li>
+<li>
+<p>创建 <code>AnnotationConfig.php</code> 文件到你项目的根目录</p>
+<pre><code class="language-php">class AnnotationConfig implements AnnotationConfigInterface
+{
+
+    public static function getAnnotationConfigs(): array
+    {
+        return [
+            // The dirs need to be scanned
+            'scanDirs' =&gt; [
+                __NAMESPACE__ =&gt; __DIR__,
+            ],
+        ];
+    }
+}
+</code></pre>
+</li>
+<li>
+<p>添加Annotation及AnnotationHandler.</p>
+<pre><code class="language-php">// Annotation
+#[Attribute(Attribute::TARGET_CLASS)]
+class ClassAnnotation
+{
+    public const TEST = 'test';
+
+    private string $test;
+
+    public function __construct(string $test)
+    {
+        $this-&gt;test = $test;
+    }
+}
+
+// AnnotationHandler
+#[AnnotationHandler(ClassAnnotation::class)]
+class ClassAnnotationHandler extends AbstractAnnotationHandler
+{
+    public function handle()
+    {
+        // Your logic.
+        var_dump($this);
+    }
+}
+</code></pre>
+</li>
+<li>
+<p>开始扫描</p>
+<pre><code class="language-php">AnnotationHelper::scan();
+</code></pre>
+</li>
+</ol>
+<h2 id="附">附</h2>
+<p>由于注解需要配合反射来使用，其相比正常代码性能较差，而且在php-fpm模式下，每次请求都需要重新获取注解信息，所以<strong>不推荐在php-fpm下使用注解</strong>，其<strong>更适合一些常驻内存型的项目</strong>，例如：Swoole、WorkerMan等。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Swoft内存泄漏排查]]></title>
+        <id>https://anhoder.github.io/post/e-qWPg1ij/</id>
+        <link href="https://anhoder.github.io/post/e-qWPg1ij/">
+        </link>
+        <updated>2021-01-16T12:04:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>最近在公司使用swoft写了一个定时爬取数据的项目，上线后跟踪线上日志发现swoft的worker进程会<strong>出现周期性的内存溢出</strong>：</p>
+<pre><code class="language-txt">Fatal error: Uncaught ErrorException: Allowed memory size of 268435456 bytes exhausted (tried to allocate 262144 bytes)
+</code></pre>
+]]></summary>
+        <content type="html"><![CDATA[<p>最近在公司使用swoft写了一个定时爬取数据的项目，上线后跟踪线上日志发现swoft的worker进程会<strong>出现周期性的内存溢出</strong>：</p>
+<pre><code class="language-txt">Fatal error: Uncaught ErrorException: Allowed memory size of 268435456 bytes exhausted (tried to allocate 262144 bytes)
+</code></pre>
+<!-- more -->
+<h2 id="一-分析">一、分析</h2>
+<p>观察到线上worker进程的内存占用是随时间增长而逐渐上升的，所以排除单次执行导致内存溢出的情况，基本可以确定是项目中的某处代码<strong>存在内存泄漏</strong>。</p>
+<p>因此，解决问题的关键就在于<strong>如何定位到项目中产生内存泄漏的位置</strong>。</p>
+<h2 id="二-定位内存泄漏">二、定位内存泄漏</h2>
+<h3 id="1-swoole-tracker">1、Swoole Tracker</h3>
+<p><a href="https://business.swoole.com/tracker/index">Swoole Tracker</a>是Swoole官方提供的分析工具，可以用来检测项目中的内存泄漏问题（<a href="https://mp.weixin.qq.com/s/oAyToE4aNyU3-_PQ5ii3aw">使用方法</a>）。</p>
+<h4 id="安装">安装</h4>
+<p>Swoole Tracker的安装比较简单，因为它本身就是一个php的扩展，而且是已经编译好的，我们只需要将编译好的动态链接库文件(.so)放到php的扩展目录下，然后在php.ini中加上配置即可。</p>
+<h4 id="使用">使用</h4>
+<p>安装完Swoole Tracker扩展后，在相应的代码中加入Swoole Tracker提供的Hook函数，例如：</p>
+<pre><code class="language-php">public function onPipeMessage(Server $server, int $srcWorkerId, $message): void
+{
+    trackerHookMalloc();
+    // ...
+}
+</code></pre>
+<p>接着启动服务，运行一段时间后，在docker容器内执行<code>php -r &quot;trackerAnalyzeLeak();&quot;</code>即可获取到服务运行时的内存申请信息、内存释放信息以及可能存在内存泄漏的位置。</p>
+<h4 id="检测结果">检测结果</h4>
+<p><a href="media/16100728525468/memory_leak.txt">memory_leak.txt</a></p>
+<blockquote>
+<p>文件中含命令行颜色代码，可以在命令行使用<code>cat memory_leak.txt</code>查看</p>
+</blockquote>
+<p>以下是检测结果中可能存在内存泄漏的代码位置：</p>
+<pre><code class="language-txt"> The Possible Leak As Malloc Size Keep Growth:
+ /var/www/swoft_marketing_engine/vendor/swoft/server/src/Server.php:544 =&gt;  Growth Times : [29];  Growth Size : [181440]
+ /var/www/swoft_marketing_engine/vendor/swoft/stdlib/src/Helper/ArrayHelper.php:959 =&gt;  Growth Times : [8];  Growth Size : [2784]
+ /var/www/swoft_marketing_engine/vendor/swoft/stdlib/src/Helper/ArrayHelper.php:997 =&gt;  Growth Times : [12];  Growth Size : [17920]
+ /var/www/swoft_marketing_engine/vendor/swoft/bean/src/Container.php:413 =&gt;  Growth Times : [24];  Growth Size : [10752]
+ /var/www/swoft_marketing_engine/vendor/swoft/db/src/Database.php:252 =&gt;  Growth Times : [24];  Growth Size : [1536]
+ /var/www/swoft_marketing_engine/vendor/swoft/db/src/Connection/Connection.php:370 =&gt;  Growth Times : [24];  Growth Size : [4608]
+</code></pre>
+<p>根据结果，<strong>发现是Swoft框架本身某个位置存在内存泄漏</strong>。</p>
+<p>但是，检测结果中只有产生内存申请时的代码位置，还不能确定具体是什么地方未释放内存。</p>
+<p>因此，只能换一种思路。</p>
+<h3 id="2-valgrind">2、Valgrind</h3>
+<p>尝试另外一款内存泄漏分析神器——valgrind。</p>
+<p>使用后发现分析报告中只会出现相关的C/C++代码，无法定位到具体的PHP代码位置，放弃。</p>
+<h3 id="3-memory_get_usage">3、memory_get_usage()</h3>
+<p>使用几种内存泄漏分析工具都无果后，尝试使用最原始的方式——PHP的内置函数<code>memory_get_usage()</code>。</p>
+<p>大致思路就是在需要调用的函数上下，加上<code>memory_get_usage()</code>函数，例如：</p>
+<pre><code class="language-php">var_dump(memory_get_usage());
+test();
+var_dump(memory_get_usage());
+</code></pre>
+<p>因为，正常情况下，在函数调用完成后，Zend引擎会将对应的函数栈销毁，相应的内存会被释放。</p>
+<blockquote>
+<p>在使用时，有一些需要注意的点：</p>
+<ol>
+<li><code>memory_get_usage()</code>支持一个布尔类型的参数<code>real_usage</code>，表示是否获取真实内存大小，其中包括未被使用的内存空间。因为PHP引擎在申请内存时，会一次申请一大块内存，用于后续使用，以减少系统调用的次数。所以，在这里<strong>不要将它设置为true</strong>。</li>
+<li>如果函数中存在循环引用（如：Swoft中ORM的join方法），在函数执行完成后，变量并不会被及时释放，输出内存占用会增加，但是这是正常的。因为当待释放变量达到一定数量或内存达到一定阈值时，PHP的GC才会统一释放掉这些的内存。</li>
+</ol>
+</blockquote>
+<h4 id="检查结果">检查结果</h4>
+<p>这种方法虽然费时费力，但效果还算不错。经过一段时间排查，成功定位到了两处内存泄漏：</p>
+<ul>
+<li>在协程中使用Redis时，Swoft未在协程结束后释放相应的Redis连接信息；</li>
+<li>Swoft在处理pipeMessage事件结束后未触发协程结束事件，导致协程数据（MySQL、Redis连接信息等）未被释放。</li>
+</ul>
+<h2 id="三-解决方案">三、解决方案</h2>
+<p>既然已经定位到内存泄漏的原因了，解决办法就不难了：</p>
+<ul>
+<li>协程结束后，手动unset Redis的连接信息；</li>
+<li>在pipeMessgae事件结束后，手动触发协程结束事件，销毁对应协程产生的数据。</li>
+</ul>
+<h2 id="四-后续">四、后续</h2>
+<p>经过以上处理后，<strong>截至目前，线上swoft项目的内存占用稳定在50M左右，未出现内存溢出错误</strong>。</p>
+<p>此外，针对这两个问题，我在GitHub上向Swoft团队提交了两个相应的issue及修复PR，目前代码已被合并到master。</p>
+<figure data-type="image" tabindex="1"><img src="media/16100728525468/16106151032602.jpg" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="media/16100728525468/16106151256329.jpg" alt="" loading="lazy"></figure>
+<h2 id="五-总结">五、总结</h2>
+<p>其实，内存溢出、内存泄漏的情况并不容易发生（单次运行直接爆内存的除外emmm...），只要你：</p>
+<ul>
+<li>不轻易使用全局变量、静态变量；</li>
+<li>如果不可避免的需要使用到全局变量、静态变量，一定要在用完后unset掉相应的数据。</li>
+</ul>
+<blockquote>
+<p>另外，在排查过程中，用到的一个挺好用的查看内存占用的工具——smem，可以查看程序的USS、PSS、RSS👍。</p>
+</blockquote>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[PHP扩展开发中常用的函数]]></title>
+        <id>https://anhoder.github.io/post/B6gBPbA-S/</id>
+        <link href="https://anhoder.github.io/post/B6gBPbA-S/">
+        </link>
+        <updated>2020-12-13T12:03:08.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="php函数相关">PHP函数相关</h2>
+<pre><code class="language-c">
+zend_parse_parameters()     // 解析函数参数
+// 例如，s表示字符串, 解析一个字符串类型的参数到name, 及其长度到name_len: 
+if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, &quot;s&quot;, &amp;name, &amp;name_len) == FAILURE) {
+    RETURN_NULL();
+}
+
+/* 解析参数时的类型代码 */
+b: 布尔类型（对应c类型: zend_bool）
+l: 整型（long）
+d: 浮点型（double）
+s: 字符串（char*, int）
+r: 资源型（zval*）
+a: 数组（zval*）
+o: 对象（zval*）
+z: zval（zval*）
+</code></pre>
+<blockquote>
+<p>附：PHP 7中使用FAST_ZPP方式解析函数参数的宏：<br>
+<img src="media/16078683686223/16078723189095.jpg" alt="" loading="lazy"></p>
+</blockquote>
+<h2 id="数组操作">数组操作</h2>
+<pre><code class="language-c">array_init(arr)                         // 初始化数组
+add_next_index_null(zval*)              // 向数字索引的数组增加null
+add_next_index_long(zval*, long)        // ...添加long类型
+add_next_index_bool(zval*, 0|1)         // ...添加bool类型
+add_next_index_double(zval*, double)  
+add_next_index_string(zval*, char*, zend_bool)
+add_next_index_zval(zval*, zval*)
+// ...
+</code></pre>
+<p>更多操作数组的函数: <a href="https://www.php.net/manual/en/internals2.variables.arrays.php">https://www.php.net/manual/en/internals2.variables.arrays.php</a></p>
+<blockquote>
+<p>未完待续...</p>
+</blockquote>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[PHP扩展开发中常用的宏函数]]></title>
+        <id>https://anhoder.github.io/post/y_zVEbs0X/</id>
+        <link href="https://anhoder.github.io/post/y_zVEbs0X/">
+        </link>
+        <updated>2020-12-13T12:02:21.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="zval类型相关">zval类型相关</h2>
+<pre><code class="language-c">
+Z_TYPE(zval)        // 获取zval的类型
+Z_TYPE_P(*zval)     // 获取*zval的类型
+Z_TYPE_PP(**zval)   // 获取**zval的类型
+
+/* zval类型相关常量 */
+IS_NULL         // null 
+IS_BOOL         // 布尔
+IS_LONG         // 整型
+IS_DOUBLE       // 浮点型
+IS_STRING       // 字符串
+IS_ARRAY        // 数组
+IS_OBJECT       // 对象
+IS_RESOURCE     // 资源
+
+</code></pre>
+<h2 id="zval值相关">zval值相关</h2>
+<pre><code class="language-c">//操作整数的
+#define Z_LVAL(zval)			(zval).value.lval
+#define Z_LVAL_P(zval_p)		Z_LVAL(*zval_p)
+#define Z_LVAL_PP(zval_pp)		Z_LVAL(**zval_pp)
+
+//操作IS_BOOL布尔型的
+#define Z_BVAL(zval)			((zend_bool)(zval).value.lval)
+#define Z_BVAL_P(zval_p)		Z_BVAL(*zval_p)
+#define Z_BVAL_PP(zval_pp)		Z_BVAL(**zval_pp)
+
+//操作浮点数的
+#define Z_DVAL(zval)			(zval).value.dval
+#define Z_DVAL_P(zval_p)		Z_DVAL(*zval_p)
+#define Z_DVAL_PP(zval_pp)		Z_DVAL(**zval_pp)
+
+//操作字符串的值和长度的
+#define Z_STRVAL(zval)			(zval).value.str.val
+#define Z_STRVAL_P(zval_p)		Z_STRVAL(*zval_p)
+#define Z_STRVAL_PP(zval_pp)		Z_STRVAL(**zval_pp)
+
+#define Z_STRLEN(zval)			(zval).value.str.len
+#define Z_STRLEN_P(zval_p)		Z_STRLEN(*zval_p)
+#define Z_STRLEN_PP(zval_pp)		Z_STRLEN(**zval_pp)
+
+#define Z_ARRVAL(zval)			(zval).value.ht
+#define Z_ARRVAL_P(zval_p)		Z_ARRVAL(*zval_p)
+#define Z_ARRVAL_PP(zval_pp)		Z_ARRVAL(**zval_pp)
+
+//操作对象的
+#define Z_OBJVAL(zval)			(zval).value.obj
+#define Z_OBJVAL_P(zval_p)		Z_OBJVAL(*zval_p)
+#define Z_OBJVAL_PP(zval_pp)		Z_OBJVAL(**zval_pp)
+
+#define Z_OBJ_HANDLE(zval)		Z_OBJVAL(zval).handle
+#define Z_OBJ_HANDLE_P(zval_p)		Z_OBJ_HANDLE(*zval_p)
+#define Z_OBJ_HANDLE_PP(zval_p)		Z_OBJ_HANDLE(**zval_p)
+
+#define Z_OBJ_HT(zval)			Z_OBJVAL(zval).handlers
+#define Z_OBJ_HT_P(zval_p)		Z_OBJ_HT(*zval_p)
+#define Z_OBJ_HT_PP(zval_p)		Z_OBJ_HT(**zval_p)
+
+#define Z_OBJCE(zval)			zend_get_class_entry(&amp;(zval) TSRMLS_CC)
+#define Z_OBJCE_P(zval_p)		Z_OBJCE(*zval_p)
+#define Z_OBJCE_PP(zval_pp)		Z_OBJCE(**zval_pp)
+
+#define Z_OBJPROP(zval)			Z_OBJ_HT((zval))-&gt;get_properties(&amp;(zval) TSRMLS_CC)
+#define Z_OBJPROP_P(zval_p)		Z_OBJPROP(*zval_p)
+#define Z_OBJPROP_PP(zval_pp)		Z_OBJPROP(**zval_pp)
+
+#define Z_OBJ_HANDLER(zval, hf) 	Z_OBJ_HT((zval))-&gt;hf
+#define Z_OBJ_HANDLER_P(zval_p, h)	Z_OBJ_HANDLER(*zval_p, h)
+#define Z_OBJ_HANDLER_PP(zval_p, h)		Z_OBJ_HANDLER(**zval_p, h)
+
+#define Z_OBJDEBUG(zval,is_tmp)		(Z_OBJ_HANDLER((zval),get_debug_info)?	\
+						Z_OBJ_HANDLER((zval),get_debug_info)(&amp;(zval),&amp;is_tmp TSRMLS_CC): \
+						(is_tmp=0,Z_OBJ_HANDLER((zval),get_properties)?Z_OBJPROP(zval):NULL)) 
+#define Z_OBJDEBUG_P(zval_p,is_tmp)	Z_OBJDEBUG(*zval_p,is_tmp) 
+#define Z_OBJDEBUG_PP(zval_pp,is_tmp)	Z_OBJDEBUG(**zval_pp,is_tmp)
+
+//操作资源的
+#define Z_RESVAL(zval)			(zval).value.lval
+#define Z_RESVAL_P(zval_p)		Z_RESVAL(*zval_p)
+#define Z_RESVAL_PP(zval_pp)		Z_RESVAL(**zval_pp)
+</code></pre>
+<h2 id="创建zval">创建zval</h2>
+<pre><code class="language-c">ALLOC_ZVAL              // PHP 7中移除
+ALLOC_INIT_ZVAL         // PHP 7中移除
+MAKE_STD_ZVAL           // PHP 7中移除
+// 例如：
+zval *val; MAKE_STD_ZVAL(val);
+
+ZVAL_LONG(*zval, long)      // 将整型值赋给*zval
+ZVAL_NULL(*zval)            // null
+ZVAL_BOOL(*zval, int)       // bool
+ZVAL_TRUE(*zval)            // true
+ZVAL_FALSE(*zval)           // false
+ZVAL_LONG(*zval, long)      // long
+ZVAL_DOUBLE(*zval, double)  // double
+ZVAL_STRINGL(*zval,str,len,dup); // string with length
+ZVAL_STRING(*zval, str, dup)     // string, dup指明了该字符串是否需要被复制。 值为 1 将先申请一块新内存并赋值该字符串，然后把新内存的地址复制给pzv， 为 0 时则是直接把str的地址赋值给zval。
+ZVAL_RESOURCE(*zval, res);       // resource
+</code></pre>
+<h2 id="函数相关">函数相关</h2>
+<pre><code class="language-c">ZEND_NUM_ARGS()             // 获取函数参数的数量
+
+RETVAL_STRING(s)            // 函数返回字符串
+RETURN_STRING(s)            // 函数返回字符串, #define RETURN_STRING(s) { RETVAL_STRING(s); return; }
+RETURN_NULL()               // 函数返回null
+RETURN_TRUE()               // 函数返回true
+</code></pre>
+<blockquote>
+<p>附：PHP 7中使用FAST_ZPP方式解析函数参数的宏：<br>
+<img src="media/16078683686223/16078723189095.jpg" alt="" loading="lazy"></p>
+</blockquote>
+<h2 id="数组操作">数组操作</h2>
+<pre><code class="language-c">ZEND_HASH_FOREACH_VAL(ht, val)
+ZEND_HASH_FOREACH_KEY(ht, h, key) 
+ZEND_HASH_FOREACH_PTR(ht, ptr)
+ZEND_HASH_FOREACH_NUM_KEY(ht, h) 
+ZEND_HASH_FOREACH_STR_KEY(ht, key)
+ZEND_HASH_FOREACH_STR_KEY_VAL(ht, key, val)
+ZEND_HASH_FOREACH_KEY_VAL(ht, h, key, val)
+
+// 例如：
+ZEND_HASH_FOREACH_KEY_VAL(arr_hash, num_key, key, val) {
+    //if (key) { //HASH_KEY_IS_STRING
+    //}
+    PHPWRITE(Z_STRVAL_P(val), Z_STRLEN_P(val));
+    php_printf(&quot;\n&quot;);
+}ZEND_HASH_FOREACH_END();
+</code></pre>
+<h2 id="符号表">符号表</h2>
+<p>PHP的变量存储在符号表中，不同作用域有不同的符号表。</p>
+<pre><code class="language-c">struct _zend_executor_globals {
+    ...
+    HashTable symbol_table;         // 全局符号表
+    HashTable *active_symbol_table; // 当前作用域符号表
+    ...
+};
+</code></pre>
+<pre><code class="language-c">EG(active_symbol_table)
+EG(symbol_table)
+ZEND_SET_SYMBOL(symbol, var_name, val)  // 设置变量到符号表
+// 例如：
+ZEND_SET_SYMBOL( EG(active_symbol_table) ,  &quot;foo&quot; , fooval);
+</code></pre>
+<blockquote>
+<p>未完待续...</p>
+</blockquote>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[又一个命令行版网易云音乐——musicfox]]></title>
+        <id>https://anhoder.github.io/post/npa_TQCOL/</id>
+        <link href="https://anhoder.github.io/post/npa_TQCOL/">
+        </link>
+        <updated>2020-07-12T12:01:18.000Z</updated>
+        <summary type="html"><![CDATA[<p>musicfox是一款使用Dart编写的网易云音乐命令行程序。</p>
+<p><img src="https://badgen.net/github/release/anhoder/musicfox" alt="last release" loading="lazy"> <img src="https://badgen.net/github/license/anhoder/musicfox" alt="GitHub" loading="lazy"> <img src="https://badgen.net/github/tag/anhoder/musicfox" alt="Last Tag" loading="lazy"> <img src="https://badgen.net/github/stars/anhoder/musicfox" alt="Star" loading="lazy"> <img src="https://badgen.net/github/last-commit/anhoder/musicfox" alt="GitHub last commit" loading="lazy"></p>
+]]></summary>
+        <content type="html"><![CDATA[<p>musicfox是一款使用Dart编写的网易云音乐命令行程序。</p>
+<p><img src="https://badgen.net/github/release/anhoder/musicfox" alt="last release" loading="lazy"> <img src="https://badgen.net/github/license/anhoder/musicfox" alt="GitHub" loading="lazy"> <img src="https://badgen.net/github/tag/anhoder/musicfox" alt="Last Tag" loading="lazy"> <img src="https://badgen.net/github/stars/anhoder/musicfox" alt="Star" loading="lazy"> <img src="https://badgen.net/github/last-commit/anhoder/musicfox" alt="GitHub last commit" loading="lazy"></p>
+<!-- more -->
+<h2 id="一-为什么做这个项目">一、为什么做这个项目</h2>
+<p>在开始这个项目的之前，其实是已经有一个基于命令行的网易云音乐项目——<a href="https://github.com/darknessomi/musicbox" title="musicbox">musicbox</a>。</p>
+<p>我也使用它听了很长一段时间的歌了，其中还贡献过一些代码，修复几个小问题。那为什么还要重新造一个轮子呢？</p>
+<blockquote>
+<ol>
+<li>musicbox缺少一些我特别想要的功能</li>
+<li>musicbox使用python进行编写，我对python并不是很熟悉，所以修改或者新增功能时比较麻烦</li>
+</ol>
+</blockquote>
+<h2 id="二-为什么使用dart">二、为什么使用Dart</h2>
+<ul>
+<li>Dart的语法极像Java，我本身也学过Java，因此学习成本较低；</li>
+<li>Dart可以将代码编译成能在三大平台（Windows、Linux、Mac）上直接运行的可执行程序。</li>
+</ul>
+<h2 id="三-效果预览">三、效果预览</h2>
+<figure data-type="image" tabindex="1"><img src="media/15981627088641/preview0.png" alt="欢迎界面" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="media/15981627088641/preview1.png" alt="主界面1" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="media/15981627088641/preview2.png" alt="主界面2" loading="lazy"></figure>
+<h2 id="四-安装">四、安装</h2>
+<p>依赖mpg123，<strong>必须先安装mpg123</strong></p>
+<h3 id="mac">Mac</h3>
+<p>提供两种方式安装：</p>
+<ol>
+<li>进入到<a href="https://github.com/anhoder/musicfox/releases/latest" title="Release">Release</a>下载musicfox.mac文件，在iTerm或Terminal中运行</li>
+<li>使用brew安装：</li>
+</ol>
+<pre><code class="language-sh">brew tap anhoder/musicfox &amp;&amp; brew install musicfox
+</code></pre>
+<h3 id="linuxubuntu">Linux(Ubuntu)</h3>
+<p>进入到<a href="https://github.com/anhoder/musicfox/releases/latest" title="Release">Release</a>下载musicfox.ubuntu文件，在终端中运行。</p>
+<blockquote>
+<p>本人没有Linux系统，该执行文件是在WSL2(Ubuntu 2004)下打包的，不确定其他Linux系统是否也能正常使用</p>
+</blockquote>
+<h3 id="windows">Windows</h3>
+<p>下载<a href="./bin/musicfox.exe" title="Windows可执行文件">Windows可执行文件</a>，在命令行(推荐Windows Terminal)中运行即可。</p>
+<p><strong>Windows下存在几个已知问题，暂时没有解决方法：</strong></p>
+<ol>
+<li>暂停时会延迟几秒，播放时不会延迟</li>
+<li>登录或搜索输入时，会吞掉第一个字符</li>
+<li>上、下、左、右及ESC键无法监听，只能使用字母代替这些操作</li>
+<li>命令行窗口大小发生变化后，UI会变乱（因为Windows不支持resize事件）</li>
+</ol>
+<p><em>因为存在以上问题，所以推荐在WSL下使用，WSL的声音转发可以参考我的另一个<a href="https://github.com/anhoder/wsl-audio-musicbox" title="项目">项目</a></em>。</p>
+<h2 id="五-通知功能">五、通知功能</h2>
+<h3 id="mac-2">Mac</h3>
+<p>Mac下默认使用<code>AppleScript</code>发送通知。如下：</p>
+<figure data-type="image" tabindex="4"><img src="media/15981627088641/AppleScript.png" alt="AppleScript" loading="lazy"></figure>
+<p>如果想要更好的通知体验，可以安装<code>terminal-notifier</code>:</p>
+<pre><code class="language-sh">brew install terminal-notifier
+</code></pre>
+<p>效果如下：</p>
+<figure data-type="image" tabindex="5"><img src="media/15981627088641/terminal-notifier.png" alt="terminal-notifie" loading="lazy"></figure>
+<h3 id="linux">Linux</h3>
+<p>Linux可以安装<code>libnotify-bin</code>来使用通知功能（未经测试）</p>
+<h3 id="windows-2">Windows</h3>
+<p>Windows下可以安装<code>notifu</code>实现通知，体验不太好（没找到其他更好的通知工具）</p>
+<blockquote>
+<p>当然，如果你有更好的命令行通知程序，你也可以自己实现INotifier接口达到你想要的效果：</p>
+<pre><code class="language-dart">abstract class INotifier {
+  // 检查该通知程序是否可用
+  bool isAvailable();
+
+  // 发送消息
+  void send(String message, {String title, String subtitle, String soundName, String groupID, String activateID, String appIcon, String contentImage, String openURL, String executeCmd});
+}
+</code></pre>
+</blockquote>
+<h2 id="六-使用">六、使用</h2>
+<pre><code class="language-sh">$ musicfox
+</code></pre>
+<p><strong>按键：</strong></p>
+<table>
+<thead>
+<tr>
+<th>按键</th>
+<th>作用</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>h/H/LEFT</td>
+<td>左</td>
+<td>Windows只能使用<code>h</code></td>
+</tr>
+<tr>
+<td>l/L/RIGHT</td>
+<td>右</td>
+<td>Windows只能使用<code>l</code></td>
+</tr>
+<tr>
+<td>k/K/UP</td>
+<td>上</td>
+<td>Windows只能使用<code>k</code></td>
+</tr>
+<tr>
+<td>j/J/DOWN</td>
+<td>下</td>
+<td>Windows只能使用<code>j</code></td>
+</tr>
+<tr>
+<td>q/Q</td>
+<td>退出</td>
+<td>Windows只能使用<code>q</code></td>
+</tr>
+<tr>
+<td>space</td>
+<td>暂停/播放</td>
+<td></td>
+</tr>
+<tr>
+<td>[</td>
+<td>上一曲</td>
+<td></td>
+</tr>
+<tr>
+<td>]</td>
+<td>下一曲</td>
+<td></td>
+</tr>
+<tr>
+<td>-</td>
+<td>减小音量</td>
+<td></td>
+</tr>
+<tr>
+<td>=</td>
+<td>加大音量</td>
+<td></td>
+</tr>
+<tr>
+<td>n/N/ENTER</td>
+<td>进入选中的菜单</td>
+<td>Windows只能使用<code>n</code></td>
+</tr>
+<tr>
+<td>b/B/ESC</td>
+<td>返回上级菜单</td>
+<td>Windows只能使用<code>b</code></td>
+</tr>
+<tr>
+<td>w/W</td>
+<td>退出并退出登录</td>
+<td>Windows只能使用<code>w</code></td>
+</tr>
+<tr>
+<td>p</td>
+<td>切换播放方式</td>
+<td></td>
+</tr>
+<tr>
+<td>P</td>
+<td>心动模式(仅在歌单中时有效)</td>
+<td>Windows下使用<code>o</code></td>
+</tr>
+<tr>
+<td>,</td>
+<td>喜欢当前播放歌曲</td>
+<td></td>
+</tr>
+<tr>
+<td>&lt;</td>
+<td>喜欢当前选中歌曲</td>
+<td>Windows下使用<code>;</code></td>
+</tr>
+<tr>
+<td>.</td>
+<td>当前播放歌曲移除出喜欢</td>
+<td></td>
+</tr>
+<tr>
+<td>&gt;</td>
+<td>当前选中歌曲移除出喜欢</td>
+<td>Windows下使用<code>'</code></td>
+</tr>
+<tr>
+<td>/</td>
+<td>标记当前播放歌曲为不喜欢</td>
+<td></td>
+</tr>
+<tr>
+<td>?</td>
+<td>标记当前选中歌曲为不喜欢</td>
+<td>Windows下使用<code>\</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="七-todo">七、TODO</h2>
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-808548"><label class="task-list-item-label" for="task-item-808548"> 我的歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1702493"><label class="task-list-item-label" for="task-item-1702493"> 每日推荐歌曲</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-518788"><label class="task-list-item-label" for="task-item-518788"> 每日推荐歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7686596"><label class="task-list-item-label" for="task-item-7686596"> 私人FM</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7043808"><label class="task-list-item-label" for="task-item-7043808"> 歌词显示</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6763440"><label class="task-list-item-label" for="task-item-6763440"> 欢迎界面</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7656230"><label class="task-list-item-label" for="task-item-7656230"> 搜索</label>
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-217643"><label class="task-list-item-label" for="task-item-217643"> 按歌曲</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8869447"><label class="task-list-item-label" for="task-item-8869447"> 按歌手</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3263007"><label class="task-list-item-label" for="task-item-3263007"> 按歌词</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6740218"><label class="task-list-item-label" for="task-item-6740218"> 按歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4760062"><label class="task-list-item-label" for="task-item-4760062"> 按专辑</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3153455"><label class="task-list-item-label" for="task-item-3153455"> 按用户</label></li>
+</ul>
+</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1736506"><label class="task-list-item-label" for="task-item-1736506"> 排行榜</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6055977"><label class="task-list-item-label" for="task-item-6055977"> 精选歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2824703"><label class="task-list-item-label" for="task-item-2824703"> 最新专辑</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1983221"><label class="task-list-item-label" for="task-item-1983221"> 热门歌手</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2562557"><label class="task-list-item-label" for="task-item-2562557"> 云盘</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6840860"><label class="task-list-item-label" for="task-item-6840860"> 播放方式切换</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8137543"><label class="task-list-item-label" for="task-item-8137543"> 喜欢/取消喜欢</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1382894"><label class="task-list-item-label" for="task-item-1382894"> 心动模式/智能模式</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-4450607"><label class="task-list-item-label" for="task-item-4450607"> 音乐电台</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-1598336"><label class="task-list-item-label" for="task-item-1598336"> 将部分设置转化为文件可配置</label>
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-7144656"><label class="task-list-item-label" for="task-item-7144656"> 欢迎界面的欢迎语</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-8816279"><label class="task-list-item-label" for="task-item-8816279"> 欢迎界面时长</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-7796084"><label class="task-list-item-label" for="task-item-7796084"> 主题色</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-3741769"><label class="task-list-item-label" for="task-item-3741769"> 歌词显示行数</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-1088885"><label class="task-list-item-label" for="task-item-1088885"> ...</label></li>
+</ul>
+</li>
+</ul>
+<h2 id="八-伴生项目">八、伴生项目</h2>
+<p>在该项目的开发过程中，我将一些通用的功能模块单独抽离出来，做成了几个伴生项目：</p>
+<ol>
+<li><a href="https://github.com/anhoder/mp3_player" title="mp3_player">mp3_player</a>: dart命令行调用mpg123播放音乐</li>
+<li><a href="https://github.com/anhoder/netease_music_request" title="netease_music_request">netease_music_request</a>: Dart实现的网易云音乐接口库，使用Dio发起请求，CookieJar管理Cookie信息</li>
+<li><a href="https://github.com/anhoder/colorful_cmd" title="colorful_cmd">colorful_cmd</a>: 使用dart实现的一些命令行UI组件，如：WindowUI命令行窗口应用UI、RainbowProgress彩虹进度条、NotifierProxy三大平台通知代理、ColorText颜色文本...<br>
+<img src="media/15981627088641/command.png" alt="command" loading="lazy">  <img src="media/15981627088641/rainbow_progress.png" alt="rainbow_progress" loading="lazy"><br>
+<img src="media/15981627088641/window_ui.png" alt="window_ui" loading="lazy"><br>
+<img src="media/15981627088641/window_ui2.png" alt="window_ui2" loading="lazy"></li>
+</ol>
+<h2 id="九-感谢">九、感谢</h2>
+<p>感谢以下项目及其贡献者们（不限于）：</p>
+<ul>
+<li><a href="https://github.com/darknessomi/musicbox" title="musicbox">musicbox</a></li>
+<li><a href="https://github.com/Binaryify/NeteaseCloudMusicApi" title="NeteaseCloudMusicApi">NeteaseCloudMusicApi</a></li>
+<li><a href="https://github.com/DirectMyFile/console.dart" title="console.dart">console.dart</a></li>
+</ul>
+<figure data-type="image" tabindex="6"><img src="media/15981627088641/wechat.png" alt="wechat" loading="lazy"></figure>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[使用laravel的方式管理imi的路由]]></title>
+        <id>https://anhoder.github.io/post/O4IVHtR2w/</id>
+        <link href="https://anhoder.github.io/post/O4IVHtR2w/">
+        </link>
+        <updated>2020-06-27T12:00:21.000Z</updated>
+        <content type="html"><![CDATA[<!-- more -->
+<h2 id="1-imi是什么">1、imi是什么</h2>
+<p>imi与Swoft、Hyperf一样，是一个基于Swoole的PHP框架。</p>
+<p><strong>不同之处在于，Swoft与Hyperf是主要针对微服务推出的框架，而imi致力于单体应用。</strong></p>
+<p>此外，imi还支持代码热更新，只要监听的文件发生了更改，imi就会在很短的时间内重启服务。大体实现是：</p>
+<blockquote>
+<p>① 在worker进程的启动事件onWorkerStart中，载入相应的PHP文件。</p>
+<p>② 当监听到代码更新后，向swoole发送一个SIGUSR1信号，swoole会重启所有的worker进程，并触发onWorkerStart事件，重新载入相应的PHP文件。此时，worker进程就是最新的代码了。</p>
+</blockquote>
+<p>虽然这个功能对于线上服务没有很大的帮助，但是却可以大大提高开发时效率。</p>
+<h2 id="2-imi的路由管理">2、imi的路由管理</h2>
+<h3 id="注解">注解</h3>
+<p>imi路由的管理方式与Swoft框架类似。使用<strong>注解</strong>来管理路由，例如：</p>
+<pre><code class="language-php">&lt;?php
+namespace Test;
+ 
+use Imi\Controller\HttpController;
+use Imi\Server\Route\Annotation\Route;
+use Imi\Server\Route\Annotation\Action;
+use Imi\Server\Route\Annotation\Controller;
+ 
+/**
+ * @Controller(prefix=&quot;home&quot;)
+ */
+class Index extends HttpController
+{
+    /**
+     * @Action
+     * @Route(url=&quot;/index&quot;)
+     */
+    public function index()
+    {
+        // 使用/index可以访问到
+        return $this-&gt;response-&gt;write('hello imi!');
+    }
+    
+    /**
+     * @Action
+     * @Route(url=&quot;test&quot;)
+     */
+    public function test()
+    {
+        // 使用/home/test可以访问到
+        return $this-&gt;response-&gt;write('hello test!');
+    }
+}
+</code></pre>
+<p>上面的代码中，<code>Index</code>类上添加了<code>@Controller</code>注解，标识该类为一个控制器，并设置路由前缀为<code>home</code>；<code>index</code>及<code>test</code>方法上添加了<code>Action</code>、<code>Route</code>注解，并分别为它们设置路由为<code>/home</code>、<code>test</code>。</p>
+<p>使用注解管理路由可以很直观地将控制器的方法和路由对应起来，但是它也会带来一些缺陷：</p>
+<ul>
+<li>当路由越来越多时，路由的管理就变得很复杂。例如：我们需要为一批路由添加一个中间件，此时，就需要修改很多文件。</li>
+<li>路由结构不够清晰。</li>
+</ul>
+<h3 id="配置">配置</h3>
+<p>当然，imi也支持使用配置的方式管理路由：</p>
+<pre><code class="language-php">return [
+    'route' =&gt; [
+        [
+            'controller' =&gt; \ImiDemo\HttpDemo\MainServer\Controller\Test::class,
+            'method' =&gt; 'index',
+            'route' =&gt; [
+                'url' =&gt; '/test',
+                // 'method'    =&gt;    'PUT',
+                // 'method'    =&gt;    ['GET', 'POST'],
+                // 'domain'    =&gt;    '{name}.xxx.com',
+            ],
+        ],
+     ]
+];
+</code></pre>
+<p>但是，这种方式存在多重嵌套，可读性并不高。</p>
+<p>既然如此，还有什么其他路由管理方式呢？🤔</p>
+<h2 id="3-imi-route">3、imi-route</h2>
+<p>我认为laravel的路由管理方式是很方便且易读的，例如：</p>
+<pre><code class="language-php">Route::group(['middleware' =&gt; ['auth']], function () {
+    Route::get('/auth/userinfo', 'AuthController@getUser');
+});
+</code></pre>
+<p>所以，我编写了一个组件——<a href="https://github.com/anhoder/imi-route"><code>imi-route</code></a>，希望可以将laravel路由管理的基本功能应用到在imi框架中去。</p>
+<h3 id="基本实现思路">基本实现思路</h3>
+<p>首先，我们需要知道imi框架在启动时是如何加载相关路由的：</p>
+<ol>
+<li>解析应用目录下的所有文件，通过反射获取所有类的注释</li>
+<li>注释通过字符串解析后得到相应注解，例如：路由注解为<code>RouteAnnotation</code></li>
+<li>将所有的路由注解添加到HttpRoute中</li>
+</ol>
+<p>以上的流程都是在服务启动时进行处理，得到路由结果会常驻内存。</p>
+<p>而**<code>imi-route</code>就是在服务启动时，将存储的路由转化为路由注解，添加到HttpRoute中。**</p>
+<h3 id="使用">使用</h3>
+<p>1、使用composer安装依赖：</p>
+<pre><code class="language-sh">composer require alanalbert/imi-route
+</code></pre>
+<p>2、将下列代码添加到项目根目录的<code>Main.php</code>文件中：</p>
+<pre><code class="language-php">&lt;?php
+namespace ImiApp;
+
+use Imi\Main\AppBaseMain;
+  
+class Main extends AppBaseMain
+{
+  public function __init()
+  {
+      \Alan\ImiRoute\Route::init(); // Add this line
+  }
+
+}
+</code></pre>
+<p>3、在项目根目录下，创建<code>route/route.php</code>目录及文件，在<code>route.php</code>文件中，你就可以管理你的路由了：</p>
+<pre><code class="language-php">/**
+ * @var $router Route
+ */
+
+use Alan\ImiRoute\Route;
+use ImiApp\ApiServer\Controller\IndexController;
+use ImiApp\ApiServer\Middleware\Test2Middleware;
+use ImiApp\ApiServer\Middleware\TestMiddleware;
+
+$router-&gt;group(['middleware' =&gt; TestMiddleware::class], function (Route $router) {
+
+    $router-&gt;group(
+        [
+            'middleware' =&gt; Test2Middleware::class, 
+            'ignoreCase' =&gt; true, 
+            'prefix' =&gt; 'prefix'
+        ], function (Route $router) {
+        $router-&gt;get('hi', 'ImiApp\ApiServer\Controller\IndexController@index');
+    });
+
+    $router-&gt;any('/hi/api/abc', [IndexController::class, 'index']);
+
+    $router-&gt;any('/hi/api/{time}', [IndexController::class, 'api']);
+
+});
+
+$router-&gt;group(['prefix' =&gt; 'prefix'], function (Route $router) {
+    $router-&gt;get('/TEST/{time}', [IndexController::class, 'api']);
+});
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Windows的WSL音频解决方案]]></title>
+        <id>https://anhoder.github.io/post/1Es4mN1Hn/</id>
+        <link href="https://anhoder.github.io/post/1Es4mN1Hn/">
+        </link>
+        <updated>2020-04-18T11:58:26.000Z</updated>
+        <summary type="html"><![CDATA[<p>主要实现思路是使用pulseaudio进行音频转发，<a href="https://github.com/anhoder/wsl-audio-musicbox">wsl-audio-musicbox</a>项目主要是为了简化WSL与Windows之间通信转发的配置。</p>
+<blockquote>
+<p>可以实现在WSL中使用musicbox播放歌曲（<strong>给个Star吧~~</strong>）</p>
+</blockquote>
+]]></summary>
+        <content type="html"><![CDATA[<p>主要实现思路是使用pulseaudio进行音频转发，<a href="https://github.com/anhoder/wsl-audio-musicbox">wsl-audio-musicbox</a>项目主要是为了简化WSL与Windows之间通信转发的配置。</p>
+<blockquote>
+<p>可以实现在WSL中使用musicbox播放歌曲（<strong>给个Star吧~~</strong>）</p>
+</blockquote>
+<!-- more -->
+<h2 id="项目依赖">项目依赖</h2>
+<ul>
+<li>基于WSL2，WSL1未进行测试</li>
+<li>基于ubuntu1804，其他需要修改代码</li>
+<li>php-cli, 因为使用到PHP脚本处理文件内容</li>
+</ul>
+<h2 id="原理">原理</h2>
+<p>使用pulseaudio软件将音频数据信号转发到Windows上，本项目只是将繁杂的配置进行自动化处理，并可以实现开机自启动</p>
+<h2 id="使用">使用</h2>
+<ol>
+<li>
+<p>Windows下安装pulseaudio软件</p>
+</li>
+<li>
+<p>下载或clone本项目，将auto、etc目录移动或覆盖到pulseaudio的根目录下</p>
+</li>
+<li>
+<p>启动WSL，安装pulseaudio: <code>sudo apt install pulseaudio</code>，如果没有php环境，执行<code>sudo apt install php-cli</code>进行安装。<strong>确保/etc/wsl.conf中有配置项</strong>：<code>generateResolvConf = true</code>（如果没有，需要添加上，并<strong>重启电脑</strong>）</p>
+</li>
+<li>
+<p>Windows回到pulseaudio根目录，手动运行<code>auto</code>目录下的<code>start.bat</code>，出现<code>成功</code>表明一切顺利。（<strong>如果你在WSL中使用的不是zsh，则需要打开<code>auto/start.bat</code>文件，将ubuntu1804.exe run &quot;./start.php <code>echo ~/.zshrc</code> &amp;&amp; source ~/.zshrc&quot;中的<code>~/.zshrc</code>修改为你正在使用的环境变量文件，例如<code>~/.bashrc</code></strong></p>
+</li>
+<li>
+<p><strong>关闭WSL并重新打开</strong>，运行<code>paplay -p /mnt/c/Windows/Media/Alarm04.wav</code>，如果有美妙的声音播放出来，恭喜你，音频转发成功了！！</p>
+</li>
+<li>
+<p>如果你不想每次开机都手动执行一次<code>start.bat</code>，可以打开<code>auto/start.vbs</code>文件，将其中的<code>.\start.bat</code>替换为你电脑<code>start.bat</code>文件的<strong>绝对路径</strong>，并将start.vbs移动到Windows的自启动目录下（win+R运行<code>shell:startup</code>即可打开该目录）。重启试试看吧~</p>
+</li>
+</ol>
+<h2 id="使用musicbox">使用musicbox</h2>
+<blockquote>
+<p>只需要根据musicbox项目的Linux系统安装指引进行安装即可~~</p>
+</blockquote>
+<figure data-type="image" tabindex="1"><img src="media/15981627088961/musicbox.png" alt="musicbox" loading="lazy"></figure>
+]]></content>
+    </entry>
+</feed>
