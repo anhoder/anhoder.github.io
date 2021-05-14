@@ -8,7 +8,7 @@
 <meta name="keywords" content="anhoder的进阶日志">
 <meta name="description" content="一川烟草，满城风絮。">
 <meta name="theme-color" content="#000">
-<title>读《高性能MySQL》---（二） | anhoder的进阶日志</title>
+<title>anhoder的进阶日志</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1621005373025">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -61,8 +61,6 @@
 </script>
 
 
-  <meta name="description" content="读《高性能MySQL》---（二）" />
-  <meta name="keywords" content="MySQL" />
 </head>
 
 <body>
@@ -211,26 +209,10 @@
   <div class="main-continer">
     
     <div
-      class="section-layout pisces ">
+      class="section-layout  pisces">
       <div class="section-layout-wrapper">
-        
-
-<div class="sidebar">
-  
-    <div class="sidebar-box box-shadow-wrapper bg-color right-motion" id="sidebar">
-      
-        <div class="post-list-sidebar">
-          <div class="sidebar-title">
-            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
-            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
-          </div>
-        </div>
-      
-      <div class="sidebar-body pisces" id="sidebar_body">
-        
-          
-            <div class="post-side-meta" id="post_side_meta">
-              
+        <div id="sidebarMeta" class="sidebar">
+    
 <div class="sidebar-wrapper box-shadow-wrapper bg-color">
   <div class="sidebar-item">
     <img class="site-author-image right-motion" src="/images/avatar.png"/>
@@ -304,481 +286,474 @@
 
 
 </div>
-            </div>
-            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
-              <div class="toc-box right-motion">
-  <div class="toc-wrapper  auto"
-    id="toc_wrapper">
-    <ul class="markdownIt-TOC">
-<li>
-<ul>
-<li><a href="#%E8%A1%A8%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E4%BC%98%E5%8C%96">表与数据类型的优化</a>
-<ul>
-<li><a href="#%E9%80%89%E6%8B%A9%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%8E%9F%E5%88%99">选择数据类型的原则</a></li>
-<li><a href="#%E6%95%B4%E6%95%B0">整数</a></li>
-<li><a href="#%E5%AE%9E%E6%95%B0">实数</a></li>
-<li><a href="#%E5%AD%97%E7%AC%A6%E4%B8%B2">字符串</a></li>
-<li><a href="#%E6%9E%9A%E4%B8%BE">枚举</a></li>
-<li><a href="#%E6%97%B6%E9%97%B4">时间</a></li>
-<li><a href="#mysql%E8%AE%BE%E8%AE%A1%E4%B8%AD%E5%BA%94%E9%81%BF%E5%85%8D%E7%9A%84%E9%97%AE%E9%A2%98">MySQL设计中应避免的问题</a></li>
-<li><a href="#%E8%8C%83%E5%BC%8F">范式</a></li>
-<li><a href="#alter-table%E6%93%8D%E4%BD%9C">ALTER TABLE操作</a></li>
-</ul>
-</li>
-<li><a href="#%E5%88%9B%E5%BB%BA%E9%AB%98%E6%80%A7%E8%83%BD%E7%9A%84%E7%B4%A2%E5%BC%95">创建高性能的索引</a>
-<ul>
-<li><a href="#b-tree%E7%B4%A2%E5%BC%95">B-Tree索引</a></li>
-<li><a href="#hash%E7%B4%A2%E5%BC%95">Hash索引</a></li>
-<li><a href="#%E6%A8%A1%E6%8B%9Fhash%E7%B4%A2%E5%BC%95">模拟Hash索引</a></li>
-<li><a href="#%E5%85%A8%E6%96%87%E7%B4%A2%E5%BC%95">全文索引</a></li>
-<li><a href="#%E9%AB%98%E6%80%A7%E8%83%BD%E7%9A%84%E7%B4%A2%E5%BC%95%E7%AD%96%E7%95%A5">高性能的索引策略</a></li>
-<li><a href="#%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95">聚簇索引</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-  </div>
 </div>
-
 <script>
-
-  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
-  let active = 'active-show', activeClass = 'active-current';
-  let tocWrapper = document.querySelector('#toc_wrapper');
-  let tocContent = tocWrapper.children[0];
-  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
-
-  function addTocNumber(elem, deep) {
-    if (!elem) {
-      return;
-    }
-    let prop = elem.__proto__;
-
-    if (prop === HTMLUListElement.prototype) {
-      for (let i = 0; i < elem.children.length; i++) {
-        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+  let sidebarMeta = document.querySelector('#sidebarMeta');
+  let scheme = 'pisces';
+  let sidebarWrapper = document.querySelector('.sidebar-wrapper');
+  if (sidebarMeta && (scheme === 'pisces' || scheme === 'gemini')) {
+    document.addEventListener('scroll', function(e) {
+      if (document.scrollingElement.scrollTop > parseInt(sidebarMeta.style.marginTop) + 10) {
+        sidebarWrapper.classList.add('home-sidebar-fixed')
+      } else {
+        sidebarWrapper.classList.remove('home-sidebar-fixed')
       }
-    } else if (prop === HTMLLIElement.prototype) {
-      // 保存li元素
-      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
-        lList.push(elem);
-      }
-      for (let i = 0; i < elem.children.length; i++) {
-        let cur = elem.children[i];
-        if (cur.__proto__ === HTMLAnchorElement.prototype) {
-          if (autoNumber) {
-            cur.text = deep + ' ' + cur.text;
-          }
-        } else if (cur.__proto__ === HTMLUListElement.prototype) {
-          addTocNumber(cur, deep);
-        }
-      }
-    }
-  }
-
-  function removeParentActiveClass() {
-    let parents = tocContent.querySelectorAll('.' + active)
-    parents.forEach(function (elem) {
-      elem.classList.remove(active);
     });
   }
-
-  function addActiveClass(index) {
-    if (index >= 0 && index < hList.length) {
-      lList[index].classList.add(activeClass);
-    }
-  }
-
-  function removeActiveClass(index) {
-    if (index >= 0 && index < hList.length) {
-      lList[index].classList.remove(activeClass);
-    }
-  }
-
-  function addActiveLiElemment(elem, parent) {
-    if (!elem || elem === parent) {
-      return;
-    } else {
-      if (elem.__proto__ === HTMLLIElement.prototype) {
-        elem.classList.add(active);
-      }
-      addActiveLiElemment(elem.parentElement, parent);
-    }
-  }
-
-  function showToc() {
-    if (tocWrapper) {
-      postBody = document.querySelector('#post_body');
-      for (let i = 0; i < postBody.children.length; i++) {
-        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
-          hList.push(postBody.children[i]);
-        }
-      }
-      if (tocWrapper.classList.contains('compress')) {
-        tocContent.classList.add('closed');
-      } else if (tocWrapper.classList.contains('no_compress')) {
-        tocContent.classList.add('expanded');
-      } else {
-        if (hList.length > 10) {
-          active = 'active-hidden'
-          tocContent.classList.add('closed');
-        } else {
-          tocContent.classList.add('expanded');
-        }
-      }
-    }
-  }
-
-  (function () {
-    // 处理不是从#一级标题开始目录
-    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
-      let con = tocContent.children[0].children[0];
-      tocContent.innerHTML = con.innerHTML;
-    }
-    let markdownItTOC = document.querySelector('.markdownIt-TOC');
-    let innerHeight = window.innerHeight;
-    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
-    addTocNumber(tocContent, '');
-  })();
-
-  document.addEventListener('scroll', function (e) {
-    if (lList.length <= 0) {
-      return;
-    }
-    let scrollTop = document.scrollingElement.scrollTop + 10;
-    let dir;
-
-    if (lastTop - scrollTop > 0) {
-      dir = 'up';
-    } else {
-      dir = 'down';
-    }
-
-    lastTop = scrollTop;
-    if (scrollTop <= 0) {
-      if (lastIndex >= 0 && lastIndex < hList.length) {
-        lList[lastIndex].classList.remove(activeClass);
-      }
-      return;
-    }
-
-    let current = 0, hasFind = false;
-    for (let i = 0; i < hList.length; i++) {
-      if (hList[i].offsetTop > scrollTop) {
-        current = i;
-        hasFind = true;
-        break;
-      }
-    }
-    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
-      current = hList.length - 1;
-    } else {
-      current--;
-    }
-    if (dir === 'down') {
-      if (current > lastIndex) {
-        addActiveClass(current);
-        removeActiveClass(lastIndex)
-        lastIndex = current;
-        removeParentActiveClass();
-        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
-      }
-    } else {
-      if (current < lastIndex) {
-        addActiveClass(current);
-        removeActiveClass(lastIndex);
-        lastIndex = current;
-        removeParentActiveClass();
-        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
-      }
-    }
-  });
-
-
-  window.addEventListener('load', function () {
-    showToc();
-    document.querySelector('#sidebar').style = 'display: block;';
-    tocWrapper.classList.add('toc-active');
-    setTimeout(function () {
-      if ("createEvent" in document) {
-        let evt = document.createEvent("HTMLEvents");
-        evt.initEvent("scroll", false, true);
-        document.dispatchEvent(evt);
-      }
-      else {
-        document.fireEvent("scroll");
-      }
-    }, 500)
-  })
-
-</script>
-            </div>
-          
-        
+  </script>
+        <div class="section-box tag-line box-shadow-wrapper">
+          <section class="section tags-section posts-expand bg-color">
+            <div class="padding-wrapper">
+  <div class="tag-timeline-box">
+    <div class="tag-timeline-wrapper">
+      <div class="tag-timeline-title">
+        <h2>
+          go
+          <small class="language" data-lan="tag">标签</small>
+        </h2>
       </div>
-    </div>
-  
-</div>
-<script>
-  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
-  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
-  const SLIDE_UP_IN = 'slide-up-in';
-
-  let sidebar = document.querySelector('#sidebar'),
-  tocSideBar = document.querySelector('#tocSideBar'),
-  metaSideBar = document.querySelector('#metaSideBar'),
-  postToc = document.querySelector('#post_toc'),
-  postSiteMeta = document.querySelector('#post_side_meta'),
-  sidebarTitle = document.querySelector('.sidebar-title'),
-  sidebarBody = document.querySelector('#sidebar_body');
-
-  tocSideBar && tocSideBar.addEventListener('click', (e) => {
-    toggleSidebar(e);
-  });
-
-  metaSideBar && metaSideBar.addEventListener('click', (e) => {
-    toggleSidebar(e);
-  });
-
-  function toggleSidebar(e) {
-    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
-    if (currentTitle == e.srcElement) {
-      return ;
-    }
-    let current, showElement, hideElement;
-    if (e.srcElement == metaSideBar) {
-      showElement = postSiteMeta;
-      hideElement = postToc;
-    } else if (e.srcElement == tocSideBar){
-      showElement = postToc;
-      hideElement = postSiteMeta;
-    }
-    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
-    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
-
-    window.Velocity(hideElement, 'stop');
-    window.Velocity(hideElement, 'transition.slideUpOut', {
-      display: 'none',
-      duration: 200,
-      complete: function () {
-        window.Velocity(showElement, 'transition.slideDownIn', {
-          duration: 200
-        });
-      }
-    })
-    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
-    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
-  }
-
-  postToc && postToc.addEventListener('transitionend', function() {
-    this.classList.remove(SLIDE_UP_IN);
-  });
-
-  if (sidebarBody) {
-    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
-      let hasFix = false;
-      let scrollEl = document.querySelector('.main-continer');
-      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
-      window.addEventListener('scroll', function(e) {
-        if (document.scrollingElement.scrollTop >= limitTop) {
-          if (!hasFix) {
-            sidebar.classList.add('sidebar-fixed');
-            hasFix = true;
-          }
-        } else {
-          if (hasFix) {
-            sidebar.classList.remove('sidebar-fixed');
-            hasFix = false;
-          }
-        }
-      });
-    }
-  }
-  
-</script>
-        <div class="section-box box-shadow-wrapper">
-          <div class="section bg-color post post-page">
-            <section class="post-header">
-  <h1 class="post-title">
-    <a class="post-title-link" href="/post/eYNTZFhJ-/">
-      读《高性能MySQL》---（二）
-    </a>
-  </h1>
-  <div class="post-meta">
-    
-    <span class="meta-item pc-show">
-      <i class="fa fa-calendar-o"></i>
-      <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2018-12-12 19:23:08">2018-12-12</span>
-      <span class="post-meta-divider pc-show">|</span>
-    </span>
-    
-    <span class="meta-item">
-      <i class="fa fa-folder-o"></i>
-      <span class="pc-show language" data-lan="category-in">分类于</span>
       
       
-      <a href="/tag/K7yppa0Fn/">
-        <span>MySQL</span>
+      
+      <a href="/post/NOO340v6g/">
+        <div class="motion-warpper">
+          <div class="tag-post-node">
+            <h1>
+              05-14
+              <small>musicfox 2.0——golang重写版</small>
+            </h1>
+          </div>
+        </div>
       </a>
       
       
-    </span>
-    <span class="post-meta-divider">|</span>
-    
-    <span class="meta-item">
-      <i class="fa fa-clock-o"></i>
-      <span>5<span class="language" data-lan="minute">分钟</span></span>
-    </span>
-    <span class="meta-item">
-      <span class="post-meta-divider">|</span>
-      <i class="fa fa-file-word-o"></i>
-      <span>1352<span class="pc-show language" data-lan="words">字数</span></span>
-    </span>
-    
-  </div>
-</section>
-            <div class="post-body next-md-body" id="post_body">
-              <!-- more -->
-<h2 id="表与数据类型的优化">表与数据类型的优化</h2>
-<h3 id="选择数据类型的原则">选择数据类型的原则</h3>
-<blockquote>
-<p><strong>更小的通常更好</strong>：尽量使用可以正确存储数据的最小数据类型。因为更小通常更快，性能更好。</p>
-<p><strong>简单就好</strong>：简单数据类型通常需要更少的CPU周期。例，使用MySQL内建的类型而不是字符串来存储日期和时间；应该用整型存储IP地址，因为IP本身就是一串数字，使用点分割只是为了更容易让我们识别。</p>
-<p><strong>尽量避免NULL</strong>：使用NULL会让MySQL更难优化，因为可为NULL的列使得索引、索引统计和值更复杂。</p>
-</blockquote>
-<h3 id="整数">整数</h3>
-<p>TINYINT, SMALLINT, MEDIUMINT, INT, BIGINT。分别使用8, 16, 24, 32, 64位存储空间。</p>
-<p>MySQL可以为整数类型指定宽度，但是不会限制值的合法范围，只是规定一些MySQL交互工具用来显示字符的个数。</p>
-<h3 id="实数">实数</h3>
-<p>FLOAT, DOUBLE, DECIMAL。FLOAT使用4个字节，DOUBLE使用8个字节。</p>
-<p>其中FLOAT、DOUBLE使用浮点运算实现，而DECIMAL是由MySQL服务器实现其计算。</p>
-<pre><code class="language-sql">decimal(总位数, 小数点后位数)
-</code></pre>
-<h3 id="字符串">字符串</h3>
-<p>VARCHAR, CHAR。VARCHAR为变长，CHAR为定长。当使用VARCHAR时，ROW_FORMAT不应该指定为FIXED，因为FIXED表示行长度不可变。</p>
-<h3 id="枚举">枚举</h3>
-<p>ENUM。底层使用整数存储，存在“数字-字符串”的映射关系表。<strong>需要注意的是排序时是按照内部整数进行排序，而不是按照字符串</strong>。在定义时，可以将枚举的项按字符串排好序，已解决排序问题。</p>
-<h3 id="时间">时间</h3>
-<p>DATETIME: 1001~9999，占8个字节，与时区无关。</p>
-<p>TIMESTAMP: 1970~2038，占4个字节，与时区有关。在插入数据时，若未指定值，则自动取当前时间作为值填充。</p>
-<h3 id="mysql设计中应避免的问题">MySQL设计中应避免的问题</h3>
-<blockquote>
-<p>① 使用太多的列；</p>
-<p>② 使用太多的关联：如果希望查询执行得快速且并发性好，单个查询最好在12个表内做关联。</p>
-<p>③ 过度使用枚举；</p>
-<p>④ 完全不使用NULL，有时候使用NULL能更好的处理业务逻辑。</p>
-</blockquote>
-<h3 id="范式">范式</h3>
-<p><strong>范式的优点</strong>：范式化的更新操作通常比反范式化要快；范式化的表更小，执行操作会更快；冗余数据更少，查询数据时更少使用DISTINCT或GROUP BY。</p>
-<p><strong>范式的缺点</strong>：范式化的表需要关联操作。</p>
-<p>在实际使用中，通常<strong>混合使用范式化和反范式化</strong>。</p>
-<h3 id="alter-table操作">ALTER TABLE操作</h3>
-<p>当对表使用ALTER TABLE操作时，大部分时候会导致MySQL服务中断。常用的解决方法有：</p>
-<blockquote>
-<p>① 先在一台不提供服务的机器上执行ALTER TABLE操作，然后和提供服务的主库进行切换。</p>
-<p>② 影子拷贝：用要求的表结构创建一张和源表无关的新表，然后通过重命名和删表操作交换两张表。</p>
-</blockquote>
-<h2 id="创建高性能的索引">创建高性能的索引</h2>
-<h3 id="b-tree索引">B-Tree索引</h3>
-<p>B-Tree索引是最通用的索引类型。B-Tree索引适用于全键值、键值范围、键前缀查找、ORDER BY。</p>
-<h3 id="hash索引">Hash索引</h3>
-<p>哈希索引，对所有索引列计算一个哈希码，并将哈希码存储在索引中，同时在哈希表中保存指向数据行的指针。哈希冲突时，使用链表保存相同哈希码的数据。</p>
-<p>Hash索引的特点：</p>
-<blockquote>
-<p>① 只有精确匹配索引的每一列才有效，因为Hash索引需要使用所有列计算出hash码才能找到对应的数据行。</p>
-<p>② 无法用于排序；</p>
-<p>③ 速度快；</p>
-<p>④ 只能用于等值查询，不能用于范围查询。</p>
-</blockquote>
-<h3 id="模拟hash索引">模拟Hash索引</h3>
-<p>例如：存储大量URL时，需要根据URL进行搜索查找。这时，可以添加一个被索引的url_crc列，使用CRC32作为hash。</p>
-<pre><code class="language-sql">select id from url where url_crc=CRC32(&quot;http://&quot;) and url=&quot;http://&quot;
-</code></pre>
-<h3 id="全文索引">全文索引</h3>
-<p>全文索引是一种特殊类型的索引，它查找的是文本中的关键词，而不是直接比较索引中的值。</p>
-<h3 id="高性能的索引策略">高性能的索引策略</h3>
-<blockquote>
-<p>① 索引列不能是表达式的一部分，也不能是函数的参数。应该养成简化WHERE条件的习惯，始终将索引列单独放在比较符号的一侧。</p>
-<p>② 当需要索引很长的字符列时，可以索引开始的部分前缀字符，以节约索引空间。</p>
-<p>③ 当创建多列索引时，需要注意索引列的顺序，应遵循前缀原则进行排序。</p>
-</blockquote>
-<h3 id="聚簇索引">聚簇索引</h3>
-<p>聚簇索引不同于B-Tree索引、Hash索引，其不是一种索引类型，而是一种数据存储方式。</p>
-<p>InnoDB的聚簇索引在同一个结构中保存了B-Tree索引和数据行。InnoDB通过主键聚集数据，如果没有定义主键，InnoDB会选择一个唯一的非空索引代替，如果没有这样的索引，InnoDB会隐式定义一个主键来作为聚簇索引。</p>
-<blockquote>
-<p>聚簇索引的优点：① 可以把相关数据保存在一起；② 数据访问更快；③ 使用覆盖索引扫描的查询可以直接使用叶节点中的主键值。</p>
-<p>聚簇索引的缺点：① 插入速度严重依赖于插入顺序；② 更新聚簇索引列的代价很高；③ 聚簇索引可能导致全盘扫描变慢。</p>
-</blockquote>
-
-            </div>
-            
-            
-              <div class="post-footer">
-  <ul class="post-copyright">
-    <li class="post-copyright-author">
-      <strong class="language" data-lan="author">本文作者：</strong>
-      anhoder
-    </li>
-    <li class="post-copyright-link">
-      <strong class="language" data-lan="link">本文链接：</strong>
-      <a href="/post/eYNTZFhJ-/" title="读《高性能MySQL》---（二）">/post/eYNTZFhJ-/</a>
-    </li>
-    <li class="post-copyright-license">
-      <strong class="language" data-lan="copyright">版权声明： </strong>
-      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
-    </li>
-  </ul>
-  <div class="tags">
-    
-      <a href="/tag/K7yppa0Fn/"># MySQL</a>
-    
-  </div>
-  <div class="nav">
-    <div class="nav-prev">
       
-        <i class="fa fa-chevron-left"></i>
-        <a class="nav-pc-next" title="读《高性能MySQL》---（三）" href="/post/sQNETQWN2/">读《高性能MySQL》---（三）</a class="nav-pc-next">
-        <a class="nav-mobile-prev" title="读《高性能MySQL》---（三）" href="/post/sQNETQWN2/">上一篇</a>
       
-    </div>
-    <div class="nav-next">
       
-        <a class="nav-pc-next" title="读《高性能MySQL》---（一）" href="/post/_vhnkfsn5/">读《高性能MySQL》---（一）</a>
-        <a class="nav-mobile-next" title="读《高性能MySQL》---（一）" href="/post/_vhnkfsn5/">下一篇</a>
-        <i class="fa fa-chevron-right"></i>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       
     </div>
   </div>
 </div>
-            
-            
-  
-    
-      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-
-<div id="gitalk-container"></div>
-
-<script>
-  var gitalk = new Gitalk({
-    clientID: '8254f894b17fffeef6e2',
-    clientSecret: 'aa345603999774a44649ad73ef7fe72ee45a021b',
-    repo: 'personal-blog-comments',
-    owner: 'anhoder',
-    admin: ['anhoder'],
-    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
-    distractionFreeMode: false  // Facebook-like distraction free mode
-  })
-  gitalk.render('gitalk-container')
-</script>
-    
-    
-  
-
-          </div>
+          </section>
         </div>
       </div>
     </div>
@@ -1507,223 +1482,6 @@
     parent.insertBefore(aelem, next);
   })
 </script>
-    <div class="reward-mask" style="display: none;">
-  <div class="reward-relative">
-    <span class="close" aria-hidden="true">x</span>
-    <div class="reward-body">
-      <h2>感谢您的支持，我会继续努力的!</h2>
-      <div class="reward-img-box">
-        <div style="position: relative; width: 140px; height: 140px;">
-          
-          
-          
-        </div>
-      </div>
-      <p class="reward-word">扫码打赏，你说多少就多少</p>
-      <p class="reward-tip">打开微信扫一扫，即可进行扫码打赏哦</p>
-    </div>
-    <div class="bottom">
-      
-      
-    </div>
-  </div>
-</div>
-<style>
-  .reward-mask {
-    position: fixed;
-    z-index: 99999;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: #00000054;
-  }
-
-  .reward-relative {
-    position: relative;
-    width: 480px;
-    text-align: center;
-    margin: 0 auto;
-    border-radius: 5px;
-    background-color: #fff;
-    top: 50%;
-    margin-top: -205px;
-  }
-
-  .reward-relative .close {
-    position: absolute;
-    right: 10px;
-    font-weight: normal;
-    font-size: 16px;
-    color: #929292;
-  }
-
-  .reward-body {
-    padding: 40px 20px 20px;
-  }
-
-  .bottom {
-    display: flex;
-  }
-
-  .reward-btn {
-    text-align: center;
-  }
-
-  .reward-btn-text {
-    display: inline-block;
-    cursor: pointer;
-    width: 60px;
-    height: 60px;
-    line-height: 60px;
-    border-radius: 50%;
-    background-color: #ff9734;
-    color: #FFF;
-    margin-top: 20px;
-  }
-
-  .pay-text {
-    margin-top: 10px;
-    padding: 10px;
-    flex: 1;
-    transition: all .2s linear;
-  }
-
-  .pay-text:hover {
-    background-color: #a5a5a536;
-  }
-
-  .reward-body h2 {
-    padding-top: 10px;
-    text-align: center;
-    color: #a3a3a3;
-    font-size: 16px;
-    font-weight: normal;
-    margin: 0 0 20px;
-  }
-
-  .reward-body h2:after,
-  .reward-body h2:before {
-    font-family: Arial, Helvetica, sans-serif;
-    background: 0 0;
-    width: 0;
-    height: 0;
-    font-style: normal;
-    color: #eee;
-    font-size: 80px;
-    position: absolute;
-    top: 20px;
-  }
-
-  .reward-body h2:before {
-    content: '\201c';
-    left: 50px;
-  }
-
-  .reward-body h2:after {
-    content: '\201d';
-    right: 80px;
-  }
-
-  .reward-img-box {
-    display: inline-block;
-    padding: 10px;
-    border: 6px solid #ea5f00;
-    margin: 0 auto;
-    border-radius: 3px;
-    position: relative;
-  }
-
-  .reward-img {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-  }
-
-  @media (max-width: 767px) {
-    .reward-relative {
-      height: 100%;
-      top: 0px;
-      margin-top: 0;
-      width: auto;
-    }
-
-    .reward-relative .bottom {
-      flex-direction: column;
-    }
-
-    .reward-relative .pay-text {
-      width: 80%;
-      margin: 5px auto;
-      border: 1px solid silver;
-      padding: 6px;
-      border-radius: 4px;
-    }
-
-    .reward-body h2:after {
-      right: 40px;
-    }
-
-    .reward-body h2:after,
-    .reward-body h2:before {
-      font-size: 60px;
-    }
-
-    .reward-body h2:before {
-      left: 20px;
-    }
-  }
-</style>
-<script>
-  !function () {
-    var mask = document.querySelector('.reward-mask');
-    let close = document.querySelector('.reward-relative .close');
-    let rewardBtn = document.querySelector('.reward-btn');
-
-    let zfb = document.querySelector('#zfb'),
-      wx = document.querySelector('#wx'),
-      zfbBtn = document.querySelector('#zfbBtn'),
-      wxBtn = document.querySelector('#wxBtn');
-
-    if (zfbBtn && wxBtn) {
-      zfbBtn.addEventListener('click', () => {
-        window.Velocity(zfb, 'transition.slideLeftIn', {
-          duration: 400
-        });
-        window.Velocity(wx, 'transition.slideRightOut', {
-          display: 'none',
-          duration: 400
-        });
-      });
-
-      wxBtn.addEventListener('click', () => {
-        window.Velocity(wx, 'transition.slideRightIn', {
-          duration: 400
-        });
-        window.Velocity(zfb, 'transition.slideLeftOut', {
-          display: 'none',
-          duration: 400
-        });
-      });
-    }
-
-    rewardBtn.addEventListener('click', (e) => {
-      window.Velocity(mask, 'transition.slideDownIn', {
-        duration: 400
-      })
-    });
-
-    close.addEventListener('click', (e) => {
-      e.preventDefault();
-      window.Velocity(mask, 'transition.slideUpOut', {
-        duration: 400
-      })
-    })
-  }()
-</script>
-
   </div>
 </body>
 
@@ -16044,6 +15802,7 @@ server {
 
 
 <script src="/media/js/cool.js"></script>
+
 
 
 

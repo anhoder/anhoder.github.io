@@ -8,7 +8,7 @@
 <meta name="keywords" content="anhoder的进阶日志">
 <meta name="description" content="一川烟草，满城风絮。">
 <meta name="theme-color" content="#000">
-<title>读《高性能MySQL》---（二） | anhoder的进阶日志</title>
+<title>musicfox 2.0——golang重写版 | anhoder的进阶日志</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1621005373025">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -61,8 +61,8 @@
 </script>
 
 
-  <meta name="description" content="读《高性能MySQL》---（二）" />
-  <meta name="keywords" content="MySQL" />
+  <meta name="description" content="musicfox 2.0——golang重写版" />
+  <meta name="keywords" content="go,musicfox,musicbox" />
 </head>
 
 <body>
@@ -312,29 +312,29 @@
     <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E8%A1%A8%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E4%BC%98%E5%8C%96">表与数据类型的优化</a>
+<li><a href="#%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98%E4%B8%8E%E6%96%B9%E6%A1%88">存在的问题与方案</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8go%E6%97%B6%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98">使用go时遇到的问题</a>
 <ul>
-<li><a href="#%E9%80%89%E6%8B%A9%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%8E%9F%E5%88%99">选择数据类型的原则</a></li>
-<li><a href="#%E6%95%B4%E6%95%B0">整数</a></li>
-<li><a href="#%E5%AE%9E%E6%95%B0">实数</a></li>
-<li><a href="#%E5%AD%97%E7%AC%A6%E4%B8%B2">字符串</a></li>
-<li><a href="#%E6%9E%9A%E4%B8%BE">枚举</a></li>
-<li><a href="#%E6%97%B6%E9%97%B4">时间</a></li>
-<li><a href="#mysql%E8%AE%BE%E8%AE%A1%E4%B8%AD%E5%BA%94%E9%81%BF%E5%85%8D%E7%9A%84%E9%97%AE%E9%A2%98">MySQL设计中应避免的问题</a></li>
-<li><a href="#%E8%8C%83%E5%BC%8F">范式</a></li>
-<li><a href="#alter-table%E6%93%8D%E4%BD%9C">ALTER TABLE操作</a></li>
+<li><a href="#%E5%8D%8F%E7%A8%8B%E6%B3%84%E6%BC%8F">协程泄漏</a></li>
+<li><a href="#%E5%A6%82%E4%BD%95%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%E5%8D%8F%E7%A8%8B%E6%B3%84%E6%BC%8F">如何尽量避免协程泄漏</a></li>
+<li><a href="#%E5%8D%8F%E7%A8%8B%E6%B3%84%E6%BC%8F%E6%8E%92%E6%9F%A5">协程泄漏排查</a></li>
 </ul>
 </li>
-<li><a href="#%E5%88%9B%E5%BB%BA%E9%AB%98%E6%80%A7%E8%83%BD%E7%9A%84%E7%B4%A2%E5%BC%95">创建高性能的索引</a>
+<li><a href="#%E9%A2%84%E8%A7%88">预览</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85">安装</a>
 <ul>
-<li><a href="#b-tree%E7%B4%A2%E5%BC%95">B-Tree索引</a></li>
-<li><a href="#hash%E7%B4%A2%E5%BC%95">Hash索引</a></li>
-<li><a href="#%E6%A8%A1%E6%8B%9Fhash%E7%B4%A2%E5%BC%95">模拟Hash索引</a></li>
-<li><a href="#%E5%85%A8%E6%96%87%E7%B4%A2%E5%BC%95">全文索引</a></li>
-<li><a href="#%E9%AB%98%E6%80%A7%E8%83%BD%E7%9A%84%E7%B4%A2%E5%BC%95%E7%AD%96%E7%95%A5">高性能的索引策略</a></li>
-<li><a href="#%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95">聚簇索引</a></li>
+<li><a href="#mac">Mac</a>
+<ul>
+<li><a href="#%E4%BD%BF%E7%94%A8brew%E5%AE%89%E8%A3%85">使用brew安装</a></li>
+<li><a href="#%E7%9B%B4%E6%8E%A5%E4%B8%8B%E8%BD%BD">直接下载</a></li>
 </ul>
 </li>
+<li><a href="#linux">Linux</a></li>
+<li><a href="#windows">Windows</a></li>
+</ul>
+</li>
+<li><a href="#%E5%BF%AB%E6%8D%B7%E9%94%AE">快捷键</a></li>
+<li><a href="#todo">TODO</a></li>
 </ul>
 </li>
 </ul>
@@ -602,8 +602,8 @@
           <div class="section bg-color post post-page">
             <section class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="/post/eYNTZFhJ-/">
-      读《高性能MySQL》---（二）
+    <a class="post-title-link" href="/post/NOO340v6g/">
+      musicfox 2.0——golang重写版
     </a>
   </h1>
   <div class="post-meta">
@@ -611,7 +611,7 @@
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2018-12-12 19:23:08">2018-12-12</span>
+      <span class="publish-time" data-t="2021-05-14 20:51:23">2021-05-14</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
@@ -620,8 +620,20 @@
       <span class="pc-show language" data-lan="category-in">分类于</span>
       
       
-      <a href="/tag/K7yppa0Fn/">
-        <span>MySQL</span>
+      <a href="/tag/Sq0EaZE0z/">
+        <span>go</span>
+      </a>、
+      
+      
+      
+      <a href="/tag/4DtRgZzLu/">
+        <span>musicfox</span>
+      </a>、
+      
+      
+      
+      <a href="/tag/9ERhdVc7a8/">
+        <span>musicbox</span>
       </a>
       
       
@@ -635,83 +647,306 @@
     <span class="meta-item">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
-      <span>1352<span class="pc-show language" data-lan="words">字数</span></span>
+      <span>1249<span class="pc-show language" data-lan="words">字数</span></span>
     </span>
     
   </div>
 </section>
             <div class="post-body next-md-body" id="post_body">
-              <!-- more -->
-<h2 id="表与数据类型的优化">表与数据类型的优化</h2>
-<h3 id="选择数据类型的原则">选择数据类型的原则</h3>
-<blockquote>
-<p><strong>更小的通常更好</strong>：尽量使用可以正确存储数据的最小数据类型。因为更小通常更快，性能更好。</p>
-<p><strong>简单就好</strong>：简单数据类型通常需要更少的CPU周期。例，使用MySQL内建的类型而不是字符串来存储日期和时间；应该用整型存储IP地址，因为IP本身就是一串数字，使用点分割只是为了更容易让我们识别。</p>
-<p><strong>尽量避免NULL</strong>：使用NULL会让MySQL更难优化，因为可为NULL的列使得索引、索引统计和值更复杂。</p>
-</blockquote>
-<h3 id="整数">整数</h3>
-<p>TINYINT, SMALLINT, MEDIUMINT, INT, BIGINT。分别使用8, 16, 24, 32, 64位存储空间。</p>
-<p>MySQL可以为整数类型指定宽度，但是不会限制值的合法范围，只是规定一些MySQL交互工具用来显示字符的个数。</p>
-<h3 id="实数">实数</h3>
-<p>FLOAT, DOUBLE, DECIMAL。FLOAT使用4个字节，DOUBLE使用8个字节。</p>
-<p>其中FLOAT、DOUBLE使用浮点运算实现，而DECIMAL是由MySQL服务器实现其计算。</p>
-<pre><code class="language-sql">decimal(总位数, 小数点后位数)
+              <p>musicfox 2.0终于完成了，没有太多的功能变更，主要使用golang进行重写，优化了用户体验（主要是Windows下）。</p>
+<!-- more -->
+<h2 id="存在的问题与方案">存在的问题与方案</h2>
+<p>musicfox最开始是用Dart写的，工作原理大致是主进程fork一个mpg123的子进程，主进程处理UI渲染、用户交互及网络请求等，然后通过进程间管道通信，来控制mpg123子进程的音乐播放、暂停以及播放器的音量大小等。</p>
+<p>这种模式下，会存在以下这些问题：</p>
+<ul>
+<li>依赖mpg123，需要用户手动安装mpg123</li>
+<li>mpg123只能播放mp3音乐，网易云无损音质是flac格式，无法播放</li>
+<li>进程间需要通过管道进行通信，Windows下不容易处理</li>
+<li>Dart大多数三方包都是基于Flutter的，原生包不多</li>
+<li>...</li>
+</ul>
+<p>为了解决这些问题，于是开始采用golang进行重写，优势主要是：</p>
+<ul>
+<li>golang支持更多平台的二进制编译</li>
+<li>拥有丰富的第三方包，例如音频播放的<a href="https://github.com/faiface/beep">beep</a>、TUI渲染的<br>
+<a href="https://github.com/charmbracelet/bubbletea">bubbletea</a>、本地数据库的<a href="https://github.com/boltdb/bolt">bolt</a>等等</li>
+<li>不需要借助其他进程，所以不存在进程通信</li>
+<li>支持mp3、flac、wav等格式音频文件的解码播放</li>
+<li>goroutine + chan</li>
+</ul>
+<p>另外对我自己来说可以深入熟悉golang...</p>
+<h2 id="使用go时遇到的问题">使用go时遇到的问题</h2>
+<h3 id="协程泄漏">协程泄漏</h3>
+<p>在使用golang过程中遇到比较严重的问题就是协程泄漏。例如下面的代码：</p>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+	&quot;runtime&quot;
+)
+
+func main() {
+	c1 := make(chan struct{})
+	for i := 0; i &lt; 3; i++ {
+		go test(c1)
+		fmt.Println(runtime.NumGoroutine())
+	}
+}
+
+func test(c chan&lt;- struct{}) {
+	c &lt;- struct{}{}
+}
 </code></pre>
-<h3 id="字符串">字符串</h3>
-<p>VARCHAR, CHAR。VARCHAR为变长，CHAR为定长。当使用VARCHAR时，ROW_FORMAT不应该指定为FIXED，因为FIXED表示行长度不可变。</p>
-<h3 id="枚举">枚举</h3>
-<p>ENUM。底层使用整数存储，存在“数字-字符串”的映射关系表。<strong>需要注意的是排序时是按照内部整数进行排序，而不是按照字符串</strong>。在定义时，可以将枚举的项按字符串排好序，已解决排序问题。</p>
-<h3 id="时间">时间</h3>
-<p>DATETIME: 1001~9999，占8个字节，与时区无关。</p>
-<p>TIMESTAMP: 1970~2038，占4个字节，与时区有关。在插入数据时，若未指定值，则自动取当前时间作为值填充。</p>
-<h3 id="mysql设计中应避免的问题">MySQL设计中应避免的问题</h3>
-<blockquote>
-<p>① 使用太多的列；</p>
-<p>② 使用太多的关联：如果希望查询执行得快速且并发性好，单个查询最好在12个表内做关联。</p>
-<p>③ 过度使用枚举；</p>
-<p>④ 完全不使用NULL，有时候使用NULL能更好的处理业务逻辑。</p>
-</blockquote>
-<h3 id="范式">范式</h3>
-<p><strong>范式的优点</strong>：范式化的更新操作通常比反范式化要快；范式化的表更小，执行操作会更快；冗余数据更少，查询数据时更少使用DISTINCT或GROUP BY。</p>
-<p><strong>范式的缺点</strong>：范式化的表需要关联操作。</p>
-<p>在实际使用中，通常<strong>混合使用范式化和反范式化</strong>。</p>
-<h3 id="alter-table操作">ALTER TABLE操作</h3>
-<p>当对表使用ALTER TABLE操作时，大部分时候会导致MySQL服务中断。常用的解决方法有：</p>
-<blockquote>
-<p>① 先在一台不提供服务的机器上执行ALTER TABLE操作，然后和提供服务的主库进行切换。</p>
-<p>② 影子拷贝：用要求的表结构创建一张和源表无关的新表，然后通过重命名和删表操作交换两张表。</p>
-</blockquote>
-<h2 id="创建高性能的索引">创建高性能的索引</h2>
-<h3 id="b-tree索引">B-Tree索引</h3>
-<p>B-Tree索引是最通用的索引类型。B-Tree索引适用于全键值、键值范围、键前缀查找、ORDER BY。</p>
-<h3 id="hash索引">Hash索引</h3>
-<p>哈希索引，对所有索引列计算一个哈希码，并将哈希码存储在索引中，同时在哈希表中保存指向数据行的指针。哈希冲突时，使用链表保存相同哈希码的数据。</p>
-<p>Hash索引的特点：</p>
-<blockquote>
-<p>① 只有精确匹配索引的每一列才有效，因为Hash索引需要使用所有列计算出hash码才能找到对应的数据行。</p>
-<p>② 无法用于排序；</p>
-<p>③ 速度快；</p>
-<p>④ 只能用于等值查询，不能用于范围查询。</p>
-</blockquote>
-<h3 id="模拟hash索引">模拟Hash索引</h3>
-<p>例如：存储大量URL时，需要根据URL进行搜索查找。这时，可以添加一个被索引的url_crc列，使用CRC32作为hash。</p>
-<pre><code class="language-sql">select id from url where url_crc=CRC32(&quot;http://&quot;) and url=&quot;http://&quot;
+<p>执行后会输出：</p>
+<pre><code>2
+3
+4
+5
+6
+7
+8
+9
+10
+11
 </code></pre>
-<h3 id="全文索引">全文索引</h3>
-<p>全文索引是一种特殊类型的索引，它查找的是文本中的关键词，而不是直接比较索引中的值。</p>
-<h3 id="高性能的索引策略">高性能的索引策略</h3>
-<blockquote>
-<p>① 索引列不能是表达式的一部分，也不能是函数的参数。应该养成简化WHERE条件的习惯，始终将索引列单独放在比较符号的一侧。</p>
-<p>② 当需要索引很长的字符列时，可以索引开始的部分前缀字符，以节约索引空间。</p>
-<p>③ 当创建多列索引时，需要注意索引列的顺序，应遵循前缀原则进行排序。</p>
-</blockquote>
-<h3 id="聚簇索引">聚簇索引</h3>
-<p>聚簇索引不同于B-Tree索引、Hash索引，其不是一种索引类型，而是一种数据存储方式。</p>
-<p>InnoDB的聚簇索引在同一个结构中保存了B-Tree索引和数据行。InnoDB通过主键聚集数据，如果没有定义主键，InnoDB会选择一个唯一的非空索引代替，如果没有这样的索引，InnoDB会隐式定义一个主键来作为聚簇索引。</p>
-<blockquote>
-<p>聚簇索引的优点：① 可以把相关数据保存在一起；② 数据访问更快；③ 使用覆盖索引扫描的查询可以直接使用叶节点中的主键值。</p>
-<p>聚簇索引的缺点：① 插入速度严重依赖于插入顺序；② 更新聚簇索引列的代价很高；③ 聚簇索引可能导致全盘扫描变慢。</p>
-</blockquote>
+<p>可见，协程数一直在增加，这是因为没有消费者消费chan中的数据，所有子协程都阻塞在写chan的操作。</p>
+<p>类似这种情况就会导致协程数不断增长，出现协程泄漏，内存占用不断上升。</p>
+<h3 id="如何尽量避免协程泄漏">如何尽量避免协程泄漏</h3>
+<ol>
+<li>确保chan都会有相应的消费者、生产者，且生产速度和消费速度差不多</li>
+<li>如果需要往chan中压数据或读数据，但又不确定是否有消费者或生产者，可以使用<code>select</code>结构避免阻塞</li>
+<li>使用goroutine + chan处理，避免创建大量协程，例如：</li>
+</ol>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+	&quot;runtime&quot;
+	&quot;time&quot;
+)
+
+func main() {
+	var data [100]string
+	// 获取data逻辑
+	for _, v := range data {
+		go test(v)
+	}
+
+	fmt.Println(runtime.NumGoroutine())
+}
+
+func test(s string) {
+	// 假装业务逻辑
+	time.Sleep(time.Millisecond)
+}
+</code></pre>
+<p>输出为: 101，也就是新开了100个协程，如果数据更多时，会产生更多协程。这种情况可以考虑创建固定数量的若干个协程，然后通过chan将数据投递给子协程进行处理，避免大量协程占用内存，如：</p>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+	&quot;runtime&quot;
+	&quot;time&quot;
+)
+
+func main() {
+	var data [100]string
+	c := make(chan string)
+
+	for i := 0; i &lt; 5; i++ {
+		go test(c)
+	}
+
+	for _, v := range data {
+		c &lt;- v
+	}
+
+	fmt.Println(runtime.NumGoroutine())
+}
+
+func test(c &lt;-chan string) {
+	for _ = range c {
+        // 业务逻辑
+		time.Sleep(time.Millisecond)
+	}
+}
+</code></pre>
+<h3 id="协程泄漏排查">协程泄漏排查</h3>
+<ol>
+<li>runtime.NumGoroutine()查看协程数</li>
+<li>使用gops排查，可以查看当前协程数、调用栈等</li>
+</ol>
+<h2 id="预览">预览</h2>
+<figure data-type="image" tabindex="1"><img src="/post-images/1620999111458.png" alt="preview1" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="/post-images/1620999246727.png" alt="preview2" loading="lazy"></figure>
+<h2 id="安装">安装</h2>
+<h3 id="mac">Mac</h3>
+<p>提供两种方式安装：</p>
+<h4 id="使用brew安装">使用brew安装</h4>
+<pre><code class="language-sh">brew tap anhoder/go-musicfox &amp;&amp; brew install go-musicfox
+</code></pre>
+<p>如果你之前安装过musicfox，需要使用下列命令重新链接:</p>
+<pre><code class="language-sh">brew unlink musicfox &amp;&amp; brew link --overwrite go-musicfox
+</code></pre>
+<h4 id="直接下载">直接下载</h4>
+<p>下载<a href="https://github.com/anhoder/go-musicfox/releases/latest/download/musicfox.mac">Mac可执行文件</a>，在iTerm或Terminal中打开</p>
+<h3 id="linux">Linux</h3>
+<p>身边没有Linux设备，而播放音乐依赖CGO，无法进行交叉编译，所以暂时没有可用的二进制文件</p>
+<h3 id="windows">Windows</h3>
+<p>下载<a href="https://github.com/anhoder/go-musicfox/releases/latest/download/musicfox.exe">Windows可执行文件</a>，在命令行中运行即可。</p>
+<p><strong>推荐使用Windows Terminal，UI及体验会好很多</strong></p>
+<h2 id="快捷键">快捷键</h2>
+<table>
+<thead>
+<tr>
+<th>按键</th>
+<th>作用</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>h/H/LEFT</td>
+<td>左</td>
+<td></td>
+</tr>
+<tr>
+<td>l/L/RIGHT</td>
+<td>右</td>
+<td></td>
+</tr>
+<tr>
+<td>k/K/UP</td>
+<td>上</td>
+<td></td>
+</tr>
+<tr>
+<td>j/J/DOWN</td>
+<td>下</td>
+<td></td>
+</tr>
+<tr>
+<td>q/Q</td>
+<td>退出</td>
+<td></td>
+</tr>
+<tr>
+<td>space</td>
+<td>暂停/播放</td>
+<td></td>
+</tr>
+<tr>
+<td>[</td>
+<td>上一曲</td>
+<td></td>
+</tr>
+<tr>
+<td>]</td>
+<td>下一曲</td>
+<td></td>
+</tr>
+<tr>
+<td>-</td>
+<td>减小音量</td>
+<td></td>
+</tr>
+<tr>
+<td>=</td>
+<td>加大音量</td>
+<td></td>
+</tr>
+<tr>
+<td>n/N/ENTER</td>
+<td>进入选中的菜单</td>
+<td></td>
+</tr>
+<tr>
+<td>b/B/ESC</td>
+<td>返回上级菜单</td>
+<td></td>
+</tr>
+<tr>
+<td>w/W</td>
+<td>退出并退出登录</td>
+<td></td>
+</tr>
+<tr>
+<td>p</td>
+<td>切换播放方式</td>
+<td></td>
+</tr>
+<tr>
+<td>P</td>
+<td>心动模式(仅在歌单中时有效)</td>
+<td></td>
+</tr>
+<tr>
+<td>r/R</td>
+<td>重新渲染UI</td>
+<td>Windows调整窗口大小后，没有事件触发，可以使用该方法手动重新渲染</td>
+</tr>
+<tr>
+<td>,</td>
+<td>喜欢当前播放歌曲</td>
+<td></td>
+</tr>
+<tr>
+<td>&lt;</td>
+<td>喜欢当前选中歌曲</td>
+<td></td>
+</tr>
+<tr>
+<td>.</td>
+<td>当前播放歌曲移除出喜欢</td>
+<td></td>
+</tr>
+<tr>
+<td>&gt;</td>
+<td>当前选中歌曲移除出喜欢</td>
+<td></td>
+</tr>
+<tr>
+<td>/</td>
+<td>标记当前播放歌曲为不喜欢</td>
+<td></td>
+</tr>
+<tr>
+<td>?</td>
+<td>标记当前选中歌曲为不喜欢</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="todo">TODO</h2>
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-893963"><label class="task-list-item-label" for="task-item-893963"> 我的歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2276791"><label class="task-list-item-label" for="task-item-2276791"> 每日推荐歌曲</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4479573"><label class="task-list-item-label" for="task-item-4479573"> 每日推荐歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7044662"><label class="task-list-item-label" for="task-item-7044662"> 私人FM</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4656899"><label class="task-list-item-label" for="task-item-4656899"> 歌词显示</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3499159"><label class="task-list-item-label" for="task-item-3499159"> 欢迎界面</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4018149"><label class="task-list-item-label" for="task-item-4018149"> 搜索</label>
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7331921"><label class="task-list-item-label" for="task-item-7331921"> 按歌曲</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1944213"><label class="task-list-item-label" for="task-item-1944213"> 按歌手</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-477772"><label class="task-list-item-label" for="task-item-477772"> 按歌词</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8835598"><label class="task-list-item-label" for="task-item-8835598"> 按歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8469475"><label class="task-list-item-label" for="task-item-8469475"> 按专辑</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5904411"><label class="task-list-item-label" for="task-item-5904411"> 按用户</label></li>
+</ul>
+</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2455965"><label class="task-list-item-label" for="task-item-2455965"> 排行榜</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8031181"><label class="task-list-item-label" for="task-item-8031181"> 精选歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3592403"><label class="task-list-item-label" for="task-item-3592403"> 最新专辑</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1405746"><label class="task-list-item-label" for="task-item-1405746"> 热门歌手</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5541502"><label class="task-list-item-label" for="task-item-5541502"> 云盘</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3523661"><label class="task-list-item-label" for="task-item-3523661"> 播放方式切换</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7031701"><label class="task-list-item-label" for="task-item-7031701"> 喜欢/取消喜欢</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8057369"><label class="task-list-item-label" for="task-item-8057369"> 心动模式/智能模式</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4819053"><label class="task-list-item-label" for="task-item-4819053"> 音乐电台</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-1254351"><label class="task-list-item-label" for="task-item-1254351"> 配置文件</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-139148"><label class="task-list-item-label" for="task-item-139148"> 通知功能</label></li>
+</ul>
 
             </div>
             
@@ -724,7 +959,7 @@
     </li>
     <li class="post-copyright-link">
       <strong class="language" data-lan="link">本文链接：</strong>
-      <a href="/post/eYNTZFhJ-/" title="读《高性能MySQL》---（二）">/post/eYNTZFhJ-/</a>
+      <a href="/post/NOO340v6g/" title="musicfox 2.0——golang重写版">/post/NOO340v6g/</a>
     </li>
     <li class="post-copyright-license">
       <strong class="language" data-lan="copyright">版权声明： </strong>
@@ -733,21 +968,21 @@
   </ul>
   <div class="tags">
     
-      <a href="/tag/K7yppa0Fn/"># MySQL</a>
+      <a href="/tag/Sq0EaZE0z/"># go</a>
+    
+      <a href="/tag/4DtRgZzLu/"># musicfox</a>
+    
+      <a href="/tag/9ERhdVc7a8/"># musicbox</a>
     
   </div>
   <div class="nav">
     <div class="nav-prev">
       
-        <i class="fa fa-chevron-left"></i>
-        <a class="nav-pc-next" title="读《高性能MySQL》---（三）" href="/post/sQNETQWN2/">读《高性能MySQL》---（三）</a class="nav-pc-next">
-        <a class="nav-mobile-prev" title="读《高性能MySQL》---（三）" href="/post/sQNETQWN2/">上一篇</a>
-      
     </div>
     <div class="nav-next">
       
-        <a class="nav-pc-next" title="读《高性能MySQL》---（一）" href="/post/_vhnkfsn5/">读《高性能MySQL》---（一）</a>
-        <a class="nav-mobile-next" title="读《高性能MySQL》---（一）" href="/post/_vhnkfsn5/">下一篇</a>
+        <a class="nav-pc-next" title="一个utools插件——hasids加解密" href="/post/YMhNrwxuT/">一个utools插件——hasids加解密</a>
+        <a class="nav-mobile-next" title="一个utools插件——hasids加解密" href="/post/YMhNrwxuT/">下一篇</a>
         <i class="fa fa-chevron-right"></i>
       
     </div>
