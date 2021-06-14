@@ -687,7 +687,7 @@ import (
 
 func main() {
 	c1 := make(chan struct{})
-	for i := 0; i &lt; 3; i++ {
+	for i := 0; i &lt; 10; i++ {
 		go test(c1)
 		fmt.Println(runtime.NumGoroutine())
 	}
