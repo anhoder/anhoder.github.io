@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>/</id>
     <title>anhoder的进阶日志</title>
-    <updated>2021-06-14T14:59:04.346Z</updated>
+    <updated>2021-06-14T15:04:51.646Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="/"/>
     <link rel="self" href="/atom.xml"/>
@@ -162,7 +162,7 @@ import (
 
 func main() {
 	c1 := make(chan struct{})
-	for i := 0; i &lt; 3; i++ {
+	for i := 0; i &lt; 10; i++ {
 		go test(c1)
 		fmt.Println(runtime.NumGoroutine())
 	}
@@ -394,33 +394,33 @@ func test(c &lt;-chan string) {
 </table>
 <h2 id="todo">TODO</h2>
 <ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1202754"><label class="task-list-item-label" for="task-item-1202754"> 我的歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6178767"><label class="task-list-item-label" for="task-item-6178767"> 每日推荐歌曲</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6217806"><label class="task-list-item-label" for="task-item-6217806"> 每日推荐歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-401842"><label class="task-list-item-label" for="task-item-401842"> 私人FM</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6213879"><label class="task-list-item-label" for="task-item-6213879"> 歌词显示</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6362327"><label class="task-list-item-label" for="task-item-6362327"> 欢迎界面</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9097687"><label class="task-list-item-label" for="task-item-9097687"> 搜索</label>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8391065"><label class="task-list-item-label" for="task-item-8391065"> 我的歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2300337"><label class="task-list-item-label" for="task-item-2300337"> 每日推荐歌曲</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8991192"><label class="task-list-item-label" for="task-item-8991192"> 每日推荐歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1868604"><label class="task-list-item-label" for="task-item-1868604"> 私人FM</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4894085"><label class="task-list-item-label" for="task-item-4894085"> 歌词显示</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5799736"><label class="task-list-item-label" for="task-item-5799736"> 欢迎界面</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1829224"><label class="task-list-item-label" for="task-item-1829224"> 搜索</label>
 <ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9163320"><label class="task-list-item-label" for="task-item-9163320"> 按歌曲</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4343880"><label class="task-list-item-label" for="task-item-4343880"> 按歌手</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8214196"><label class="task-list-item-label" for="task-item-8214196"> 按歌词</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4165831"><label class="task-list-item-label" for="task-item-4165831"> 按歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5835029"><label class="task-list-item-label" for="task-item-5835029"> 按专辑</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8659398"><label class="task-list-item-label" for="task-item-8659398"> 按用户</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4360166"><label class="task-list-item-label" for="task-item-4360166"> 按歌曲</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9398398"><label class="task-list-item-label" for="task-item-9398398"> 按歌手</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5299896"><label class="task-list-item-label" for="task-item-5299896"> 按歌词</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8671828"><label class="task-list-item-label" for="task-item-8671828"> 按歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9774217"><label class="task-list-item-label" for="task-item-9774217"> 按专辑</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7587472"><label class="task-list-item-label" for="task-item-7587472"> 按用户</label></li>
 </ul>
 </li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4929102"><label class="task-list-item-label" for="task-item-4929102"> 排行榜</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-648834"><label class="task-list-item-label" for="task-item-648834"> 精选歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4014933"><label class="task-list-item-label" for="task-item-4014933"> 最新专辑</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-782028"><label class="task-list-item-label" for="task-item-782028"> 热门歌手</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8468749"><label class="task-list-item-label" for="task-item-8468749"> 云盘</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1967254"><label class="task-list-item-label" for="task-item-1967254"> 播放方式切换</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6073862"><label class="task-list-item-label" for="task-item-6073862"> 喜欢/取消喜欢</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9899390"><label class="task-list-item-label" for="task-item-9899390"> 心动模式/智能模式</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1446844"><label class="task-list-item-label" for="task-item-1446844"> 音乐电台</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-250891"><label class="task-list-item-label" for="task-item-250891"> 配置文件</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-5264402"><label class="task-list-item-label" for="task-item-5264402"> 通知功能</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5069508"><label class="task-list-item-label" for="task-item-5069508"> 排行榜</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9894256"><label class="task-list-item-label" for="task-item-9894256"> 精选歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8368697"><label class="task-list-item-label" for="task-item-8368697"> 最新专辑</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6330233"><label class="task-list-item-label" for="task-item-6330233"> 热门歌手</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7955695"><label class="task-list-item-label" for="task-item-7955695"> 云盘</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5418418"><label class="task-list-item-label" for="task-item-5418418"> 播放方式切换</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7776581"><label class="task-list-item-label" for="task-item-7776581"> 喜欢/取消喜欢</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-171721"><label class="task-list-item-label" for="task-item-171721"> 心动模式/智能模式</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8227347"><label class="task-list-item-label" for="task-item-8227347"> 音乐电台</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-6413221"><label class="task-list-item-label" for="task-item-6413221"> 配置文件</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-786155"><label class="task-list-item-label" for="task-item-786155"> 通知功能</label></li>
 </ul>
 ]]></content>
     </entry>
@@ -1334,38 +1334,38 @@ ZEND_SET_SYMBOL( EG(active_symbol_table) ,  &quot;foo&quot; , fooval);
 </table>
 <h2 id="七-todo">七、TODO</h2>
 <ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8817139"><label class="task-list-item-label" for="task-item-8817139"> 我的歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-717300"><label class="task-list-item-label" for="task-item-717300"> 每日推荐歌曲</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1549609"><label class="task-list-item-label" for="task-item-1549609"> 每日推荐歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8100024"><label class="task-list-item-label" for="task-item-8100024"> 私人FM</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9264719"><label class="task-list-item-label" for="task-item-9264719"> 歌词显示</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8343738"><label class="task-list-item-label" for="task-item-8343738"> 欢迎界面</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4755029"><label class="task-list-item-label" for="task-item-4755029"> 搜索</label>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1537864"><label class="task-list-item-label" for="task-item-1537864"> 我的歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7505592"><label class="task-list-item-label" for="task-item-7505592"> 每日推荐歌曲</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8991295"><label class="task-list-item-label" for="task-item-8991295"> 每日推荐歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4142288"><label class="task-list-item-label" for="task-item-4142288"> 私人FM</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2796177"><label class="task-list-item-label" for="task-item-2796177"> 歌词显示</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1300158"><label class="task-list-item-label" for="task-item-1300158"> 欢迎界面</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6567607"><label class="task-list-item-label" for="task-item-6567607"> 搜索</label>
 <ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7285780"><label class="task-list-item-label" for="task-item-7285780"> 按歌曲</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6801594"><label class="task-list-item-label" for="task-item-6801594"> 按歌手</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8508029"><label class="task-list-item-label" for="task-item-8508029"> 按歌词</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8013802"><label class="task-list-item-label" for="task-item-8013802"> 按歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9615554"><label class="task-list-item-label" for="task-item-9615554"> 按专辑</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8143528"><label class="task-list-item-label" for="task-item-8143528"> 按用户</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7212717"><label class="task-list-item-label" for="task-item-7212717"> 按歌曲</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9267184"><label class="task-list-item-label" for="task-item-9267184"> 按歌手</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8832176"><label class="task-list-item-label" for="task-item-8832176"> 按歌词</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5146545"><label class="task-list-item-label" for="task-item-5146545"> 按歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6422934"><label class="task-list-item-label" for="task-item-6422934"> 按专辑</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-213351"><label class="task-list-item-label" for="task-item-213351"> 按用户</label></li>
 </ul>
 </li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-158640"><label class="task-list-item-label" for="task-item-158640"> 排行榜</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3718749"><label class="task-list-item-label" for="task-item-3718749"> 精选歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4694575"><label class="task-list-item-label" for="task-item-4694575"> 最新专辑</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9488669"><label class="task-list-item-label" for="task-item-9488669"> 热门歌手</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3818452"><label class="task-list-item-label" for="task-item-3818452"> 云盘</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1348834"><label class="task-list-item-label" for="task-item-1348834"> 播放方式切换</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2929478"><label class="task-list-item-label" for="task-item-2929478"> 喜欢/取消喜欢</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1619"><label class="task-list-item-label" for="task-item-1619"> 心动模式/智能模式</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-4176255"><label class="task-list-item-label" for="task-item-4176255"> 音乐电台</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-797297"><label class="task-list-item-label" for="task-item-797297"> 将部分设置转化为文件可配置</label>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3117403"><label class="task-list-item-label" for="task-item-3117403"> 排行榜</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9907933"><label class="task-list-item-label" for="task-item-9907933"> 精选歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3365520"><label class="task-list-item-label" for="task-item-3365520"> 最新专辑</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8970588"><label class="task-list-item-label" for="task-item-8970588"> 热门歌手</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2202903"><label class="task-list-item-label" for="task-item-2202903"> 云盘</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2252654"><label class="task-list-item-label" for="task-item-2252654"> 播放方式切换</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9312187"><label class="task-list-item-label" for="task-item-9312187"> 喜欢/取消喜欢</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9943735"><label class="task-list-item-label" for="task-item-9943735"> 心动模式/智能模式</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-4523947"><label class="task-list-item-label" for="task-item-4523947"> 音乐电台</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-9246725"><label class="task-list-item-label" for="task-item-9246725"> 将部分设置转化为文件可配置</label>
 <ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-4226718"><label class="task-list-item-label" for="task-item-4226718"> 欢迎界面的欢迎语</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-1032637"><label class="task-list-item-label" for="task-item-1032637"> 欢迎界面时长</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-9762033"><label class="task-list-item-label" for="task-item-9762033"> 主题色</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-5304539"><label class="task-list-item-label" for="task-item-5304539"> 歌词显示行数</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-327601"><label class="task-list-item-label" for="task-item-327601"> ...</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-9055213"><label class="task-list-item-label" for="task-item-9055213"> 欢迎界面的欢迎语</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-4362981"><label class="task-list-item-label" for="task-item-4362981"> 欢迎界面时长</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-4773672"><label class="task-list-item-label" for="task-item-4773672"> 主题色</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-5381265"><label class="task-list-item-label" for="task-item-5381265"> 歌词显示行数</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-3400234"><label class="task-list-item-label" for="task-item-3400234"> ...</label></li>
 </ul>
 </li>
 </ul>
