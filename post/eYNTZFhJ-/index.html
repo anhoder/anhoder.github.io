@@ -9,7 +9,7 @@
 <meta name="description" content="一川烟草，满城风絮。">
 <meta name="theme-color" content="#000">
 <title>读《高性能MySQL》---（二） | anhoder的进阶日志</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1621005373025">
+<link rel="shortcut icon" href="/favicon.ico?v=1623682736933">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -241,19 +241,19 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">86</span>
+        <span class="site-item-stat-count">87</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
     <div class="sidebar-item-box">
       <a href="">
-        <span class="site-item-stat-count">25</span>
+        <span class="site-item-stat-count">26</span>
         <span class="site-item-stat-name language" data-lan="category">分类</span>
       </a>
     </div>
     <div class="sidebar-item-box">
       <a href="/tags/">
-        <span class="site-item-stat-count">25</span>
+        <span class="site-item-stat-count">26</span>
         <span class="site-item-stat-name language" data-lan="tag">标签</span>
       </a>
     </div>
@@ -1743,6 +1743,111 @@
     <div class="result" id="result">
       
       <div class="item">
+        <a class="result-title" style="opacity: 0;" href="/post/kYHKCQzOh/"" data-c="
+          &lt;p&gt;最近工作中接触到PostgreSQL，所以稍微学习下它的几种数据类型：&lt;code&gt;json&lt;/code&gt;、&lt;code&gt;jsonb&lt;/code&gt;、数组以及相对应的数据查询。&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;blockquote&gt;
+&lt;p&gt;PostgreSQL中单引号用于表示字符串值，双引号用于表示系统标识符，没有反引号`。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;json-jsonb&#34;&gt;JSON、JSONB&lt;/h2&gt;
+&lt;h3 id=&#34;json和jsonb的异同&#34;&gt;&lt;code&gt;json&lt;/code&gt;和&lt;code&gt;jsonb&lt;/code&gt;的异同&lt;/h3&gt;
+&lt;p&gt;在PostgreSQL中，&lt;code&gt;json&lt;/code&gt;和&lt;code&gt;jsonb&lt;/code&gt;都是用来存储&lt;code&gt;json&lt;/code&gt;数据的。&lt;/p&gt;
+&lt;p&gt;使用&lt;code&gt;json&lt;/code&gt;类型时，PostgreSQL会将输入的&lt;code&gt;json&lt;/code&gt;文本存储起来，包括其中的空格以及键的顺序，在查询使用时才去解析。而&lt;code&gt;jsonb&lt;/code&gt;类型会将输入的&lt;code&gt;json&lt;/code&gt;文本解析为对应的二进制数据进行存储。&lt;code&gt;jsonb&lt;/code&gt;类型相较&lt;code&gt;json&lt;/code&gt;类型而言更高效，性能更好，且支持建立索引。&lt;/p&gt;
+&lt;h3 id=&#34;json及jsonb的相关sql操作&#34;&gt;&lt;code&gt;json&lt;/code&gt;及&lt;code&gt;jsonb&lt;/code&gt;的相关SQL操作&lt;/h3&gt;
+&lt;h4 id=&#34;表的创建&#34;&gt;表的创建&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;-- 创建测试表
+CREATE TABLE test (
+    id int not null primary key,
+    attr_json json not null,
+    attr_jsonb jsonb not null
+);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;数据插入&#34;&gt;数据插入&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;INSERT INTO test (id, attr_json, attr_jsonb)
+VALUES (1, &#39;{&amp;quot;name&amp;quot;:&amp;quot;anhoder&amp;quot;,&amp;quot;age&amp;quot;:18}&#39;, &#39;{&amp;quot;name&amp;quot;:&amp;quot;anhoder&amp;quot;,&amp;quot;age&amp;quot;:18}&#39;),
+       (2, &#39;{&amp;quot;name&amp;quot;:&amp;quot;jane&amp;quot;,&amp;quot;age&amp;quot;:34,&amp;quot;son&amp;quot;: {&amp;quot;name&amp;quot;:&amp;quot;coco&amp;quot;,&amp;quot;age&amp;quot;:1}}&#39;, &#39;{&amp;quot;name&amp;quot;:&amp;quot;jane&amp;quot;,&amp;quot;age&amp;quot;:34,&amp;quot;son&amp;quot;: {&amp;quot;name&amp;quot;:&amp;quot;coco&amp;quot;,&amp;quot;age&amp;quot;:1}}&#39;),
+       (3, &#39;{&amp;quot;name&amp;quot;:&amp;quot;alan&amp;quot;,&amp;quot;age&amp;quot;:35,&amp;quot;son&amp;quot;: {&amp;quot;name&amp;quot;:&amp;quot;coney&amp;quot;,&amp;quot;age&amp;quot;:1}}&#39;, &#39;{&amp;quot;name&amp;quot;:&amp;quot;alan&amp;quot;,&amp;quot;age&amp;quot;:35,&amp;quot;son&amp;quot;: {&amp;quot;name&amp;quot;:&amp;quot;coney&amp;quot;,&amp;quot;age&amp;quot;:1}}&#39;),
+       (4, &#39;{&amp;quot;name&amp;quot;:&amp;quot;jojo&amp;quot;,&amp;quot;age&amp;quot;:26}&#39;, &#39;{&amp;quot;name&amp;quot;:&amp;quot;jojo&amp;quot;,&amp;quot;age&amp;quot;:26}&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;插入后的结果：&lt;/p&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;1&#34;&gt;&lt;img src=&#34;/post-images/1623679477303.png&#34; alt=&#34;插入结果&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;p&gt;可见&lt;code&gt;jsonb&lt;/code&gt;会对数据进行解析后，再进行存储，&lt;code&gt;json&lt;/code&gt;则存储原输入。&lt;/p&gt;
+&lt;h4 id=&#34;数据查询&#34;&gt;数据查询&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;-- -&amp;gt; 获取对象的属性，结果作为json对象；-&amp;gt;&amp;gt;获取对象的属性，结果作为文本
+select attr_json-&amp;gt;&#39;son&#39;-&amp;gt;&#39;age&#39; as son_age, attr_json-&amp;gt;&amp;gt;&#39;son&#39; as son_text from test;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;2&#34;&gt;&lt;img src=&#34;/post-images/1623680145772.png&#34; alt=&#34;结果1&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;hr&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;-- #&amp;gt; 根据路径获取结果作为json对象；#&amp;gt;&amp;gt; 根据路径获取结果作为文本(json, jsonb结果一致)
+select attr_json#&amp;gt;&#39;{son}&#39;-&amp;gt;&#39;age&#39; as son_age, attr_json#&amp;gt;&#39;{son,age}&#39; as son_age2, attr_json#&amp;gt;&amp;gt;&#39;{son}&#39; as son_text from test;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;3&#34;&gt;&lt;img src=&#34;/post-images/1623680312500.png&#34; alt=&#34;结果2&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;hr&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;-- @&amp;gt;左边是否包含右边；&amp;lt;@右边是否包含左边 (jsonb可用)
+select * from test where attr_jsonb@&amp;gt;&#39;{&amp;quot;age&amp;quot;:18}&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;4&#34;&gt;&lt;img src=&#34;/post-images/1623680487862.png&#34; alt=&#34;结果3&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;hr&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;-- ? 是否存在属性
+select * from test where attr_jsonb ? &#39;name&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;-- ?| 存在数组中任意一个属性则为true (jsonb可用)
+select * from test where attr_jsonb ?| array [&#39;son&#39;, &#39;name&#39;];
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;5&#34;&gt;&lt;img src=&#34;/post-images/1623680779281.png&#34; alt=&#34;结果4&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;hr&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;-- ?&amp;amp; 同时存在数组中的所有属性则为true (jsonb可用)
+select * from test where attr_jsonb ?&amp;amp; array [&#39;son&#39;, &#39;name&#39;];
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;6&#34;&gt;&lt;img src=&#34;/post-images/1623680893730.png&#34; alt=&#34;结果5&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;hr&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;-- ::为类型转换
+select * from test where (attr_json-&amp;gt;&amp;gt;&#39;age&#39;)::int&amp;gt;20;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;7&#34;&gt;&lt;img src=&#34;/post-images/1623681132425.png&#34; alt=&#34;结果6&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;h4 id=&#34;数据更新&#34;&gt;数据更新&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;-- jsonb_set(jsonb old_jsonb, text[] path, jsonb new_jsonb, bool create_if_missing) 更新jsonb 
+update test set attr_jsonb=jsonb_set(attr_jsonb, &#39;{son}&#39;, &#39;{&amp;quot;name&amp;quot;:&amp;quot;con&amp;quot;,&amp;quot;age&amp;quot;:2}&#39;)
+where (attr_jsonb#&amp;gt;&amp;gt;&#39;{son,name}&#39;) = &#39;coco&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;-- 根据路径删除属性 (jsonb可用)
+update test set attr_jsonb=attr_jsonb#-&#39;{son,name}&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;-- 删除属性 (jsonb可用)
+update test set attr_jsonb=attr_jsonb-&#39;son&#39; where attr_jsonb ? &#39;son&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;数组&#34;&gt;数组&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;-- 创建测试表
+CREATE TABLE test_arr (
+    id int not null primary key,
+    arr int[] not null
+);
+
+-- 插入数据
+insert into test_arr (id, arr) values (1, array[2,3,4]),(2, array[3,4,5]);
+
+-- 数组合并
+select array[1,2,3,4] || array[2,3,4,5]; -- 结果：{1,2,3,4,2,3,4,5}
+select 2 || array[2,3,4,5]; -- 结果：{2,2,3,4,5}
+
+-- 数组比较，每个元素依次比较大小
+select array[1,2,3,4] &amp;gt; array[1,2,3]; -- 结果: true
+select array[1,2,3,4] &amp;gt; array[1,2,4]; -- 结果: false
+
+-- 数组包含关系
+select array[1,2,3] @&amp;gt; array[2,3]; -- 结果: true
+select array[1,2,3] @&amp;gt; array[2,3,4]; -- 结果: false
+
+-- 数组是否有共同元素
+select array[1,2,3] &amp;amp;&amp;amp; array[3,4,5]; -- 结果: true
+&lt;/code&gt;&lt;/pre&gt;
+">PostgreSQL的json、jsonb、数组</a>
+      </div>
+      
+      <div class="item">
         <a class="result-title" style="opacity: 0;" href="/post/NOO340v6g/"" data-c="
           &lt;p&gt;musicfox 2.0终于完成了，没有太多的功能变更，主要使用golang进行重写，优化了用户体验（主要是Windows下）。&lt;/p&gt;
 &lt;!-- more --&gt;
@@ -2010,33 +2115,33 @@ func test(c &amp;lt;-chan string) {
 &lt;/table&gt;
 &lt;h2 id=&#34;todo&#34;&gt;TODO&lt;/h2&gt;
 &lt;ul class=&#34;contains-task-list&#34;&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-893963&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-893963&#34;&gt; 我的歌单&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-2276791&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-2276791&#34;&gt; 每日推荐歌曲&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-4479573&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-4479573&#34;&gt; 每日推荐歌单&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-7044662&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-7044662&#34;&gt; 私人FM&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-4656899&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-4656899&#34;&gt; 歌词显示&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-3499159&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-3499159&#34;&gt; 欢迎界面&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-4018149&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-4018149&#34;&gt; 搜索&lt;/label&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-1202754&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-1202754&#34;&gt; 我的歌单&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-6178767&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-6178767&#34;&gt; 每日推荐歌曲&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-6217806&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-6217806&#34;&gt; 每日推荐歌单&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-401842&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-401842&#34;&gt; 私人FM&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-6213879&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-6213879&#34;&gt; 歌词显示&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-6362327&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-6362327&#34;&gt; 欢迎界面&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-9097687&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-9097687&#34;&gt; 搜索&lt;/label&gt;
 &lt;ul class=&#34;contains-task-list&#34;&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-7331921&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-7331921&#34;&gt; 按歌曲&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-1944213&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-1944213&#34;&gt; 按歌手&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-477772&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-477772&#34;&gt; 按歌词&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-8835598&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-8835598&#34;&gt; 按歌单&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-8469475&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-8469475&#34;&gt; 按专辑&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-5904411&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-5904411&#34;&gt; 按用户&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-9163320&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-9163320&#34;&gt; 按歌曲&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-4343880&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-4343880&#34;&gt; 按歌手&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-8214196&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-8214196&#34;&gt; 按歌词&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-4165831&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-4165831&#34;&gt; 按歌单&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-5835029&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-5835029&#34;&gt; 按专辑&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-8659398&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-8659398&#34;&gt; 按用户&lt;/label&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-2455965&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-2455965&#34;&gt; 排行榜&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-8031181&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-8031181&#34;&gt; 精选歌单&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-3592403&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-3592403&#34;&gt; 最新专辑&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-1405746&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-1405746&#34;&gt; 热门歌手&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-5541502&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-5541502&#34;&gt; 云盘&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-3523661&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-3523661&#34;&gt; 播放方式切换&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-7031701&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-7031701&#34;&gt; 喜欢/取消喜欢&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-8057369&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-8057369&#34;&gt; 心动模式/智能模式&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-4819053&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-4819053&#34;&gt; 音乐电台&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-1254351&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-1254351&#34;&gt; 配置文件&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-139148&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-139148&#34;&gt; 通知功能&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-4929102&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-4929102&#34;&gt; 排行榜&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-648834&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-648834&#34;&gt; 精选歌单&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-4014933&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-4014933&#34;&gt; 最新专辑&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-782028&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-782028&#34;&gt; 热门歌手&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-8468749&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-8468749&#34;&gt; 云盘&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-1967254&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-1967254&#34;&gt; 播放方式切换&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-6073862&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-6073862&#34;&gt; 喜欢/取消喜欢&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-9899390&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-9899390&#34;&gt; 心动模式/智能模式&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-1446844&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-1446844&#34;&gt; 音乐电台&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-250891&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-250891&#34;&gt; 配置文件&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-5264402&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-5264402&#34;&gt; 通知功能&lt;/label&gt;&lt;/li&gt;
 &lt;/ul&gt;
 ">musicfox 2.0——golang重写版</a>
       </div>
@@ -2913,38 +3018,38 @@ ZEND_SET_SYMBOL( EG(active_symbol_table) ,  &amp;quot;foo&amp;quot; , fooval);
 &lt;/table&gt;
 &lt;h2 id=&#34;七-todo&#34;&gt;七、TODO&lt;/h2&gt;
 &lt;ul class=&#34;contains-task-list&#34;&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-3669041&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-3669041&#34;&gt; 我的歌单&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-733976&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-733976&#34;&gt; 每日推荐歌曲&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-7693451&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-7693451&#34;&gt; 每日推荐歌单&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-8023411&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-8023411&#34;&gt; 私人FM&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-6203151&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-6203151&#34;&gt; 歌词显示&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-2673020&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-2673020&#34;&gt; 欢迎界面&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-8603624&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-8603624&#34;&gt; 搜索&lt;/label&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-8817139&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-8817139&#34;&gt; 我的歌单&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-717300&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-717300&#34;&gt; 每日推荐歌曲&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-1549609&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-1549609&#34;&gt; 每日推荐歌单&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-8100024&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-8100024&#34;&gt; 私人FM&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-9264719&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-9264719&#34;&gt; 歌词显示&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-8343738&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-8343738&#34;&gt; 欢迎界面&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-4755029&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-4755029&#34;&gt; 搜索&lt;/label&gt;
 &lt;ul class=&#34;contains-task-list&#34;&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-3796580&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-3796580&#34;&gt; 按歌曲&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-1626477&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-1626477&#34;&gt; 按歌手&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-2855416&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-2855416&#34;&gt; 按歌词&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-2217588&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-2217588&#34;&gt; 按歌单&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-7954257&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-7954257&#34;&gt; 按专辑&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-6549023&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-6549023&#34;&gt; 按用户&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-7285780&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-7285780&#34;&gt; 按歌曲&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-6801594&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-6801594&#34;&gt; 按歌手&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-8508029&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-8508029&#34;&gt; 按歌词&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-8013802&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-8013802&#34;&gt; 按歌单&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-9615554&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-9615554&#34;&gt; 按专辑&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-8143528&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-8143528&#34;&gt; 按用户&lt;/label&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-8254742&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-8254742&#34;&gt; 排行榜&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-6863100&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-6863100&#34;&gt; 精选歌单&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-8832011&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-8832011&#34;&gt; 最新专辑&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-1008947&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-1008947&#34;&gt; 热门歌手&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-2485030&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-2485030&#34;&gt; 云盘&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-7458224&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-7458224&#34;&gt; 播放方式切换&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-3875275&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-3875275&#34;&gt; 喜欢/取消喜欢&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-2289080&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-2289080&#34;&gt; 心动模式/智能模式&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-2051578&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-2051578&#34;&gt; 音乐电台&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-1779048&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-1779048&#34;&gt; 将部分设置转化为文件可配置&lt;/label&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-158640&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-158640&#34;&gt; 排行榜&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-3718749&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-3718749&#34;&gt; 精选歌单&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-4694575&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-4694575&#34;&gt; 最新专辑&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-9488669&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-9488669&#34;&gt; 热门歌手&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-3818452&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-3818452&#34;&gt; 云盘&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-1348834&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-1348834&#34;&gt; 播放方式切换&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-2929478&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-2929478&#34;&gt; 喜欢/取消喜欢&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-1619&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-1619&#34;&gt; 心动模式/智能模式&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-4176255&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-4176255&#34;&gt; 音乐电台&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-797297&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-797297&#34;&gt; 将部分设置转化为文件可配置&lt;/label&gt;
 &lt;ul class=&#34;contains-task-list&#34;&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-8668186&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-8668186&#34;&gt; 欢迎界面的欢迎语&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-7586044&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-7586044&#34;&gt; 欢迎界面时长&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-7724089&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-7724089&#34;&gt; 主题色&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-5516367&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-5516367&#34;&gt; 歌词显示行数&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-1495082&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-1495082&#34;&gt; ...&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-4226718&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-4226718&#34;&gt; 欢迎界面的欢迎语&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-1032637&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-1032637&#34;&gt; 欢迎界面时长&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-9762033&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-9762033&#34;&gt; 主题色&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-5304539&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-5304539&#34;&gt; 歌词显示行数&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-327601&#34;&gt;&lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-327601&#34;&gt; ...&lt;/label&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -15146,8 +15251,8 @@ __这些文字会生成`&amp;lt;strong&amp;gt;`__
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;效果如下：&lt;/p&gt;
 &lt;ul class=&#34;contains-task-list&#34;&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-5254025&#34;&gt; 任务一 未做任务 &lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-5254025&#34;&gt; 任务一 未做任务 `- + 空格 + [ ]`&lt;/label&gt;&lt;/li&gt;
-&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-8575528&#34;&gt; 任务二 已做任务 &lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-8575528&#34;&gt; 任务二 已做任务 `- + 空格 + [x]`&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-1901112&#34;&gt; 任务一 未做任务 &lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-1901112&#34;&gt; 任务一 未做任务 `- + 空格 + [ ]`&lt;/label&gt;&lt;/li&gt;
+&lt;li class=&#34;task-list-item&#34;&gt;&lt;input class=&#34;task-list-item-checkbox&#34; checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34; id=&#34;task-item-310648&#34;&gt; 任务二 已做任务 &lt;label class=&#34;task-list-item-label&#34; for=&#34;task-item-310648&#34;&gt; 任务二 已做任务 `- + 空格 + [x]`&lt;/label&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;图片&#34;&gt;图片&lt;/h2&gt;
 &lt;p&gt;Markdown 语法：&lt;/p&gt;

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>/</id>
     <title>anhoder的进阶日志</title>
-    <updated>2021-05-14T15:16:20.693Z</updated>
+    <updated>2021-06-14T14:59:04.346Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="/"/>
     <link rel="self" href="/atom.xml"/>
@@ -10,6 +10,116 @@
     <logo>/images/avatar.png</logo>
     <icon>/favicon.ico</icon>
     <rights>All rights reserved 2021, anhoder的进阶日志</rights>
+    <entry>
+        <title type="html"><![CDATA[PostgreSQL的json、jsonb、数组]]></title>
+        <id>/post/kYHKCQzOh/</id>
+        <link href="/post/kYHKCQzOh/">
+        </link>
+        <updated>2021-06-14T13:09:40.000Z</updated>
+        <summary type="html"><![CDATA[<p>最近工作中接触到PostgreSQL，所以稍微学习下它的几种数据类型：<code>json</code>、<code>jsonb</code>、数组以及相对应的数据查询。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>最近工作中接触到PostgreSQL，所以稍微学习下它的几种数据类型：<code>json</code>、<code>jsonb</code>、数组以及相对应的数据查询。</p>
+<!-- more -->
+<blockquote>
+<p>PostgreSQL中单引号用于表示字符串值，双引号用于表示系统标识符，没有反引号`。</p>
+</blockquote>
+<h2 id="json-jsonb">JSON、JSONB</h2>
+<h3 id="json和jsonb的异同"><code>json</code>和<code>jsonb</code>的异同</h3>
+<p>在PostgreSQL中，<code>json</code>和<code>jsonb</code>都是用来存储<code>json</code>数据的。</p>
+<p>使用<code>json</code>类型时，PostgreSQL会将输入的<code>json</code>文本存储起来，包括其中的空格以及键的顺序，在查询使用时才去解析。而<code>jsonb</code>类型会将输入的<code>json</code>文本解析为对应的二进制数据进行存储。<code>jsonb</code>类型相较<code>json</code>类型而言更高效，性能更好，且支持建立索引。</p>
+<h3 id="json及jsonb的相关sql操作"><code>json</code>及<code>jsonb</code>的相关SQL操作</h3>
+<h4 id="表的创建">表的创建</h4>
+<pre><code class="language-sql">-- 创建测试表
+CREATE TABLE test (
+    id int not null primary key,
+    attr_json json not null,
+    attr_jsonb jsonb not null
+);
+</code></pre>
+<h4 id="数据插入">数据插入</h4>
+<pre><code class="language-sql">INSERT INTO test (id, attr_json, attr_jsonb)
+VALUES (1, '{&quot;name&quot;:&quot;anhoder&quot;,&quot;age&quot;:18}', '{&quot;name&quot;:&quot;anhoder&quot;,&quot;age&quot;:18}'),
+       (2, '{&quot;name&quot;:&quot;jane&quot;,&quot;age&quot;:34,&quot;son&quot;: {&quot;name&quot;:&quot;coco&quot;,&quot;age&quot;:1}}', '{&quot;name&quot;:&quot;jane&quot;,&quot;age&quot;:34,&quot;son&quot;: {&quot;name&quot;:&quot;coco&quot;,&quot;age&quot;:1}}'),
+       (3, '{&quot;name&quot;:&quot;alan&quot;,&quot;age&quot;:35,&quot;son&quot;: {&quot;name&quot;:&quot;coney&quot;,&quot;age&quot;:1}}', '{&quot;name&quot;:&quot;alan&quot;,&quot;age&quot;:35,&quot;son&quot;: {&quot;name&quot;:&quot;coney&quot;,&quot;age&quot;:1}}'),
+       (4, '{&quot;name&quot;:&quot;jojo&quot;,&quot;age&quot;:26}', '{&quot;name&quot;:&quot;jojo&quot;,&quot;age&quot;:26}');
+</code></pre>
+<p>插入后的结果：</p>
+<figure data-type="image" tabindex="1"><img src="/post-images/1623679477303.png" alt="插入结果" loading="lazy"></figure>
+<p>可见<code>jsonb</code>会对数据进行解析后，再进行存储，<code>json</code>则存储原输入。</p>
+<h4 id="数据查询">数据查询</h4>
+<pre><code class="language-sql">-- -&gt; 获取对象的属性，结果作为json对象；-&gt;&gt;获取对象的属性，结果作为文本
+select attr_json-&gt;'son'-&gt;'age' as son_age, attr_json-&gt;&gt;'son' as son_text from test;
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="/post-images/1623680145772.png" alt="结果1" loading="lazy"></figure>
+<hr>
+<pre><code class="language-sql">-- #&gt; 根据路径获取结果作为json对象；#&gt;&gt; 根据路径获取结果作为文本(json, jsonb结果一致)
+select attr_json#&gt;'{son}'-&gt;'age' as son_age, attr_json#&gt;'{son,age}' as son_age2, attr_json#&gt;&gt;'{son}' as son_text from test;
+</code></pre>
+<figure data-type="image" tabindex="3"><img src="/post-images/1623680312500.png" alt="结果2" loading="lazy"></figure>
+<hr>
+<pre><code class="language-sql">-- @&gt;左边是否包含右边；&lt;@右边是否包含左边 (jsonb可用)
+select * from test where attr_jsonb@&gt;'{&quot;age&quot;:18}';
+</code></pre>
+<figure data-type="image" tabindex="4"><img src="/post-images/1623680487862.png" alt="结果3" loading="lazy"></figure>
+<hr>
+<pre><code class="language-sql">-- ? 是否存在属性
+select * from test where attr_jsonb ? 'name';
+</code></pre>
+<hr>
+<pre><code class="language-sql">-- ?| 存在数组中任意一个属性则为true (jsonb可用)
+select * from test where attr_jsonb ?| array ['son', 'name'];
+</code></pre>
+<figure data-type="image" tabindex="5"><img src="/post-images/1623680779281.png" alt="结果4" loading="lazy"></figure>
+<hr>
+<pre><code class="language-sql">-- ?&amp; 同时存在数组中的所有属性则为true (jsonb可用)
+select * from test where attr_jsonb ?&amp; array ['son', 'name'];
+</code></pre>
+<figure data-type="image" tabindex="6"><img src="/post-images/1623680893730.png" alt="结果5" loading="lazy"></figure>
+<hr>
+<pre><code class="language-sql">-- ::为类型转换
+select * from test where (attr_json-&gt;&gt;'age')::int&gt;20;
+</code></pre>
+<figure data-type="image" tabindex="7"><img src="/post-images/1623681132425.png" alt="结果6" loading="lazy"></figure>
+<h4 id="数据更新">数据更新</h4>
+<pre><code class="language-sql">-- jsonb_set(jsonb old_jsonb, text[] path, jsonb new_jsonb, bool create_if_missing) 更新jsonb 
+update test set attr_jsonb=jsonb_set(attr_jsonb, '{son}', '{&quot;name&quot;:&quot;con&quot;,&quot;age&quot;:2}')
+where (attr_jsonb#&gt;&gt;'{son,name}') = 'coco';
+</code></pre>
+<hr>
+<pre><code class="language-sql">-- 根据路径删除属性 (jsonb可用)
+update test set attr_jsonb=attr_jsonb#-'{son,name}';
+</code></pre>
+<hr>
+<pre><code class="language-sql">-- 删除属性 (jsonb可用)
+update test set attr_jsonb=attr_jsonb-'son' where attr_jsonb ? 'son';
+</code></pre>
+<h2 id="数组">数组</h2>
+<pre><code class="language-sql">-- 创建测试表
+CREATE TABLE test_arr (
+    id int not null primary key,
+    arr int[] not null
+);
+
+-- 插入数据
+insert into test_arr (id, arr) values (1, array[2,3,4]),(2, array[3,4,5]);
+
+-- 数组合并
+select array[1,2,3,4] || array[2,3,4,5]; -- 结果：{1,2,3,4,2,3,4,5}
+select 2 || array[2,3,4,5]; -- 结果：{2,2,3,4,5}
+
+-- 数组比较，每个元素依次比较大小
+select array[1,2,3,4] &gt; array[1,2,3]; -- 结果: true
+select array[1,2,3,4] &gt; array[1,2,4]; -- 结果: false
+
+-- 数组包含关系
+select array[1,2,3] @&gt; array[2,3]; -- 结果: true
+select array[1,2,3] @&gt; array[2,3,4]; -- 结果: false
+
+-- 数组是否有共同元素
+select array[1,2,3] &amp;&amp; array[3,4,5]; -- 结果: true
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[musicfox 2.0——golang重写版]]></title>
         <id>/post/NOO340v6g/</id>
@@ -284,33 +394,33 @@ func test(c &lt;-chan string) {
 </table>
 <h2 id="todo">TODO</h2>
 <ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-893963"><label class="task-list-item-label" for="task-item-893963"> 我的歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2276791"><label class="task-list-item-label" for="task-item-2276791"> 每日推荐歌曲</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4479573"><label class="task-list-item-label" for="task-item-4479573"> 每日推荐歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7044662"><label class="task-list-item-label" for="task-item-7044662"> 私人FM</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4656899"><label class="task-list-item-label" for="task-item-4656899"> 歌词显示</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3499159"><label class="task-list-item-label" for="task-item-3499159"> 欢迎界面</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4018149"><label class="task-list-item-label" for="task-item-4018149"> 搜索</label>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1202754"><label class="task-list-item-label" for="task-item-1202754"> 我的歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6178767"><label class="task-list-item-label" for="task-item-6178767"> 每日推荐歌曲</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6217806"><label class="task-list-item-label" for="task-item-6217806"> 每日推荐歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-401842"><label class="task-list-item-label" for="task-item-401842"> 私人FM</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6213879"><label class="task-list-item-label" for="task-item-6213879"> 歌词显示</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6362327"><label class="task-list-item-label" for="task-item-6362327"> 欢迎界面</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9097687"><label class="task-list-item-label" for="task-item-9097687"> 搜索</label>
 <ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7331921"><label class="task-list-item-label" for="task-item-7331921"> 按歌曲</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1944213"><label class="task-list-item-label" for="task-item-1944213"> 按歌手</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-477772"><label class="task-list-item-label" for="task-item-477772"> 按歌词</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8835598"><label class="task-list-item-label" for="task-item-8835598"> 按歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8469475"><label class="task-list-item-label" for="task-item-8469475"> 按专辑</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5904411"><label class="task-list-item-label" for="task-item-5904411"> 按用户</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9163320"><label class="task-list-item-label" for="task-item-9163320"> 按歌曲</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4343880"><label class="task-list-item-label" for="task-item-4343880"> 按歌手</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8214196"><label class="task-list-item-label" for="task-item-8214196"> 按歌词</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4165831"><label class="task-list-item-label" for="task-item-4165831"> 按歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5835029"><label class="task-list-item-label" for="task-item-5835029"> 按专辑</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8659398"><label class="task-list-item-label" for="task-item-8659398"> 按用户</label></li>
 </ul>
 </li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2455965"><label class="task-list-item-label" for="task-item-2455965"> 排行榜</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8031181"><label class="task-list-item-label" for="task-item-8031181"> 精选歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3592403"><label class="task-list-item-label" for="task-item-3592403"> 最新专辑</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1405746"><label class="task-list-item-label" for="task-item-1405746"> 热门歌手</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5541502"><label class="task-list-item-label" for="task-item-5541502"> 云盘</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3523661"><label class="task-list-item-label" for="task-item-3523661"> 播放方式切换</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7031701"><label class="task-list-item-label" for="task-item-7031701"> 喜欢/取消喜欢</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8057369"><label class="task-list-item-label" for="task-item-8057369"> 心动模式/智能模式</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4819053"><label class="task-list-item-label" for="task-item-4819053"> 音乐电台</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-1254351"><label class="task-list-item-label" for="task-item-1254351"> 配置文件</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-139148"><label class="task-list-item-label" for="task-item-139148"> 通知功能</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4929102"><label class="task-list-item-label" for="task-item-4929102"> 排行榜</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-648834"><label class="task-list-item-label" for="task-item-648834"> 精选歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4014933"><label class="task-list-item-label" for="task-item-4014933"> 最新专辑</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-782028"><label class="task-list-item-label" for="task-item-782028"> 热门歌手</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8468749"><label class="task-list-item-label" for="task-item-8468749"> 云盘</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1967254"><label class="task-list-item-label" for="task-item-1967254"> 播放方式切换</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6073862"><label class="task-list-item-label" for="task-item-6073862"> 喜欢/取消喜欢</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9899390"><label class="task-list-item-label" for="task-item-9899390"> 心动模式/智能模式</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1446844"><label class="task-list-item-label" for="task-item-1446844"> 音乐电台</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-250891"><label class="task-list-item-label" for="task-item-250891"> 配置文件</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-5264402"><label class="task-list-item-label" for="task-item-5264402"> 通知功能</label></li>
 </ul>
 ]]></content>
     </entry>
@@ -1224,38 +1334,38 @@ ZEND_SET_SYMBOL( EG(active_symbol_table) ,  &quot;foo&quot; , fooval);
 </table>
 <h2 id="七-todo">七、TODO</h2>
 <ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3669041"><label class="task-list-item-label" for="task-item-3669041"> 我的歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-733976"><label class="task-list-item-label" for="task-item-733976"> 每日推荐歌曲</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7693451"><label class="task-list-item-label" for="task-item-7693451"> 每日推荐歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8023411"><label class="task-list-item-label" for="task-item-8023411"> 私人FM</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6203151"><label class="task-list-item-label" for="task-item-6203151"> 歌词显示</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2673020"><label class="task-list-item-label" for="task-item-2673020"> 欢迎界面</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8603624"><label class="task-list-item-label" for="task-item-8603624"> 搜索</label>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8817139"><label class="task-list-item-label" for="task-item-8817139"> 我的歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-717300"><label class="task-list-item-label" for="task-item-717300"> 每日推荐歌曲</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1549609"><label class="task-list-item-label" for="task-item-1549609"> 每日推荐歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8100024"><label class="task-list-item-label" for="task-item-8100024"> 私人FM</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9264719"><label class="task-list-item-label" for="task-item-9264719"> 歌词显示</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8343738"><label class="task-list-item-label" for="task-item-8343738"> 欢迎界面</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4755029"><label class="task-list-item-label" for="task-item-4755029"> 搜索</label>
 <ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3796580"><label class="task-list-item-label" for="task-item-3796580"> 按歌曲</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1626477"><label class="task-list-item-label" for="task-item-1626477"> 按歌手</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2855416"><label class="task-list-item-label" for="task-item-2855416"> 按歌词</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2217588"><label class="task-list-item-label" for="task-item-2217588"> 按歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7954257"><label class="task-list-item-label" for="task-item-7954257"> 按专辑</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6549023"><label class="task-list-item-label" for="task-item-6549023"> 按用户</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7285780"><label class="task-list-item-label" for="task-item-7285780"> 按歌曲</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6801594"><label class="task-list-item-label" for="task-item-6801594"> 按歌手</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8508029"><label class="task-list-item-label" for="task-item-8508029"> 按歌词</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8013802"><label class="task-list-item-label" for="task-item-8013802"> 按歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9615554"><label class="task-list-item-label" for="task-item-9615554"> 按专辑</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8143528"><label class="task-list-item-label" for="task-item-8143528"> 按用户</label></li>
 </ul>
 </li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8254742"><label class="task-list-item-label" for="task-item-8254742"> 排行榜</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6863100"><label class="task-list-item-label" for="task-item-6863100"> 精选歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8832011"><label class="task-list-item-label" for="task-item-8832011"> 最新专辑</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1008947"><label class="task-list-item-label" for="task-item-1008947"> 热门歌手</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2485030"><label class="task-list-item-label" for="task-item-2485030"> 云盘</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7458224"><label class="task-list-item-label" for="task-item-7458224"> 播放方式切换</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3875275"><label class="task-list-item-label" for="task-item-3875275"> 喜欢/取消喜欢</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2289080"><label class="task-list-item-label" for="task-item-2289080"> 心动模式/智能模式</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-2051578"><label class="task-list-item-label" for="task-item-2051578"> 音乐电台</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-1779048"><label class="task-list-item-label" for="task-item-1779048"> 将部分设置转化为文件可配置</label>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-158640"><label class="task-list-item-label" for="task-item-158640"> 排行榜</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3718749"><label class="task-list-item-label" for="task-item-3718749"> 精选歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4694575"><label class="task-list-item-label" for="task-item-4694575"> 最新专辑</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9488669"><label class="task-list-item-label" for="task-item-9488669"> 热门歌手</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3818452"><label class="task-list-item-label" for="task-item-3818452"> 云盘</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1348834"><label class="task-list-item-label" for="task-item-1348834"> 播放方式切换</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2929478"><label class="task-list-item-label" for="task-item-2929478"> 喜欢/取消喜欢</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1619"><label class="task-list-item-label" for="task-item-1619"> 心动模式/智能模式</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-4176255"><label class="task-list-item-label" for="task-item-4176255"> 音乐电台</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-797297"><label class="task-list-item-label" for="task-item-797297"> 将部分设置转化为文件可配置</label>
 <ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-8668186"><label class="task-list-item-label" for="task-item-8668186"> 欢迎界面的欢迎语</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-7586044"><label class="task-list-item-label" for="task-item-7586044"> 欢迎界面时长</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-7724089"><label class="task-list-item-label" for="task-item-7724089"> 主题色</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-5516367"><label class="task-list-item-label" for="task-item-5516367"> 歌词显示行数</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-1495082"><label class="task-list-item-label" for="task-item-1495082"> ...</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-4226718"><label class="task-list-item-label" for="task-item-4226718"> 欢迎界面的欢迎语</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-1032637"><label class="task-list-item-label" for="task-item-1032637"> 欢迎界面时长</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-9762033"><label class="task-list-item-label" for="task-item-9762033"> 主题色</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-5304539"><label class="task-list-item-label" for="task-item-5304539"> 歌词显示行数</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-327601"><label class="task-list-item-label" for="task-item-327601"> ...</label></li>
 </ul>
 </li>
 </ul>
@@ -1277,152 +1387,6 @@ ZEND_SET_SYMBOL( EG(active_symbol_table) ,  &quot;foo&quot; , fooval);
 <li><a href="https://github.com/Binaryify/NeteaseCloudMusicApi" title="NeteaseCloudMusicApi">NeteaseCloudMusicApi</a></li>
 <li><a href="https://github.com/DirectMyFile/console.dart" title="console.dart">console.dart</a></li>
 </ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[使用laravel的方式管理imi的路由]]></title>
-        <id>/post/O4IVHtR2w/</id>
-        <link href="/post/O4IVHtR2w/">
-        </link>
-        <updated>2020-06-27T12:00:21.000Z</updated>
-        <content type="html"><![CDATA[<!-- more -->
-<h2 id="1-imi是什么">1、imi是什么</h2>
-<p>imi与Swoft、Hyperf一样，是一个基于Swoole的PHP框架。</p>
-<p><strong>不同之处在于，Swoft与Hyperf是主要针对微服务推出的框架，而imi致力于单体应用。</strong></p>
-<p>此外，imi还支持代码热更新，只要监听的文件发生了更改，imi就会在很短的时间内重启服务。大体实现是：</p>
-<blockquote>
-<p>① 在worker进程的启动事件onWorkerStart中，载入相应的PHP文件。</p>
-<p>② 当监听到代码更新后，向swoole发送一个SIGUSR1信号，swoole会重启所有的worker进程，并触发onWorkerStart事件，重新载入相应的PHP文件。此时，worker进程就是最新的代码了。</p>
-</blockquote>
-<p>虽然这个功能对于线上服务没有很大的帮助，但是却可以大大提高开发时效率。</p>
-<h2 id="2-imi的路由管理">2、imi的路由管理</h2>
-<h3 id="注解">注解</h3>
-<p>imi路由的管理方式与Swoft框架类似。使用<strong>注解</strong>来管理路由，例如：</p>
-<pre><code class="language-php">&lt;?php
-namespace Test;
- 
-use Imi\Controller\HttpController;
-use Imi\Server\Route\Annotation\Route;
-use Imi\Server\Route\Annotation\Action;
-use Imi\Server\Route\Annotation\Controller;
- 
-/**
- * @Controller(prefix=&quot;home&quot;)
- */
-class Index extends HttpController
-{
-    /**
-     * @Action
-     * @Route(url=&quot;/index&quot;)
-     */
-    public function index()
-    {
-        // 使用/index可以访问到
-        return $this-&gt;response-&gt;write('hello imi!');
-    }
-    
-    /**
-     * @Action
-     * @Route(url=&quot;test&quot;)
-     */
-    public function test()
-    {
-        // 使用/home/test可以访问到
-        return $this-&gt;response-&gt;write('hello test!');
-    }
-}
-</code></pre>
-<p>上面的代码中，<code>Index</code>类上添加了<code>@Controller</code>注解，标识该类为一个控制器，并设置路由前缀为<code>home</code>；<code>index</code>及<code>test</code>方法上添加了<code>Action</code>、<code>Route</code>注解，并分别为它们设置路由为<code>/home</code>、<code>test</code>。</p>
-<p>使用注解管理路由可以很直观地将控制器的方法和路由对应起来，但是它也会带来一些缺陷：</p>
-<ul>
-<li>当路由越来越多时，路由的管理就变得很复杂。例如：我们需要为一批路由添加一个中间件，此时，就需要修改很多文件。</li>
-<li>路由结构不够清晰。</li>
-</ul>
-<h3 id="配置">配置</h3>
-<p>当然，imi也支持使用配置的方式管理路由：</p>
-<pre><code class="language-php">return [
-    'route' =&gt; [
-        [
-            'controller' =&gt; \ImiDemo\HttpDemo\MainServer\Controller\Test::class,
-            'method' =&gt; 'index',
-            'route' =&gt; [
-                'url' =&gt; '/test',
-                // 'method'    =&gt;    'PUT',
-                // 'method'    =&gt;    ['GET', 'POST'],
-                // 'domain'    =&gt;    '{name}.xxx.com',
-            ],
-        ],
-     ]
-];
-</code></pre>
-<p>但是，这种方式存在多重嵌套，可读性并不高。</p>
-<p>既然如此，还有什么其他路由管理方式呢？🤔</p>
-<h2 id="3-imi-route">3、imi-route</h2>
-<p>我认为laravel的路由管理方式是很方便且易读的，例如：</p>
-<pre><code class="language-php">Route::group(['middleware' =&gt; ['auth']], function () {
-    Route::get('/auth/userinfo', 'AuthController@getUser');
-});
-</code></pre>
-<p>所以，我编写了一个组件——<a href="https://github.com/anhoder/imi-route"><code>imi-route</code></a>，希望可以将laravel路由管理的基本功能应用到在imi框架中去。</p>
-<h3 id="基本实现思路">基本实现思路</h3>
-<p>首先，我们需要知道imi框架在启动时是如何加载相关路由的：</p>
-<ol>
-<li>解析应用目录下的所有文件，通过反射获取所有类的注释</li>
-<li>注释通过字符串解析后得到相应注解，例如：路由注解为<code>RouteAnnotation</code></li>
-<li>将所有的路由注解添加到HttpRoute中</li>
-</ol>
-<p>以上的流程都是在服务启动时进行处理，得到路由结果会常驻内存。</p>
-<p>而**<code>imi-route</code>就是在服务启动时，将存储的路由转化为路由注解，添加到HttpRoute中。**</p>
-<h3 id="使用">使用</h3>
-<p>1、使用composer安装依赖：</p>
-<pre><code class="language-sh">composer require alanalbert/imi-route
-</code></pre>
-<p>2、将下列代码添加到项目根目录的<code>Main.php</code>文件中：</p>
-<pre><code class="language-php">&lt;?php
-namespace ImiApp;
-
-use Imi\Main\AppBaseMain;
-  
-class Main extends AppBaseMain
-{
-  public function __init()
-  {
-      \Alan\ImiRoute\Route::init(); // Add this line
-  }
-
-}
-</code></pre>
-<p>3、在项目根目录下，创建<code>route/route.php</code>目录及文件，在<code>route.php</code>文件中，你就可以管理你的路由了：</p>
-<pre><code class="language-php">/**
- * @var $router Route
- */
-
-use Alan\ImiRoute\Route;
-use ImiApp\ApiServer\Controller\IndexController;
-use ImiApp\ApiServer\Middleware\Test2Middleware;
-use ImiApp\ApiServer\Middleware\TestMiddleware;
-
-$router-&gt;group(['middleware' =&gt; TestMiddleware::class], function (Route $router) {
-
-    $router-&gt;group(
-        [
-            'middleware' =&gt; Test2Middleware::class, 
-            'ignoreCase' =&gt; true, 
-            'prefix' =&gt; 'prefix'
-        ], function (Route $router) {
-        $router-&gt;get('hi', 'ImiApp\ApiServer\Controller\IndexController@index');
-    });
-
-    $router-&gt;any('/hi/api/abc', [IndexController::class, 'index']);
-
-    $router-&gt;any('/hi/api/{time}', [IndexController::class, 'api']);
-
-});
-
-$router-&gt;group(['prefix' =&gt; 'prefix'], function (Route $router) {
-    $router-&gt;get('/TEST/{time}', [IndexController::class, 'api']);
-});
-</code></pre>
 ]]></content>
     </entry>
 </feed>
