@@ -8,7 +8,7 @@
 <meta name="keywords" content="anhoder的进阶日志">
 <meta name="description" content="一川烟草，满城风絮。">
 <meta name="theme-color" content="#000">
-<title>musicfox 2.0——golang重写版 | anhoder的进阶日志</title>
+<title>anhoder的进阶日志</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1627229474529">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -61,8 +61,6 @@
 </script>
 
 
-  <meta name="description" content="musicfox 2.0——golang重写版" />
-  <meta name="keywords" content="go,musicfox,musicbox" />
 </head>
 
 <body>
@@ -211,26 +209,10 @@
   <div class="main-continer">
     
     <div
-      class="section-layout pisces ">
+      class="section-layout  pisces">
       <div class="section-layout-wrapper">
-        
-
-<div class="sidebar">
-  
-    <div class="sidebar-box box-shadow-wrapper bg-color right-motion" id="sidebar">
-      
-        <div class="post-list-sidebar">
-          <div class="sidebar-title">
-            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
-            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
-          </div>
-        </div>
-      
-      <div class="sidebar-body pisces" id="sidebar_body">
-        
-          
-            <div class="post-side-meta" id="post_side_meta">
-              
+        <div id="sidebarMeta" class="sidebar">
+    
 <div class="sidebar-wrapper box-shadow-wrapper bg-color">
   <div class="sidebar-item">
     <img class="site-author-image right-motion" src="/images/avatar.png"/>
@@ -304,720 +286,490 @@
 
 
 </div>
-            </div>
-            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
-              <div class="toc-box right-motion">
-  <div class="toc-wrapper  auto"
-    id="toc_wrapper">
-    <ul class="markdownIt-TOC">
-<li>
-<ul>
-<li><a href="#%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98%E4%B8%8E%E6%96%B9%E6%A1%88">存在的问题与方案</a></li>
-<li><a href="#%E4%BD%BF%E7%94%A8go%E6%97%B6%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98">使用go时遇到的问题</a>
-<ul>
-<li><a href="#%E5%8D%8F%E7%A8%8B%E6%B3%84%E6%BC%8F">协程泄漏</a></li>
-<li><a href="#%E5%A6%82%E4%BD%95%E5%B0%BD%E9%87%8F%E9%81%BF%E5%85%8D%E5%8D%8F%E7%A8%8B%E6%B3%84%E6%BC%8F">如何尽量避免协程泄漏</a></li>
-<li><a href="#%E5%8D%8F%E7%A8%8B%E6%B3%84%E6%BC%8F%E6%8E%92%E6%9F%A5">协程泄漏排查</a></li>
-</ul>
-</li>
-<li><a href="#%E9%A2%84%E8%A7%88">预览</a></li>
-<li><a href="#%E5%AE%89%E8%A3%85">安装</a>
-<ul>
-<li><a href="#mac">Mac</a>
-<ul>
-<li><a href="#%E4%BD%BF%E7%94%A8brew%E5%AE%89%E8%A3%85">使用brew安装</a></li>
-<li><a href="#%E7%9B%B4%E6%8E%A5%E4%B8%8B%E8%BD%BD">直接下载</a></li>
-</ul>
-</li>
-<li><a href="#linux">Linux</a></li>
-<li><a href="#windows">Windows</a></li>
-</ul>
-</li>
-<li><a href="#%E5%BF%AB%E6%8D%B7%E9%94%AE">快捷键</a></li>
-<li><a href="#todo">TODO</a></li>
-</ul>
-</li>
-</ul>
-
-  </div>
 </div>
-
 <script>
-
-  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
-  let active = 'active-show', activeClass = 'active-current';
-  let tocWrapper = document.querySelector('#toc_wrapper');
-  let tocContent = tocWrapper.children[0];
-  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
-
-  function addTocNumber(elem, deep) {
-    if (!elem) {
-      return;
-    }
-    let prop = elem.__proto__;
-
-    if (prop === HTMLUListElement.prototype) {
-      for (let i = 0; i < elem.children.length; i++) {
-        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+  let sidebarMeta = document.querySelector('#sidebarMeta');
+  let scheme = 'pisces';
+  let sidebarWrapper = document.querySelector('.sidebar-wrapper');
+  if (sidebarMeta && (scheme === 'pisces' || scheme === 'gemini')) {
+    document.addEventListener('scroll', function(e) {
+      if (document.scrollingElement.scrollTop > parseInt(sidebarMeta.style.marginTop) + 10) {
+        sidebarWrapper.classList.add('home-sidebar-fixed')
+      } else {
+        sidebarWrapper.classList.remove('home-sidebar-fixed')
       }
-    } else if (prop === HTMLLIElement.prototype) {
-      // 保存li元素
-      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
-        lList.push(elem);
-      }
-      for (let i = 0; i < elem.children.length; i++) {
-        let cur = elem.children[i];
-        if (cur.__proto__ === HTMLAnchorElement.prototype) {
-          if (autoNumber) {
-            cur.text = deep + ' ' + cur.text;
-          }
-        } else if (cur.__proto__ === HTMLUListElement.prototype) {
-          addTocNumber(cur, deep);
-        }
-      }
-    }
-  }
-
-  function removeParentActiveClass() {
-    let parents = tocContent.querySelectorAll('.' + active)
-    parents.forEach(function (elem) {
-      elem.classList.remove(active);
     });
   }
-
-  function addActiveClass(index) {
-    if (index >= 0 && index < hList.length) {
-      lList[index].classList.add(activeClass);
-    }
-  }
-
-  function removeActiveClass(index) {
-    if (index >= 0 && index < hList.length) {
-      lList[index].classList.remove(activeClass);
-    }
-  }
-
-  function addActiveLiElemment(elem, parent) {
-    if (!elem || elem === parent) {
-      return;
-    } else {
-      if (elem.__proto__ === HTMLLIElement.prototype) {
-        elem.classList.add(active);
-      }
-      addActiveLiElemment(elem.parentElement, parent);
-    }
-  }
-
-  function showToc() {
-    if (tocWrapper) {
-      postBody = document.querySelector('#post_body');
-      for (let i = 0; i < postBody.children.length; i++) {
-        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
-          hList.push(postBody.children[i]);
-        }
-      }
-      if (tocWrapper.classList.contains('compress')) {
-        tocContent.classList.add('closed');
-      } else if (tocWrapper.classList.contains('no_compress')) {
-        tocContent.classList.add('expanded');
-      } else {
-        if (hList.length > 10) {
-          active = 'active-hidden'
-          tocContent.classList.add('closed');
-        } else {
-          tocContent.classList.add('expanded');
-        }
-      }
-    }
-  }
-
-  (function () {
-    // 处理不是从#一级标题开始目录
-    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
-      let con = tocContent.children[0].children[0];
-      tocContent.innerHTML = con.innerHTML;
-    }
-    let markdownItTOC = document.querySelector('.markdownIt-TOC');
-    let innerHeight = window.innerHeight;
-    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
-    addTocNumber(tocContent, '');
-  })();
-
-  document.addEventListener('scroll', function (e) {
-    if (lList.length <= 0) {
-      return;
-    }
-    let scrollTop = document.scrollingElement.scrollTop + 10;
-    let dir;
-
-    if (lastTop - scrollTop > 0) {
-      dir = 'up';
-    } else {
-      dir = 'down';
-    }
-
-    lastTop = scrollTop;
-    if (scrollTop <= 0) {
-      if (lastIndex >= 0 && lastIndex < hList.length) {
-        lList[lastIndex].classList.remove(activeClass);
-      }
-      return;
-    }
-
-    let current = 0, hasFind = false;
-    for (let i = 0; i < hList.length; i++) {
-      if (hList[i].offsetTop > scrollTop) {
-        current = i;
-        hasFind = true;
-        break;
-      }
-    }
-    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
-      current = hList.length - 1;
-    } else {
-      current--;
-    }
-    if (dir === 'down') {
-      if (current > lastIndex) {
-        addActiveClass(current);
-        removeActiveClass(lastIndex)
-        lastIndex = current;
-        removeParentActiveClass();
-        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
-      }
-    } else {
-      if (current < lastIndex) {
-        addActiveClass(current);
-        removeActiveClass(lastIndex);
-        lastIndex = current;
-        removeParentActiveClass();
-        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
-      }
-    }
-  });
-
-
-  window.addEventListener('load', function () {
-    showToc();
-    document.querySelector('#sidebar').style = 'display: block;';
-    tocWrapper.classList.add('toc-active');
-    setTimeout(function () {
-      if ("createEvent" in document) {
-        let evt = document.createEvent("HTMLEvents");
-        evt.initEvent("scroll", false, true);
-        document.dispatchEvent(evt);
-      }
-      else {
-        document.fireEvent("scroll");
-      }
-    }, 500)
-  })
-
-</script>
-            </div>
-          
-        
+  </script>
+        <div class="section-box tag-line box-shadow-wrapper">
+          <section class="section tags-section posts-expand bg-color">
+            <div class="padding-wrapper">
+  <div class="tag-timeline-box">
+    <div class="tag-timeline-wrapper">
+      <div class="tag-timeline-title">
+        <h2>
+          面试
+          <small class="language" data-lan="tag">标签</small>
+        </h2>
       </div>
-    </div>
-  
-</div>
-<script>
-  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
-  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
-  const SLIDE_UP_IN = 'slide-up-in';
-
-  let sidebar = document.querySelector('#sidebar'),
-  tocSideBar = document.querySelector('#tocSideBar'),
-  metaSideBar = document.querySelector('#metaSideBar'),
-  postToc = document.querySelector('#post_toc'),
-  postSiteMeta = document.querySelector('#post_side_meta'),
-  sidebarTitle = document.querySelector('.sidebar-title'),
-  sidebarBody = document.querySelector('#sidebar_body');
-
-  tocSideBar && tocSideBar.addEventListener('click', (e) => {
-    toggleSidebar(e);
-  });
-
-  metaSideBar && metaSideBar.addEventListener('click', (e) => {
-    toggleSidebar(e);
-  });
-
-  function toggleSidebar(e) {
-    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
-    if (currentTitle == e.srcElement) {
-      return ;
-    }
-    let current, showElement, hideElement;
-    if (e.srcElement == metaSideBar) {
-      showElement = postSiteMeta;
-      hideElement = postToc;
-    } else if (e.srcElement == tocSideBar){
-      showElement = postToc;
-      hideElement = postSiteMeta;
-    }
-    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
-    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
-
-    window.Velocity(hideElement, 'stop');
-    window.Velocity(hideElement, 'transition.slideUpOut', {
-      display: 'none',
-      duration: 200,
-      complete: function () {
-        window.Velocity(showElement, 'transition.slideDownIn', {
-          duration: 200
-        });
-      }
-    })
-    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
-    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
-  }
-
-  postToc && postToc.addEventListener('transitionend', function() {
-    this.classList.remove(SLIDE_UP_IN);
-  });
-
-  if (sidebarBody) {
-    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
-      let hasFix = false;
-      let scrollEl = document.querySelector('.main-continer');
-      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
-      window.addEventListener('scroll', function(e) {
-        if (document.scrollingElement.scrollTop >= limitTop) {
-          if (!hasFix) {
-            sidebar.classList.add('sidebar-fixed');
-            hasFix = true;
-          }
-        } else {
-          if (hasFix) {
-            sidebar.classList.remove('sidebar-fixed');
-            hasFix = false;
-          }
-        }
-      });
-    }
-  }
-  
-</script>
-        <div class="section-box box-shadow-wrapper">
-          <div class="section bg-color post post-page">
-            <section class="post-header">
-  <h1 class="post-title">
-    <a class="post-title-link" href="/post/NOO340v6g/">
-      musicfox 2.0——golang重写版
-    </a>
-  </h1>
-  <div class="post-meta">
-    
-    <span class="meta-item pc-show">
-      <i class="fa fa-calendar-o"></i>
-      <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2021-05-14 20:51:23">2021-05-14</span>
-      <span class="post-meta-divider pc-show">|</span>
-    </span>
-    
-    <span class="meta-item">
-      <i class="fa fa-folder-o"></i>
-      <span class="pc-show language" data-lan="category-in">分类于</span>
-      
-      
-      <a href="/tag/Sq0EaZE0z/">
-        <span>go</span>
-      </a>、
       
       
       
-      <a href="/tag/4DtRgZzLu/">
-        <span>musicfox</span>
-      </a>、
       
       
       
-      <a href="/tag/9ERhdVc7a8/">
-        <span>musicbox</span>
+      
+      
+      
+      <a href="/post/JeWf3QSkh/">
+        <div class="motion-warpper">
+          <div class="tag-post-node">
+            <h1>
+              06-14
+              <small>2021 PHP部分面经</small>
+            </h1>
+          </div>
+        </div>
       </a>
       
       
-    </span>
-    <span class="post-meta-divider">|</span>
-    
-    <span class="meta-item">
-      <i class="fa fa-clock-o"></i>
-      <span>5<span class="language" data-lan="minute">分钟</span></span>
-    </span>
-    <span class="meta-item">
-      <span class="post-meta-divider">|</span>
-      <i class="fa fa-file-word-o"></i>
-      <span>1249<span class="pc-show language" data-lan="words">字数</span></span>
-    </span>
-    
-  </div>
-</section>
-            <div class="post-body next-md-body" id="post_body">
-              <p>musicfox 2.0终于完成了，没有太多的功能变更，主要使用golang进行重写，优化了用户体验（主要是Windows下）。</p>
-<!-- more -->
-<h2 id="存在的问题与方案">存在的问题与方案</h2>
-<p>musicfox最开始是用Dart写的，工作原理大致是主进程fork一个mpg123的子进程，主进程处理UI渲染、用户交互及网络请求等，然后通过进程间管道通信，来控制mpg123子进程的音乐播放、暂停以及播放器的音量大小等。</p>
-<p>这种模式下，会存在以下这些问题：</p>
-<ul>
-<li>依赖mpg123，需要用户手动安装mpg123</li>
-<li>mpg123只能播放mp3音乐，网易云无损音质是flac格式，无法播放</li>
-<li>进程间需要通过管道进行通信，Windows下不容易处理</li>
-<li>Dart大多数三方包都是基于Flutter的，原生包不多</li>
-<li>...</li>
-</ul>
-<p>为了解决这些问题，于是开始采用golang进行重写，优势主要是：</p>
-<ul>
-<li>golang支持更多平台的二进制编译</li>
-<li>拥有丰富的第三方包，例如音频播放的<a href="https://github.com/faiface/beep">beep</a>、TUI渲染的<br>
-<a href="https://github.com/charmbracelet/bubbletea">bubbletea</a>、本地数据库的<a href="https://github.com/boltdb/bolt">bolt</a>等等</li>
-<li>不需要借助其他进程，所以不存在进程通信</li>
-<li>支持mp3、flac、wav等格式音频文件的解码播放</li>
-<li>goroutine + chan</li>
-</ul>
-<p>另外对我自己来说可以深入熟悉golang...</p>
-<h2 id="使用go时遇到的问题">使用go时遇到的问题</h2>
-<h3 id="协程泄漏">协程泄漏</h3>
-<p>在使用golang过程中遇到比较严重的问题就是协程泄漏。例如下面的代码：</p>
-<pre><code class="language-go">package main
-
-import (
-	&quot;fmt&quot;
-	&quot;runtime&quot;
-)
-
-func main() {
-	c1 := make(chan struct{})
-	for i := 0; i &lt; 10; i++ {
-		go test(c1)
-		fmt.Println(runtime.NumGoroutine())
-	}
-}
-
-func test(c chan&lt;- struct{}) {
-	c &lt;- struct{}{}
-}
-</code></pre>
-<p>执行后会输出：</p>
-<pre><code>2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</code></pre>
-<p>可见，协程数一直在增加，这是因为没有消费者消费chan中的数据，所有子协程都阻塞在写chan的操作。</p>
-<p>类似这种情况就会导致协程数不断增长，出现协程泄漏，内存占用不断上升。</p>
-<h3 id="如何尽量避免协程泄漏">如何尽量避免协程泄漏</h3>
-<ol>
-<li>确保chan都会有相应的消费者、生产者，且生产速度和消费速度差不多</li>
-<li>如果需要往chan中压数据或读数据，但又不确定是否有消费者或生产者，可以使用<code>select</code>结构避免阻塞</li>
-<li>使用goroutine + chan处理，避免创建大量协程，例如：</li>
-</ol>
-<pre><code class="language-go">package main
-
-import (
-	&quot;fmt&quot;
-	&quot;runtime&quot;
-	&quot;time&quot;
-)
-
-func main() {
-	var data [100]string
-	// 获取data逻辑
-	for _, v := range data {
-		go test(v)
-	}
-
-	fmt.Println(runtime.NumGoroutine())
-}
-
-func test(s string) {
-	// 假装业务逻辑
-	time.Sleep(time.Millisecond)
-}
-</code></pre>
-<p>输出为: 101，也就是新开了100个协程，如果数据更多时，会产生更多协程。这种情况可以考虑创建固定数量的若干个协程，然后通过chan将数据投递给子协程进行处理，避免大量协程占用内存，如：</p>
-<pre><code class="language-go">package main
-
-import (
-	&quot;fmt&quot;
-	&quot;runtime&quot;
-	&quot;time&quot;
-)
-
-func main() {
-	var data [100]string
-	c := make(chan string)
-
-	for i := 0; i &lt; 5; i++ {
-		go test(c)
-	}
-
-	for _, v := range data {
-		c &lt;- v
-	}
-
-	fmt.Println(runtime.NumGoroutine())
-}
-
-func test(c &lt;-chan string) {
-	for _ = range c {
-        // 业务逻辑
-		time.Sleep(time.Millisecond)
-	}
-}
-</code></pre>
-<h3 id="协程泄漏排查">协程泄漏排查</h3>
-<ol>
-<li>runtime.NumGoroutine()查看协程数</li>
-<li>使用gops排查，可以查看当前协程数、调用栈等</li>
-</ol>
-<h2 id="预览">预览</h2>
-<figure data-type="image" tabindex="1"><img src="/post-images/1620999111458.png" alt="preview1" loading="lazy"></figure>
-<figure data-type="image" tabindex="2"><img src="/post-images/1620999246727.png" alt="preview2" loading="lazy"></figure>
-<h2 id="安装">安装</h2>
-<h3 id="mac">Mac</h3>
-<p>提供两种方式安装：</p>
-<h4 id="使用brew安装">使用brew安装</h4>
-<pre><code class="language-sh">brew tap anhoder/go-musicfox &amp;&amp; brew install go-musicfox
-</code></pre>
-<p>如果你之前安装过musicfox，需要使用下列命令重新链接:</p>
-<pre><code class="language-sh">brew unlink musicfox &amp;&amp; brew link --overwrite go-musicfox
-</code></pre>
-<h4 id="直接下载">直接下载</h4>
-<p>下载<a href="https://github.com/anhoder/go-musicfox/releases/latest/download/musicfox.mac">Mac可执行文件</a>，在iTerm或Terminal中打开</p>
-<h3 id="linux">Linux</h3>
-<p>身边没有Linux设备，而播放音乐依赖CGO，无法进行交叉编译，所以暂时没有可用的二进制文件</p>
-<h3 id="windows">Windows</h3>
-<p>下载<a href="https://github.com/anhoder/go-musicfox/releases/latest/download/musicfox.exe">Windows可执行文件</a>，在命令行中运行即可。</p>
-<p><strong>推荐使用Windows Terminal，UI及体验会好很多</strong></p>
-<h2 id="快捷键">快捷键</h2>
-<table>
-<thead>
-<tr>
-<th>按键</th>
-<th>作用</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>h/H/LEFT</td>
-<td>左</td>
-<td></td>
-</tr>
-<tr>
-<td>l/L/RIGHT</td>
-<td>右</td>
-<td></td>
-</tr>
-<tr>
-<td>k/K/UP</td>
-<td>上</td>
-<td></td>
-</tr>
-<tr>
-<td>j/J/DOWN</td>
-<td>下</td>
-<td></td>
-</tr>
-<tr>
-<td>q/Q</td>
-<td>退出</td>
-<td></td>
-</tr>
-<tr>
-<td>space</td>
-<td>暂停/播放</td>
-<td></td>
-</tr>
-<tr>
-<td>[</td>
-<td>上一曲</td>
-<td></td>
-</tr>
-<tr>
-<td>]</td>
-<td>下一曲</td>
-<td></td>
-</tr>
-<tr>
-<td>-</td>
-<td>减小音量</td>
-<td></td>
-</tr>
-<tr>
-<td>=</td>
-<td>加大音量</td>
-<td></td>
-</tr>
-<tr>
-<td>n/N/ENTER</td>
-<td>进入选中的菜单</td>
-<td></td>
-</tr>
-<tr>
-<td>b/B/ESC</td>
-<td>返回上级菜单</td>
-<td></td>
-</tr>
-<tr>
-<td>w/W</td>
-<td>退出并退出登录</td>
-<td></td>
-</tr>
-<tr>
-<td>p</td>
-<td>切换播放方式</td>
-<td></td>
-</tr>
-<tr>
-<td>P</td>
-<td>心动模式(仅在歌单中时有效)</td>
-<td></td>
-</tr>
-<tr>
-<td>r/R</td>
-<td>重新渲染UI</td>
-<td>Windows调整窗口大小后，没有事件触发，可以使用该方法手动重新渲染</td>
-</tr>
-<tr>
-<td>,</td>
-<td>喜欢当前播放歌曲</td>
-<td></td>
-</tr>
-<tr>
-<td>&lt;</td>
-<td>喜欢当前选中歌曲</td>
-<td></td>
-</tr>
-<tr>
-<td>.</td>
-<td>当前播放歌曲移除出喜欢</td>
-<td></td>
-</tr>
-<tr>
-<td>&gt;</td>
-<td>当前选中歌曲移除出喜欢</td>
-<td></td>
-</tr>
-<tr>
-<td>/</td>
-<td>标记当前播放歌曲为不喜欢</td>
-<td></td>
-</tr>
-<tr>
-<td>?</td>
-<td>标记当前选中歌曲为不喜欢</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h2 id="todo">TODO</h2>
-<ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2009470"><label class="task-list-item-label" for="task-item-2009470"> 我的歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-478470"><label class="task-list-item-label" for="task-item-478470"> 每日推荐歌曲</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9490395"><label class="task-list-item-label" for="task-item-9490395"> 每日推荐歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1842765"><label class="task-list-item-label" for="task-item-1842765"> 私人FM</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5043299"><label class="task-list-item-label" for="task-item-5043299"> 歌词显示</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2318534"><label class="task-list-item-label" for="task-item-2318534"> 欢迎界面</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3908531"><label class="task-list-item-label" for="task-item-3908531"> 搜索</label>
-<ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6037938"><label class="task-list-item-label" for="task-item-6037938"> 按歌曲</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-804197"><label class="task-list-item-label" for="task-item-804197"> 按歌手</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8616488"><label class="task-list-item-label" for="task-item-8616488"> 按歌词</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4108182"><label class="task-list-item-label" for="task-item-4108182"> 按歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1603363"><label class="task-list-item-label" for="task-item-1603363"> 按专辑</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9802552"><label class="task-list-item-label" for="task-item-9802552"> 按用户</label></li>
-</ul>
-</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6319102"><label class="task-list-item-label" for="task-item-6319102"> 排行榜</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8208860"><label class="task-list-item-label" for="task-item-8208860"> 精选歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3556515"><label class="task-list-item-label" for="task-item-3556515"> 最新专辑</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9232950"><label class="task-list-item-label" for="task-item-9232950"> 热门歌手</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3543770"><label class="task-list-item-label" for="task-item-3543770"> 云盘</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7380629"><label class="task-list-item-label" for="task-item-7380629"> 播放方式切换</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3106604"><label class="task-list-item-label" for="task-item-3106604"> 喜欢/取消喜欢</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4835841"><label class="task-list-item-label" for="task-item-4835841"> 心动模式/智能模式</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2335364"><label class="task-list-item-label" for="task-item-2335364"> 音乐电台</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-2971905"><label class="task-list-item-label" for="task-item-2971905"> 配置文件</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-3467016"><label class="task-list-item-label" for="task-item-3467016"> 通知功能</label></li>
-</ul>
-
-            </div>
-            
-            
-              <div class="post-footer">
-  <ul class="post-copyright">
-    <li class="post-copyright-author">
-      <strong class="language" data-lan="author">本文作者：</strong>
-      anhoder
-    </li>
-    <li class="post-copyright-link">
-      <strong class="language" data-lan="link">本文链接：</strong>
-      <a href="/post/NOO340v6g/" title="musicfox 2.0——golang重写版">/post/NOO340v6g/</a>
-    </li>
-    <li class="post-copyright-license">
-      <strong class="language" data-lan="copyright">版权声明： </strong>
-      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
-    </li>
-  </ul>
-  <div class="tags">
-    
-      <a href="/tag/Sq0EaZE0z/"># go</a>
-    
-      <a href="/tag/4DtRgZzLu/"># musicfox</a>
-    
-      <a href="/tag/9ERhdVc7a8/"># musicbox</a>
-    
-  </div>
-  <div class="nav">
-    <div class="nav-prev">
       
-        <i class="fa fa-chevron-left"></i>
-        <a class="nav-pc-next" title="PostgreSQL的json、jsonb、数组" href="/post/kYHKCQzOh/">PostgreSQL的json、jsonb、数组</a class="nav-pc-next">
-        <a class="nav-mobile-prev" title="PostgreSQL的json、jsonb、数组" href="/post/kYHKCQzOh/">上一篇</a>
       
-    </div>
-    <div class="nav-next">
       
-        <a class="nav-pc-next" title="一个utools插件——hasids加解密" href="/post/YMhNrwxuT/">一个utools插件——hasids加解密</a>
-        <a class="nav-mobile-next" title="一个utools插件——hasids加解密" href="/post/YMhNrwxuT/">下一篇</a>
-        <i class="fa fa-chevron-right"></i>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       
     </div>
   </div>
 </div>
-            
-            
-  
-    
-      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-
-<div id="gitalk-container"></div>
-
-<script>
-  var gitalk = new Gitalk({
-    clientID: '8254f894b17fffeef6e2',
-    clientSecret: 'aa345603999774a44649ad73ef7fe72ee45a021b',
-    repo: 'personal-blog-comments',
-    owner: 'anhoder',
-    admin: ['anhoder'],
-    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
-    distractionFreeMode: false  // Facebook-like distraction free mode
-  })
-  gitalk.render('gitalk-container')
-</script>
-    
-    
-  
-
-          </div>
+          </section>
         </div>
       </div>
     </div>
@@ -1746,223 +1498,6 @@ func test(c &lt;-chan string) {
     parent.insertBefore(aelem, next);
   })
 </script>
-    <div class="reward-mask" style="display: none;">
-  <div class="reward-relative">
-    <span class="close" aria-hidden="true">x</span>
-    <div class="reward-body">
-      <h2>感谢您的支持，我会继续努力的!</h2>
-      <div class="reward-img-box">
-        <div style="position: relative; width: 140px; height: 140px;">
-          
-          
-          
-        </div>
-      </div>
-      <p class="reward-word">扫码打赏，你说多少就多少</p>
-      <p class="reward-tip">打开微信扫一扫，即可进行扫码打赏哦</p>
-    </div>
-    <div class="bottom">
-      
-      
-    </div>
-  </div>
-</div>
-<style>
-  .reward-mask {
-    position: fixed;
-    z-index: 99999;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: #00000054;
-  }
-
-  .reward-relative {
-    position: relative;
-    width: 480px;
-    text-align: center;
-    margin: 0 auto;
-    border-radius: 5px;
-    background-color: #fff;
-    top: 50%;
-    margin-top: -205px;
-  }
-
-  .reward-relative .close {
-    position: absolute;
-    right: 10px;
-    font-weight: normal;
-    font-size: 16px;
-    color: #929292;
-  }
-
-  .reward-body {
-    padding: 40px 20px 20px;
-  }
-
-  .bottom {
-    display: flex;
-  }
-
-  .reward-btn {
-    text-align: center;
-  }
-
-  .reward-btn-text {
-    display: inline-block;
-    cursor: pointer;
-    width: 60px;
-    height: 60px;
-    line-height: 60px;
-    border-radius: 50%;
-    background-color: #ff9734;
-    color: #FFF;
-    margin-top: 20px;
-  }
-
-  .pay-text {
-    margin-top: 10px;
-    padding: 10px;
-    flex: 1;
-    transition: all .2s linear;
-  }
-
-  .pay-text:hover {
-    background-color: #a5a5a536;
-  }
-
-  .reward-body h2 {
-    padding-top: 10px;
-    text-align: center;
-    color: #a3a3a3;
-    font-size: 16px;
-    font-weight: normal;
-    margin: 0 0 20px;
-  }
-
-  .reward-body h2:after,
-  .reward-body h2:before {
-    font-family: Arial, Helvetica, sans-serif;
-    background: 0 0;
-    width: 0;
-    height: 0;
-    font-style: normal;
-    color: #eee;
-    font-size: 80px;
-    position: absolute;
-    top: 20px;
-  }
-
-  .reward-body h2:before {
-    content: '\201c';
-    left: 50px;
-  }
-
-  .reward-body h2:after {
-    content: '\201d';
-    right: 80px;
-  }
-
-  .reward-img-box {
-    display: inline-block;
-    padding: 10px;
-    border: 6px solid #ea5f00;
-    margin: 0 auto;
-    border-radius: 3px;
-    position: relative;
-  }
-
-  .reward-img {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-  }
-
-  @media (max-width: 767px) {
-    .reward-relative {
-      height: 100%;
-      top: 0px;
-      margin-top: 0;
-      width: auto;
-    }
-
-    .reward-relative .bottom {
-      flex-direction: column;
-    }
-
-    .reward-relative .pay-text {
-      width: 80%;
-      margin: 5px auto;
-      border: 1px solid silver;
-      padding: 6px;
-      border-radius: 4px;
-    }
-
-    .reward-body h2:after {
-      right: 40px;
-    }
-
-    .reward-body h2:after,
-    .reward-body h2:before {
-      font-size: 60px;
-    }
-
-    .reward-body h2:before {
-      left: 20px;
-    }
-  }
-</style>
-<script>
-  !function () {
-    var mask = document.querySelector('.reward-mask');
-    let close = document.querySelector('.reward-relative .close');
-    let rewardBtn = document.querySelector('.reward-btn');
-
-    let zfb = document.querySelector('#zfb'),
-      wx = document.querySelector('#wx'),
-      zfbBtn = document.querySelector('#zfbBtn'),
-      wxBtn = document.querySelector('#wxBtn');
-
-    if (zfbBtn && wxBtn) {
-      zfbBtn.addEventListener('click', () => {
-        window.Velocity(zfb, 'transition.slideLeftIn', {
-          duration: 400
-        });
-        window.Velocity(wx, 'transition.slideRightOut', {
-          display: 'none',
-          duration: 400
-        });
-      });
-
-      wxBtn.addEventListener('click', () => {
-        window.Velocity(wx, 'transition.slideRightIn', {
-          duration: 400
-        });
-        window.Velocity(zfb, 'transition.slideLeftOut', {
-          display: 'none',
-          duration: 400
-        });
-      });
-    }
-
-    rewardBtn.addEventListener('click', (e) => {
-      window.Velocity(mask, 'transition.slideDownIn', {
-        duration: 400
-      })
-    });
-
-    close.addEventListener('click', (e) => {
-      e.preventDefault();
-      window.Velocity(mask, 'transition.slideUpOut', {
-        duration: 400
-      })
-    })
-  }()
-</script>
-
   </div>
 </body>
 
@@ -16598,6 +16133,7 @@ server {
 
 
 <script src="/media/js/cool.js"></script>
+
 
 
 
