@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>/</id>
     <title>anhoder的进阶日志</title>
-    <updated>2021-07-31T13:20:33.850Z</updated>
+    <updated>2021-08-01T02:23:37.026Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="/"/>
     <link rel="self" href="/atom.xml"/>
@@ -10,6 +10,55 @@
     <logo>/images/avatar.png</logo>
     <icon>/favicon.ico</icon>
     <rights>All rights reserved 2021, anhoder的进阶日志</rights>
+    <entry>
+        <title type="html"><![CDATA[PHP扩展开发--EXPECTED与UNEXPECTED]]></title>
+        <id>/post/c3xK30m15/</id>
+        <link href="/post/c3xK30m15/">
+        </link>
+        <updated>2021-07-31T16:32:55.000Z</updated>
+        <summary type="html"><![CDATA[<p>在PHP扩展开发中，经常会看到<code>EXPECTED</code>与<code>UNEXPECTED</code>两个宏的使用，但是却不清楚它们的用途，这次就来拨开它们的面纱。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>在PHP扩展开发中，经常会看到<code>EXPECTED</code>与<code>UNEXPECTED</code>两个宏的使用，但是却不清楚它们的用途，这次就来拨开它们的面纱。</p>
+<!-- more -->
+<p>首先举个在PHP底层中使用到<code>EXPECTED</code>与<code>UNEXPECTED</code>的例子：</p>
+<pre><code class="language-c">if (UNEXPECTED(_num_args &lt; _min_num_args) || \
+    (UNEXPECTED(_num_args &gt; _max_num_args) &amp;&amp; \
+        EXPECTED(_max_num_args &gt;= 0))) { \
+    if (!(_flags &amp; ZEND_PARSE_PARAMS_QUIET)) { \
+        if (_flags &amp; ZEND_PARSE_PARAMS_THROW) { \
+            zend_wrong_parameters_count_exception(_min_num_args, _max_num_args); \
+        } else { \
+            zend_wrong_parameters_count_error(_min_num_args, _max_num_args); \
+        } \
+    } \
+    error_code = ZPP_ERROR_FAILURE; \
+    break; \
+} \
+</code></pre>
+<p>这是Zend提供用于解析函数参数的一个宏的部分代码，大致代码逻辑就是判断参数数量是否不正确。在<code>zend_API.h</code>中，<code>EXPECTED</code>和<code>UNEXPECTED</code>是这样定义的：</p>
+<pre><code class="language-c">#if PHP_HAVE_BUILTIN_EXPECT
+# define EXPECTED(condition)   __builtin_expect(!!(condition), 1)
+# define UNEXPECTED(condition) __builtin_expect(!!(condition), 0)
+#else
+# define EXPECTED(condition)   (condition)
+# define UNEXPECTED(condition) (condition)
+#endif
+</code></pre>
+<p>可以发现它们其实是对<code>__builtin_expect</code>函数的一个封装，所以最终就是要搞清楚<code>__builtin_expect</code>到底是干嘛的。</p>
+<blockquote>
+<p>__builtin_expect()是GCC v2.96版本引入的内建函数，提供给程序员做分支预测。</p>
+</blockquote>
+<p>简单来说，就是程序员告诉编译器，后续的条件判断中可能性最大的条件分支是什么，方便编译器针对代码进行优化，将可能性最大的分支代码放在前面，降低指令跳转的可能性，以优化性能。例如：</p>
+<pre><code class="language-c">// 假如有a变量
+if (EXPECTED(a == 0)) {
+    // ...
+} else {
+    // ...
+}
+</code></pre>
+<p>以上代码表示，a == 0的可能性更大，即更有可能执行if分支代码，此时，编译器就会将if分支代码放在前面。反之，如果使用<code>UNEXPECTED</code>，就会将else分支代码放在前面。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[autotools的使用]]></title>
         <id>/post/jCJO8375A/</id>
@@ -614,33 +663,33 @@ func test(c &lt;-chan string) {
 </table>
 <h2 id="todo">TODO</h2>
 <ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3141476"><label class="task-list-item-label" for="task-item-3141476"> 我的歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9719898"><label class="task-list-item-label" for="task-item-9719898"> 每日推荐歌曲</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2515555"><label class="task-list-item-label" for="task-item-2515555"> 每日推荐歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6510561"><label class="task-list-item-label" for="task-item-6510561"> 私人FM</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9899693"><label class="task-list-item-label" for="task-item-9899693"> 歌词显示</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8936173"><label class="task-list-item-label" for="task-item-8936173"> 欢迎界面</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3313857"><label class="task-list-item-label" for="task-item-3313857"> 搜索</label>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1783463"><label class="task-list-item-label" for="task-item-1783463"> 我的歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7594289"><label class="task-list-item-label" for="task-item-7594289"> 每日推荐歌曲</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9325119"><label class="task-list-item-label" for="task-item-9325119"> 每日推荐歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-674140"><label class="task-list-item-label" for="task-item-674140"> 私人FM</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2678051"><label class="task-list-item-label" for="task-item-2678051"> 歌词显示</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2748323"><label class="task-list-item-label" for="task-item-2748323"> 欢迎界面</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6341154"><label class="task-list-item-label" for="task-item-6341154"> 搜索</label>
 <ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2341499"><label class="task-list-item-label" for="task-item-2341499"> 按歌曲</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6017305"><label class="task-list-item-label" for="task-item-6017305"> 按歌手</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7682172"><label class="task-list-item-label" for="task-item-7682172"> 按歌词</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2482619"><label class="task-list-item-label" for="task-item-2482619"> 按歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8839457"><label class="task-list-item-label" for="task-item-8839457"> 按专辑</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1051938"><label class="task-list-item-label" for="task-item-1051938"> 按用户</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6189166"><label class="task-list-item-label" for="task-item-6189166"> 按歌曲</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9632860"><label class="task-list-item-label" for="task-item-9632860"> 按歌手</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5540375"><label class="task-list-item-label" for="task-item-5540375"> 按歌词</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8913225"><label class="task-list-item-label" for="task-item-8913225"> 按歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-595137"><label class="task-list-item-label" for="task-item-595137"> 按专辑</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7918008"><label class="task-list-item-label" for="task-item-7918008"> 按用户</label></li>
 </ul>
 </li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4433164"><label class="task-list-item-label" for="task-item-4433164"> 排行榜</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5699988"><label class="task-list-item-label" for="task-item-5699988"> 精选歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1126561"><label class="task-list-item-label" for="task-item-1126561"> 最新专辑</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7066669"><label class="task-list-item-label" for="task-item-7066669"> 热门歌手</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5482542"><label class="task-list-item-label" for="task-item-5482542"> 云盘</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4874388"><label class="task-list-item-label" for="task-item-4874388"> 播放方式切换</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3275346"><label class="task-list-item-label" for="task-item-3275346"> 喜欢/取消喜欢</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3975617"><label class="task-list-item-label" for="task-item-3975617"> 心动模式/智能模式</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8170776"><label class="task-list-item-label" for="task-item-8170776"> 音乐电台</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-4239830"><label class="task-list-item-label" for="task-item-4239830"> 配置文件</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-6055436"><label class="task-list-item-label" for="task-item-6055436"> 通知功能</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7223898"><label class="task-list-item-label" for="task-item-7223898"> 排行榜</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6002706"><label class="task-list-item-label" for="task-item-6002706"> 精选歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7228861"><label class="task-list-item-label" for="task-item-7228861"> 最新专辑</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6442949"><label class="task-list-item-label" for="task-item-6442949"> 热门歌手</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-889444"><label class="task-list-item-label" for="task-item-889444"> 云盘</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4041299"><label class="task-list-item-label" for="task-item-4041299"> 播放方式切换</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4800828"><label class="task-list-item-label" for="task-item-4800828"> 喜欢/取消喜欢</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8382452"><label class="task-list-item-label" for="task-item-8382452"> 心动模式/智能模式</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5825362"><label class="task-list-item-label" for="task-item-5825362"> 音乐电台</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-624397"><label class="task-list-item-label" for="task-item-624397"> 配置文件</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-8780596"><label class="task-list-item-label" for="task-item-8780596"> 通知功能</label></li>
 </ul>
 ]]></content>
     </entry>
@@ -1151,50 +1200,6 @@ var_dump(memory_get_usage());
 </ul>
 <blockquote>
 <p>另外，在排查过程中，用到的一个挺好用的查看内存占用的工具——smem，可以查看程序的USS、PSS、RSS👍。</p>
-</blockquote>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[PHP扩展开发中常用的函数]]></title>
-        <id>/post/B6gBPbA-S/</id>
-        <link href="/post/B6gBPbA-S/">
-        </link>
-        <updated>2020-12-13T12:03:08.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="php函数相关">PHP函数相关</h2>
-<pre><code class="language-c">
-zend_parse_parameters()     // 解析函数参数
-// 例如，s表示字符串, 解析一个字符串类型的参数到name, 及其长度到name_len: 
-if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, &quot;s&quot;, &amp;name, &amp;name_len) == FAILURE) {
-    RETURN_NULL();
-}
-
-/* 解析参数时的类型代码 */
-b: 布尔类型（对应c类型: zend_bool）
-l: 整型（long）
-d: 浮点型（double）
-s: 字符串（char*, int）
-r: 资源型（zval*）
-a: 数组（zval*）
-o: 对象（zval*）
-z: zval（zval*）
-</code></pre>
-<blockquote>
-<p>附：PHP 7中使用FAST_ZPP方式解析函数参数的宏：<br>
-<img src="/post-images/1617678458821.jpg" alt="" loading="lazy"></p>
-</blockquote>
-<h2 id="数组操作">数组操作</h2>
-<pre><code class="language-c">array_init(arr)                         // 初始化数组
-add_next_index_null(zval*)              // 向数字索引的数组增加null
-add_next_index_long(zval*, long)        // ...添加long类型
-add_next_index_bool(zval*, 0|1)         // ...添加bool类型
-add_next_index_double(zval*, double)  
-add_next_index_string(zval*, char*, zend_bool)
-add_next_index_zval(zval*, zval*)
-// ...
-</code></pre>
-<p>更多操作数组的函数: <a href="https://www.php.net/manual/en/internals2.variables.arrays.php">https://www.php.net/manual/en/internals2.variables.arrays.php</a></p>
-<blockquote>
-<p>未完待续...</p>
 </blockquote>
 ]]></content>
     </entry>

@@ -8,7 +8,7 @@
 <meta name="keywords" content="anhoder的进阶日志">
 <meta name="description" content="一川烟草，满城风絮。">
 <meta name="theme-color" content="#000">
-<title>初探Laravel---round 9 视图 | anhoder的进阶日志</title>
+<title>anhoder的进阶日志</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1627784520537">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -61,8 +61,6 @@
 </script>
 
 
-  <meta name="description" content="初探Laravel---round 9 视图" />
-  <meta name="keywords" content="Laravel,PHP" />
 </head>
 
 <body>
@@ -211,26 +209,10 @@
   <div class="main-continer">
     
     <div
-      class="section-layout pisces ">
+      class="section-layout  pisces">
       <div class="section-layout-wrapper">
-        
-
-<div class="sidebar">
-  
-    <div class="sidebar-box box-shadow-wrapper bg-color right-motion" id="sidebar">
-      
-        <div class="post-list-sidebar">
-          <div class="sidebar-title">
-            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
-            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
-          </div>
-        </div>
-      
-      <div class="sidebar-body pisces" id="sidebar_body">
-        
-          
-            <div class="post-side-meta" id="post_side_meta">
-              
+        <div id="sidebarMeta" class="sidebar">
+    
 <div class="sidebar-wrapper box-shadow-wrapper bg-color">
   <div class="sidebar-item">
     <img class="site-author-image right-motion" src="/images/avatar.png"/>
@@ -304,541 +286,496 @@
 
 
 </div>
-            </div>
-            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
-              <div class="toc-box right-motion">
-  <div class="toc-wrapper  auto"
-    id="toc_wrapper">
-    <ul class="markdownIt-TOC">
-<li>
-<ul>
-<li><a href="#%E8%A7%86%E5%9B%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95">视图的基本用法</a></li>
-<li><a href="#%E6%95%B0%E6%8D%AE%E4%BC%A0%E9%80%92">数据传递</a></li>
-<li><a href="#blade%E6%A8%A1%E6%9D%BF">blade模板</a>
-<ul>
-<li><a href="#blade%E6%A8%A1%E6%9D%BF%E7%BB%93%E6%9E%84%E5%B8%83%E5%B1%80">blade模板结构布局</a></li>
-<li><a href="#blade%E6%A8%A1%E6%9D%BF%E7%9A%84%E8%BF%87%E7%A8%8B%E6%8E%A7%E5%88%B6%E8%AF%AD%E6%B3%95">blade模板的过程控制语法</a></li>
-<li><a href="#%E6%B3%A8%E9%87%8A">注释</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-  </div>
 </div>
-
 <script>
-
-  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
-  let active = 'active-show', activeClass = 'active-current';
-  let tocWrapper = document.querySelector('#toc_wrapper');
-  let tocContent = tocWrapper.children[0];
-  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
-
-  function addTocNumber(elem, deep) {
-    if (!elem) {
-      return;
-    }
-    let prop = elem.__proto__;
-
-    if (prop === HTMLUListElement.prototype) {
-      for (let i = 0; i < elem.children.length; i++) {
-        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+  let sidebarMeta = document.querySelector('#sidebarMeta');
+  let scheme = 'pisces';
+  let sidebarWrapper = document.querySelector('.sidebar-wrapper');
+  if (sidebarMeta && (scheme === 'pisces' || scheme === 'gemini')) {
+    document.addEventListener('scroll', function(e) {
+      if (document.scrollingElement.scrollTop > parseInt(sidebarMeta.style.marginTop) + 10) {
+        sidebarWrapper.classList.add('home-sidebar-fixed')
+      } else {
+        sidebarWrapper.classList.remove('home-sidebar-fixed')
       }
-    } else if (prop === HTMLLIElement.prototype) {
-      // 保存li元素
-      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
-        lList.push(elem);
-      }
-      for (let i = 0; i < elem.children.length; i++) {
-        let cur = elem.children[i];
-        if (cur.__proto__ === HTMLAnchorElement.prototype) {
-          if (autoNumber) {
-            cur.text = deep + ' ' + cur.text;
-          }
-        } else if (cur.__proto__ === HTMLUListElement.prototype) {
-          addTocNumber(cur, deep);
-        }
-      }
-    }
-  }
-
-  function removeParentActiveClass() {
-    let parents = tocContent.querySelectorAll('.' + active)
-    parents.forEach(function (elem) {
-      elem.classList.remove(active);
     });
   }
-
-  function addActiveClass(index) {
-    if (index >= 0 && index < hList.length) {
-      lList[index].classList.add(activeClass);
-    }
-  }
-
-  function removeActiveClass(index) {
-    if (index >= 0 && index < hList.length) {
-      lList[index].classList.remove(activeClass);
-    }
-  }
-
-  function addActiveLiElemment(elem, parent) {
-    if (!elem || elem === parent) {
-      return;
-    } else {
-      if (elem.__proto__ === HTMLLIElement.prototype) {
-        elem.classList.add(active);
-      }
-      addActiveLiElemment(elem.parentElement, parent);
-    }
-  }
-
-  function showToc() {
-    if (tocWrapper) {
-      postBody = document.querySelector('#post_body');
-      for (let i = 0; i < postBody.children.length; i++) {
-        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
-          hList.push(postBody.children[i]);
-        }
-      }
-      if (tocWrapper.classList.contains('compress')) {
-        tocContent.classList.add('closed');
-      } else if (tocWrapper.classList.contains('no_compress')) {
-        tocContent.classList.add('expanded');
-      } else {
-        if (hList.length > 10) {
-          active = 'active-hidden'
-          tocContent.classList.add('closed');
-        } else {
-          tocContent.classList.add('expanded');
-        }
-      }
-    }
-  }
-
-  (function () {
-    // 处理不是从#一级标题开始目录
-    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
-      let con = tocContent.children[0].children[0];
-      tocContent.innerHTML = con.innerHTML;
-    }
-    let markdownItTOC = document.querySelector('.markdownIt-TOC');
-    let innerHeight = window.innerHeight;
-    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
-    addTocNumber(tocContent, '');
-  })();
-
-  document.addEventListener('scroll', function (e) {
-    if (lList.length <= 0) {
-      return;
-    }
-    let scrollTop = document.scrollingElement.scrollTop + 10;
-    let dir;
-
-    if (lastTop - scrollTop > 0) {
-      dir = 'up';
-    } else {
-      dir = 'down';
-    }
-
-    lastTop = scrollTop;
-    if (scrollTop <= 0) {
-      if (lastIndex >= 0 && lastIndex < hList.length) {
-        lList[lastIndex].classList.remove(activeClass);
-      }
-      return;
-    }
-
-    let current = 0, hasFind = false;
-    for (let i = 0; i < hList.length; i++) {
-      if (hList[i].offsetTop > scrollTop) {
-        current = i;
-        hasFind = true;
-        break;
-      }
-    }
-    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
-      current = hList.length - 1;
-    } else {
-      current--;
-    }
-    if (dir === 'down') {
-      if (current > lastIndex) {
-        addActiveClass(current);
-        removeActiveClass(lastIndex)
-        lastIndex = current;
-        removeParentActiveClass();
-        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
-      }
-    } else {
-      if (current < lastIndex) {
-        addActiveClass(current);
-        removeActiveClass(lastIndex);
-        lastIndex = current;
-        removeParentActiveClass();
-        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
-      }
-    }
-  });
-
-
-  window.addEventListener('load', function () {
-    showToc();
-    document.querySelector('#sidebar').style = 'display: block;';
-    tocWrapper.classList.add('toc-active');
-    setTimeout(function () {
-      if ("createEvent" in document) {
-        let evt = document.createEvent("HTMLEvents");
-        evt.initEvent("scroll", false, true);
-        document.dispatchEvent(evt);
-      }
-      else {
-        document.fireEvent("scroll");
-      }
-    }, 500)
-  })
-
-</script>
-            </div>
-          
-        
+  </script>
+        <div class="section-box tag-line box-shadow-wrapper">
+          <section class="section tags-section posts-expand bg-color">
+            <div class="padding-wrapper">
+  <div class="tag-timeline-box">
+    <div class="tag-timeline-wrapper">
+      <div class="tag-timeline-title">
+        <h2>
+          php
+          <small class="language" data-lan="tag">标签</small>
+        </h2>
       </div>
-    </div>
-  
-</div>
-<script>
-  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
-  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
-  const SLIDE_UP_IN = 'slide-up-in';
-
-  let sidebar = document.querySelector('#sidebar'),
-  tocSideBar = document.querySelector('#tocSideBar'),
-  metaSideBar = document.querySelector('#metaSideBar'),
-  postToc = document.querySelector('#post_toc'),
-  postSiteMeta = document.querySelector('#post_side_meta'),
-  sidebarTitle = document.querySelector('.sidebar-title'),
-  sidebarBody = document.querySelector('#sidebar_body');
-
-  tocSideBar && tocSideBar.addEventListener('click', (e) => {
-    toggleSidebar(e);
-  });
-
-  metaSideBar && metaSideBar.addEventListener('click', (e) => {
-    toggleSidebar(e);
-  });
-
-  function toggleSidebar(e) {
-    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
-    if (currentTitle == e.srcElement) {
-      return ;
-    }
-    let current, showElement, hideElement;
-    if (e.srcElement == metaSideBar) {
-      showElement = postSiteMeta;
-      hideElement = postToc;
-    } else if (e.srcElement == tocSideBar){
-      showElement = postToc;
-      hideElement = postSiteMeta;
-    }
-    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
-    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
-
-    window.Velocity(hideElement, 'stop');
-    window.Velocity(hideElement, 'transition.slideUpOut', {
-      display: 'none',
-      duration: 200,
-      complete: function () {
-        window.Velocity(showElement, 'transition.slideDownIn', {
-          duration: 200
-        });
-      }
-    })
-    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
-    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
-  }
-
-  postToc && postToc.addEventListener('transitionend', function() {
-    this.classList.remove(SLIDE_UP_IN);
-  });
-
-  if (sidebarBody) {
-    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
-      let hasFix = false;
-      let scrollEl = document.querySelector('.main-continer');
-      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
-      window.addEventListener('scroll', function(e) {
-        if (document.scrollingElement.scrollTop >= limitTop) {
-          if (!hasFix) {
-            sidebar.classList.add('sidebar-fixed');
-            hasFix = true;
-          }
-        } else {
-          if (hasFix) {
-            sidebar.classList.remove('sidebar-fixed');
-            hasFix = false;
-          }
-        }
-      });
-    }
-  }
-  
-</script>
-        <div class="section-box box-shadow-wrapper">
-          <div class="section bg-color post post-page">
-            <section class="post-header">
-  <h1 class="post-title">
-    <a class="post-title-link" href="/post/_w0MPiApJ/">
-      初探Laravel---round 9 视图
-    </a>
-  </h1>
-  <div class="post-meta">
-    
-    <span class="meta-item pc-show">
-      <i class="fa fa-calendar-o"></i>
-      <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2019-01-06 19:32:22">2019-01-06</span>
-      <span class="post-meta-divider pc-show">|</span>
-    </span>
-    
-    <span class="meta-item">
-      <i class="fa fa-folder-o"></i>
-      <span class="pc-show language" data-lan="category-in">分类于</span>
-      
-      
-      <a href="/tag/x5r9ebt7J/">
-        <span>Laravel</span>
-      </a>、
       
       
       
-      <a href="/tag/wKIDH6M-M/">
-        <span>PHP</span>
+      <a href="/post/c3xK30m15/">
+        <div class="motion-warpper">
+          <div class="tag-post-node">
+            <h1>
+              08-01
+              <small>PHP扩展开发--EXPECTED与UNEXPECTED</small>
+            </h1>
+          </div>
+        </div>
       </a>
       
       
-    </span>
-    <span class="post-meta-divider">|</span>
-    
-    <span class="meta-item">
-      <i class="fa fa-clock-o"></i>
-      <span>5<span class="language" data-lan="minute">分钟</span></span>
-    </span>
-    <span class="meta-item">
-      <span class="post-meta-divider">|</span>
-      <i class="fa fa-file-word-o"></i>
-      <span>914<span class="pc-show language" data-lan="words">字数</span></span>
-    </span>
-    
-  </div>
-</section>
-            <div class="post-body next-md-body" id="post_body">
-              <!-- more -->
-<h2 id="视图的基本用法">视图的基本用法</h2>
-<p>Laravel中，可以通过两种方式返回视图，一种是直接以字符串形式返回视图源码，另一种是返回视图文件。</p>
-<p>① 第一种方法就是直接使用return返回字符串：</p>
-<pre><code class="language-php">public function index()
-{
-    return '&lt;html&gt;&lt;/html&gt;';
-}
-</code></pre>
-<p>② 第二种是通过view()返回视图文件，视图存放在laravel/resources/views目录下。view函数是定义的全局函数相当于View::make()方法，实质调用的是Illuminate\View\Factory的make方法，进而创建Illuminate\View\View类的实例化对象。</p>
-<pre><code class="language-php">public function index()
-{
-    return view('index');
-}
-</code></pre>
-<p>以上用例会加载laravel/resources/views/index.blade.php文件，如果视图文件存在laravel/resources/views下的子目录下，例如：视图文件为laravel/resources/views/user/login.blade.php，则：</p>
-<pre><code class="language-php">public function index()
-{
-    return view('user.login');
-    // 或
-    // return view('user/login');
-}
-</code></pre>
-<h2 id="数据传递">数据传递</h2>
-<p>如果需要传递数据到视图中，有三种方法：</p>
-<blockquote>
-<p>① 通过数组的形式，如：<code>return view('index', ['username' =&gt; 'Alan', 'age' =&gt; 18]);</code></p>
-<p>② 通过with函数，如：<code>return view('index')-&gt;with('username', 'Alan')-&gt;with('age', 18);</code></p>
-<p>③ 通过with加变量名的形式，如：<code>return view('index')-&gt;withUsername('Alan')-&gt;withAge(18);</code></p>
-</blockquote>
-<h2 id="blade模板">blade模板</h2>
-<p>Blade模板是Laravel提供的视图文件引擎，该模板可以通过模板继承和区块实现高度的代码复用和清晰的视图结构。blade模板文件以<code>.blade.php</code>为后缀。</p>
-<h3 id="blade模板结构布局">blade模板结构布局</h3>
-<pre><code class="language-php">// layout.blade.php
-&lt;html&gt;
-    &lt;head&gt;&lt;/head&gt;
-    &lt;body&gt;
-        @section('navbar')
-            This is the layout navbar.
-        @show
-        
-        @yield('content')
-        &lt;footer&gt;
-            &lt;p&gt;This is footer.&lt;/p&gt;
-        &lt;/footer&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-
-// view.blade.php
-@extend('layout')
-
-@section('navbar')
-    &lt;p&gt;This is the view navbar.&lt;/p&gt;
-    @parent
-@endsection
-
-@section('content')
-    &lt;div&gt;
-        This is the content.
-        include('sidebar')
-    &lt;/div&gt;
-@endsection
-
-// sidebar.blade.php
-&lt;div&gt;
-    This is the sidebar.
-&lt;/div
-
-</code></pre>
-<p>使用<code>return view('view');</code>即可使用视图，显示内容为：</p>
-<pre><code class="language-php">This is the view navbar.
-This is the layout navbar.
-This is the content.
-This is the sidebar.
-This is footer.
-</code></pre>
-<p>以下为blade模板中用于布局的语法标签：</p>
-<blockquote>
-<p>@extends('布局文件名')：用于继承一个布局文件</p>
-<p>@parent：用于显示继承的布局模板中的内容</p>
-<p>@section('区块名')：定义一个区块，其可以有不同的结尾标：@show用于显示区块；@stop和@endsection用于结束这个区块；@overwrite用于重写前面的区块。如果在布局模板文件中用@stop或@endsection结束这个区块，则视图文件将无法覆盖这个区块。</p>
-<p>@yield('区块文件', '默认内容')：用于布局文件中显示一个区块。</p>
-<p>@include('子视图名称')：加载子视图文件</p>
-</blockquote>
-<h3 id="blade模板的过程控制语法">blade模板的过程控制语法</h3>
-<p><strong>blade模板变量输出</strong>：</p>
-<pre><code class="language-php">{{ $name }}
-// 效果对应的PHP原生代码
-&lt;?php echo $name; ?&gt;
-</code></pre>
-<p><strong>三目运算符<code>?:</code>的效果</strong>：</p>
-<pre><code class="language-php">{{ $name or 'default' }}
-// 效果对应的PHP原生代码
-&lt;?php echo isset($name) ? $name : 'default'; ?&gt;
-</code></pre>
-<p><strong>禁止花括号被解析</strong>：</p>
-<pre><code class="language-php">@{{ $name }} // 输出{{ $name }}}
-</code></pre>
-<p><strong>条件控制</strong>：</p>
-<pre><code class="language-php">@if($age == 18)
-    i am {{$name}}
-@elseif($age == 19)
-    i am {{$age}}
-@else
-    i am {{$name}}, {{$age}}
-@endif
-</code></pre>
-<p><strong>循环控制</strong>：</p>
-<pre><code class="language-php">// foreach
-@foreach ($data as $key =&gt; $value)
-    &lt;p&gt;{{$key}} =&gt; {{$value}}&lt;/p&gt;
-@endforeach
-
-// for
-@for ($i = 0; $i &lt; count($data); $i++)
-    {{$i}} =&gt; {{$data[$i]}}
-@endfor
-
-// while
-@while (true)
-    While loop
-@endwhile
-</code></pre>
-<p>其中在foreach循环中，可以使用<code>$loop</code>变量获取相应的循环信息。该变量包含的信息有：</p>
-<pre><code class="language-html">object(stdClass)[203]
-  public 'iteration' =&gt; int 1       // 第几个item，范围：1~length
-  public 'index' =&gt; int 0           // 索引，范围：0~length-1
-  public 'remaining' =&gt; int 3       // 倒数，范围：length-1~0
-  public 'count' =&gt; int 4           // 总长度，length
-  public 'first' =&gt; boolean true    // 是否为第一个
-  public 'last' =&gt; boolean false    // 是否为最后一个
-  public 'depth' =&gt; int 1           // 当前循环嵌套层级
-  public 'parent' =&gt; null           // 父级循环的loop变量信息
-</code></pre>
-<h3 id="注释">注释</h3>
-<pre><code class="language-php">{{-- 注释 --}}
-</code></pre>
-
-            </div>
-            
-            
-              <div class="post-footer">
-  <ul class="post-copyright">
-    <li class="post-copyright-author">
-      <strong class="language" data-lan="author">本文作者：</strong>
-      anhoder
-    </li>
-    <li class="post-copyright-link">
-      <strong class="language" data-lan="link">本文链接：</strong>
-      <a href="/post/_w0MPiApJ/" title="初探Laravel---round 9 视图">/post/_w0MPiApJ/</a>
-    </li>
-    <li class="post-copyright-license">
-      <strong class="language" data-lan="copyright">版权声明： </strong>
-      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
-    </li>
-  </ul>
-  <div class="tags">
-    
-      <a href="/tag/x5r9ebt7J/"># Laravel</a>
-    
-      <a href="/tag/wKIDH6M-M/"># PHP</a>
-    
-  </div>
-  <div class="nav">
-    <div class="nav-prev">
       
-        <i class="fa fa-chevron-left"></i>
-        <a class="nav-pc-next" title="Lumen框架下安装dingo/api和tymon/jwt-auth" href="/post/hjW63kIwP/">Lumen框架下安装dingo/api和tymon/jwt-auth</a class="nav-pc-next">
-        <a class="nav-mobile-prev" title="Lumen框架下安装dingo/api和tymon/jwt-auth" href="/post/hjW63kIwP/">上一篇</a>
       
-    </div>
-    <div class="nav-next">
       
-        <a class="nav-pc-next" title="初探Laravel---round 8 控制器" href="/post/GFon-QqN1/">初探Laravel---round 8 控制器</a>
-        <a class="nav-mobile-next" title="初探Laravel---round 8 控制器" href="/post/GFon-QqN1/">下一篇</a>
-        <i class="fa fa-chevron-right"></i>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       
     </div>
   </div>
 </div>
-            
-            
-  
-    
-      <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-
-<div id="gitalk-container"></div>
-
-<script>
-  var gitalk = new Gitalk({
-    clientID: '8254f894b17fffeef6e2',
-    clientSecret: 'aa345603999774a44649ad73ef7fe72ee45a021b',
-    repo: 'personal-blog-comments',
-    owner: 'anhoder',
-    admin: ['anhoder'],
-    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
-    distractionFreeMode: false  // Facebook-like distraction free mode
-  })
-  gitalk.render('gitalk-container')
-</script>
-    
-    
-  
-
-          </div>
+          </section>
         </div>
       </div>
     </div>
@@ -1567,223 +1504,6 @@ This is footer.
     parent.insertBefore(aelem, next);
   })
 </script>
-    <div class="reward-mask" style="display: none;">
-  <div class="reward-relative">
-    <span class="close" aria-hidden="true">x</span>
-    <div class="reward-body">
-      <h2>感谢您的支持，我会继续努力的!</h2>
-      <div class="reward-img-box">
-        <div style="position: relative; width: 140px; height: 140px;">
-          
-          
-          
-        </div>
-      </div>
-      <p class="reward-word">扫码打赏，你说多少就多少</p>
-      <p class="reward-tip">打开微信扫一扫，即可进行扫码打赏哦</p>
-    </div>
-    <div class="bottom">
-      
-      
-    </div>
-  </div>
-</div>
-<style>
-  .reward-mask {
-    position: fixed;
-    z-index: 99999;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: #00000054;
-  }
-
-  .reward-relative {
-    position: relative;
-    width: 480px;
-    text-align: center;
-    margin: 0 auto;
-    border-radius: 5px;
-    background-color: #fff;
-    top: 50%;
-    margin-top: -205px;
-  }
-
-  .reward-relative .close {
-    position: absolute;
-    right: 10px;
-    font-weight: normal;
-    font-size: 16px;
-    color: #929292;
-  }
-
-  .reward-body {
-    padding: 40px 20px 20px;
-  }
-
-  .bottom {
-    display: flex;
-  }
-
-  .reward-btn {
-    text-align: center;
-  }
-
-  .reward-btn-text {
-    display: inline-block;
-    cursor: pointer;
-    width: 60px;
-    height: 60px;
-    line-height: 60px;
-    border-radius: 50%;
-    background-color: #ff9734;
-    color: #FFF;
-    margin-top: 20px;
-  }
-
-  .pay-text {
-    margin-top: 10px;
-    padding: 10px;
-    flex: 1;
-    transition: all .2s linear;
-  }
-
-  .pay-text:hover {
-    background-color: #a5a5a536;
-  }
-
-  .reward-body h2 {
-    padding-top: 10px;
-    text-align: center;
-    color: #a3a3a3;
-    font-size: 16px;
-    font-weight: normal;
-    margin: 0 0 20px;
-  }
-
-  .reward-body h2:after,
-  .reward-body h2:before {
-    font-family: Arial, Helvetica, sans-serif;
-    background: 0 0;
-    width: 0;
-    height: 0;
-    font-style: normal;
-    color: #eee;
-    font-size: 80px;
-    position: absolute;
-    top: 20px;
-  }
-
-  .reward-body h2:before {
-    content: '\201c';
-    left: 50px;
-  }
-
-  .reward-body h2:after {
-    content: '\201d';
-    right: 80px;
-  }
-
-  .reward-img-box {
-    display: inline-block;
-    padding: 10px;
-    border: 6px solid #ea5f00;
-    margin: 0 auto;
-    border-radius: 3px;
-    position: relative;
-  }
-
-  .reward-img {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-  }
-
-  @media (max-width: 767px) {
-    .reward-relative {
-      height: 100%;
-      top: 0px;
-      margin-top: 0;
-      width: auto;
-    }
-
-    .reward-relative .bottom {
-      flex-direction: column;
-    }
-
-    .reward-relative .pay-text {
-      width: 80%;
-      margin: 5px auto;
-      border: 1px solid silver;
-      padding: 6px;
-      border-radius: 4px;
-    }
-
-    .reward-body h2:after {
-      right: 40px;
-    }
-
-    .reward-body h2:after,
-    .reward-body h2:before {
-      font-size: 60px;
-    }
-
-    .reward-body h2:before {
-      left: 20px;
-    }
-  }
-</style>
-<script>
-  !function () {
-    var mask = document.querySelector('.reward-mask');
-    let close = document.querySelector('.reward-relative .close');
-    let rewardBtn = document.querySelector('.reward-btn');
-
-    let zfb = document.querySelector('#zfb'),
-      wx = document.querySelector('#wx'),
-      zfbBtn = document.querySelector('#zfbBtn'),
-      wxBtn = document.querySelector('#wxBtn');
-
-    if (zfbBtn && wxBtn) {
-      zfbBtn.addEventListener('click', () => {
-        window.Velocity(zfb, 'transition.slideLeftIn', {
-          duration: 400
-        });
-        window.Velocity(wx, 'transition.slideRightOut', {
-          display: 'none',
-          duration: 400
-        });
-      });
-
-      wxBtn.addEventListener('click', () => {
-        window.Velocity(wx, 'transition.slideRightIn', {
-          duration: 400
-        });
-        window.Velocity(zfb, 'transition.slideLeftOut', {
-          display: 'none',
-          duration: 400
-        });
-      });
-    }
-
-    rewardBtn.addEventListener('click', (e) => {
-      window.Velocity(mask, 'transition.slideDownIn', {
-        duration: 400
-      })
-    });
-
-    close.addEventListener('click', (e) => {
-      e.preventDefault();
-      window.Velocity(mask, 'transition.slideUpOut', {
-        duration: 400
-      })
-    })
-  }()
-</script>
-
   </div>
 </body>
 
@@ -16459,6 +16179,7 @@ server {
 
 
 <script src="/media/js/cool.js"></script>
+
 
 
 

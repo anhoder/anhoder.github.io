@@ -8,7 +8,7 @@
 <meta name="keywords" content="anhoder的进阶日志">
 <meta name="description" content="一川烟草，满城风絮。">
 <meta name="theme-color" content="#000">
-<title>初探Laravel---round 9 视图 | anhoder的进阶日志</title>
+<title>PHP扩展开发--EXPECTED与UNEXPECTED | anhoder的进阶日志</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1627784520537">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -61,8 +61,8 @@
 </script>
 
 
-  <meta name="description" content="初探Laravel---round 9 视图" />
-  <meta name="keywords" content="Laravel,PHP" />
+  <meta name="description" content="PHP扩展开发--EXPECTED与UNEXPECTED" />
+  <meta name="keywords" content="php,PHP扩展" />
 </head>
 
 <body>
@@ -229,8 +229,7 @@
       <div class="sidebar-body pisces" id="sidebar_body">
         
           
-            <div class="post-side-meta" id="post_side_meta">
-              
+            
 <div class="sidebar-wrapper box-shadow-wrapper bg-color">
   <div class="sidebar-item">
     <img class="site-author-image right-motion" src="/images/avatar.png"/>
@@ -304,203 +303,6 @@
 
 
 </div>
-            </div>
-            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
-              <div class="toc-box right-motion">
-  <div class="toc-wrapper  auto"
-    id="toc_wrapper">
-    <ul class="markdownIt-TOC">
-<li>
-<ul>
-<li><a href="#%E8%A7%86%E5%9B%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95">视图的基本用法</a></li>
-<li><a href="#%E6%95%B0%E6%8D%AE%E4%BC%A0%E9%80%92">数据传递</a></li>
-<li><a href="#blade%E6%A8%A1%E6%9D%BF">blade模板</a>
-<ul>
-<li><a href="#blade%E6%A8%A1%E6%9D%BF%E7%BB%93%E6%9E%84%E5%B8%83%E5%B1%80">blade模板结构布局</a></li>
-<li><a href="#blade%E6%A8%A1%E6%9D%BF%E7%9A%84%E8%BF%87%E7%A8%8B%E6%8E%A7%E5%88%B6%E8%AF%AD%E6%B3%95">blade模板的过程控制语法</a></li>
-<li><a href="#%E6%B3%A8%E9%87%8A">注释</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-  </div>
-</div>
-
-<script>
-
-  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
-  let active = 'active-show', activeClass = 'active-current';
-  let tocWrapper = document.querySelector('#toc_wrapper');
-  let tocContent = tocWrapper.children[0];
-  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
-
-  function addTocNumber(elem, deep) {
-    if (!elem) {
-      return;
-    }
-    let prop = elem.__proto__;
-
-    if (prop === HTMLUListElement.prototype) {
-      for (let i = 0; i < elem.children.length; i++) {
-        addTocNumber(elem.children[i], deep + (i + 1) + '.');
-      }
-    } else if (prop === HTMLLIElement.prototype) {
-      // 保存li元素
-      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
-        lList.push(elem);
-      }
-      for (let i = 0; i < elem.children.length; i++) {
-        let cur = elem.children[i];
-        if (cur.__proto__ === HTMLAnchorElement.prototype) {
-          if (autoNumber) {
-            cur.text = deep + ' ' + cur.text;
-          }
-        } else if (cur.__proto__ === HTMLUListElement.prototype) {
-          addTocNumber(cur, deep);
-        }
-      }
-    }
-  }
-
-  function removeParentActiveClass() {
-    let parents = tocContent.querySelectorAll('.' + active)
-    parents.forEach(function (elem) {
-      elem.classList.remove(active);
-    });
-  }
-
-  function addActiveClass(index) {
-    if (index >= 0 && index < hList.length) {
-      lList[index].classList.add(activeClass);
-    }
-  }
-
-  function removeActiveClass(index) {
-    if (index >= 0 && index < hList.length) {
-      lList[index].classList.remove(activeClass);
-    }
-  }
-
-  function addActiveLiElemment(elem, parent) {
-    if (!elem || elem === parent) {
-      return;
-    } else {
-      if (elem.__proto__ === HTMLLIElement.prototype) {
-        elem.classList.add(active);
-      }
-      addActiveLiElemment(elem.parentElement, parent);
-    }
-  }
-
-  function showToc() {
-    if (tocWrapper) {
-      postBody = document.querySelector('#post_body');
-      for (let i = 0; i < postBody.children.length; i++) {
-        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
-          hList.push(postBody.children[i]);
-        }
-      }
-      if (tocWrapper.classList.contains('compress')) {
-        tocContent.classList.add('closed');
-      } else if (tocWrapper.classList.contains('no_compress')) {
-        tocContent.classList.add('expanded');
-      } else {
-        if (hList.length > 10) {
-          active = 'active-hidden'
-          tocContent.classList.add('closed');
-        } else {
-          tocContent.classList.add('expanded');
-        }
-      }
-    }
-  }
-
-  (function () {
-    // 处理不是从#一级标题开始目录
-    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
-      let con = tocContent.children[0].children[0];
-      tocContent.innerHTML = con.innerHTML;
-    }
-    let markdownItTOC = document.querySelector('.markdownIt-TOC');
-    let innerHeight = window.innerHeight;
-    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
-    addTocNumber(tocContent, '');
-  })();
-
-  document.addEventListener('scroll', function (e) {
-    if (lList.length <= 0) {
-      return;
-    }
-    let scrollTop = document.scrollingElement.scrollTop + 10;
-    let dir;
-
-    if (lastTop - scrollTop > 0) {
-      dir = 'up';
-    } else {
-      dir = 'down';
-    }
-
-    lastTop = scrollTop;
-    if (scrollTop <= 0) {
-      if (lastIndex >= 0 && lastIndex < hList.length) {
-        lList[lastIndex].classList.remove(activeClass);
-      }
-      return;
-    }
-
-    let current = 0, hasFind = false;
-    for (let i = 0; i < hList.length; i++) {
-      if (hList[i].offsetTop > scrollTop) {
-        current = i;
-        hasFind = true;
-        break;
-      }
-    }
-    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
-      current = hList.length - 1;
-    } else {
-      current--;
-    }
-    if (dir === 'down') {
-      if (current > lastIndex) {
-        addActiveClass(current);
-        removeActiveClass(lastIndex)
-        lastIndex = current;
-        removeParentActiveClass();
-        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
-      }
-    } else {
-      if (current < lastIndex) {
-        addActiveClass(current);
-        removeActiveClass(lastIndex);
-        lastIndex = current;
-        removeParentActiveClass();
-        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
-      }
-    }
-  });
-
-
-  window.addEventListener('load', function () {
-    showToc();
-    document.querySelector('#sidebar').style = 'display: block;';
-    tocWrapper.classList.add('toc-active');
-    setTimeout(function () {
-      if ("createEvent" in document) {
-        let evt = document.createEvent("HTMLEvents");
-        evt.initEvent("scroll", false, true);
-        document.dispatchEvent(evt);
-      }
-      else {
-        document.fireEvent("scroll");
-      }
-    }, 500)
-  })
-
-</script>
-            </div>
           
         
       </div>
@@ -588,8 +390,8 @@
           <div class="section bg-color post post-page">
             <section class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="/post/_w0MPiApJ/">
-      初探Laravel---round 9 视图
+    <a class="post-title-link" href="/post/c3xK30m15/">
+      PHP扩展开发--EXPECTED与UNEXPECTED
     </a>
   </h1>
   <div class="post-meta">
@@ -597,7 +399,7 @@
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2019-01-06 19:32:22">2019-01-06</span>
+      <span class="publish-time" data-t="2021-08-01 00:32:55">2021-08-01</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
@@ -606,14 +408,14 @@
       <span class="pc-show language" data-lan="category-in">分类于</span>
       
       
-      <a href="/tag/x5r9ebt7J/">
-        <span>Laravel</span>
+      <a href="/tag/lD5hOUlXz/">
+        <span>php</span>
       </a>、
       
       
       
-      <a href="/tag/wKIDH6M-M/">
-        <span>PHP</span>
+      <a href="/tag/me4rZz0da/">
+        <span>PHP扩展</span>
       </a>
       
       
@@ -622,154 +424,56 @@
     
     <span class="meta-item">
       <i class="fa fa-clock-o"></i>
-      <span>5<span class="language" data-lan="minute">分钟</span></span>
+      <span>2<span class="language" data-lan="minute">分钟</span></span>
     </span>
     <span class="meta-item">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
-      <span>914<span class="pc-show language" data-lan="words">字数</span></span>
+      <span>381<span class="pc-show language" data-lan="words">字数</span></span>
     </span>
     
   </div>
 </section>
             <div class="post-body next-md-body" id="post_body">
-              <!-- more -->
-<h2 id="视图的基本用法">视图的基本用法</h2>
-<p>Laravel中，可以通过两种方式返回视图，一种是直接以字符串形式返回视图源码，另一种是返回视图文件。</p>
-<p>① 第一种方法就是直接使用return返回字符串：</p>
-<pre><code class="language-php">public function index()
-{
-    return '&lt;html&gt;&lt;/html&gt;';
-}
+              <p>在PHP扩展开发中，经常会看到<code>EXPECTED</code>与<code>UNEXPECTED</code>两个宏的使用，但是却不清楚它们的用途，这次就来拨开它们的面纱。</p>
+<!-- more -->
+<p>首先举个在PHP底层中使用到<code>EXPECTED</code>与<code>UNEXPECTED</code>的例子：</p>
+<pre><code class="language-c">if (UNEXPECTED(_num_args &lt; _min_num_args) || \
+    (UNEXPECTED(_num_args &gt; _max_num_args) &amp;&amp; \
+        EXPECTED(_max_num_args &gt;= 0))) { \
+    if (!(_flags &amp; ZEND_PARSE_PARAMS_QUIET)) { \
+        if (_flags &amp; ZEND_PARSE_PARAMS_THROW) { \
+            zend_wrong_parameters_count_exception(_min_num_args, _max_num_args); \
+        } else { \
+            zend_wrong_parameters_count_error(_min_num_args, _max_num_args); \
+        } \
+    } \
+    error_code = ZPP_ERROR_FAILURE; \
+    break; \
+} \
 </code></pre>
-<p>② 第二种是通过view()返回视图文件，视图存放在laravel/resources/views目录下。view函数是定义的全局函数相当于View::make()方法，实质调用的是Illuminate\View\Factory的make方法，进而创建Illuminate\View\View类的实例化对象。</p>
-<pre><code class="language-php">public function index()
-{
-    return view('index');
-}
+<p>这是Zend提供用于解析函数参数的一个宏的部分代码，大致代码逻辑就是判断参数数量是否不正确。在<code>zend_API.h</code>中，<code>EXPECTED</code>和<code>UNEXPECTED</code>是这样定义的：</p>
+<pre><code class="language-c">#if PHP_HAVE_BUILTIN_EXPECT
+# define EXPECTED(condition)   __builtin_expect(!!(condition), 1)
+# define UNEXPECTED(condition) __builtin_expect(!!(condition), 0)
+#else
+# define EXPECTED(condition)   (condition)
+# define UNEXPECTED(condition) (condition)
+#endif
 </code></pre>
-<p>以上用例会加载laravel/resources/views/index.blade.php文件，如果视图文件存在laravel/resources/views下的子目录下，例如：视图文件为laravel/resources/views/user/login.blade.php，则：</p>
-<pre><code class="language-php">public function index()
-{
-    return view('user.login');
-    // 或
-    // return view('user/login');
-}
-</code></pre>
-<h2 id="数据传递">数据传递</h2>
-<p>如果需要传递数据到视图中，有三种方法：</p>
+<p>可以发现它们其实是对<code>__builtin_expect</code>函数的一个封装，所以最终就是要搞清楚<code>__builtin_expect</code>到底是干嘛的。</p>
 <blockquote>
-<p>① 通过数组的形式，如：<code>return view('index', ['username' =&gt; 'Alan', 'age' =&gt; 18]);</code></p>
-<p>② 通过with函数，如：<code>return view('index')-&gt;with('username', 'Alan')-&gt;with('age', 18);</code></p>
-<p>③ 通过with加变量名的形式，如：<code>return view('index')-&gt;withUsername('Alan')-&gt;withAge(18);</code></p>
+<p>__builtin_expect()是GCC v2.96版本引入的内建函数，提供给程序员做分支预测。</p>
 </blockquote>
-<h2 id="blade模板">blade模板</h2>
-<p>Blade模板是Laravel提供的视图文件引擎，该模板可以通过模板继承和区块实现高度的代码复用和清晰的视图结构。blade模板文件以<code>.blade.php</code>为后缀。</p>
-<h3 id="blade模板结构布局">blade模板结构布局</h3>
-<pre><code class="language-php">// layout.blade.php
-&lt;html&gt;
-    &lt;head&gt;&lt;/head&gt;
-    &lt;body&gt;
-        @section('navbar')
-            This is the layout navbar.
-        @show
-        
-        @yield('content')
-        &lt;footer&gt;
-            &lt;p&gt;This is footer.&lt;/p&gt;
-        &lt;/footer&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-
-// view.blade.php
-@extend('layout')
-
-@section('navbar')
-    &lt;p&gt;This is the view navbar.&lt;/p&gt;
-    @parent
-@endsection
-
-@section('content')
-    &lt;div&gt;
-        This is the content.
-        include('sidebar')
-    &lt;/div&gt;
-@endsection
-
-// sidebar.blade.php
-&lt;div&gt;
-    This is the sidebar.
-&lt;/div
-
+<p>简单来说，就是程序员告诉编译器，后续的条件判断中可能性最大的条件分支是什么，方便编译器针对代码进行优化，将可能性最大的分支代码放在前面，降低指令跳转的可能性，以优化性能。例如：</p>
+<pre><code class="language-c">// 假如有a变量
+if (EXPECTED(a == 0)) {
+    // ...
+} else {
+    // ...
+}
 </code></pre>
-<p>使用<code>return view('view');</code>即可使用视图，显示内容为：</p>
-<pre><code class="language-php">This is the view navbar.
-This is the layout navbar.
-This is the content.
-This is the sidebar.
-This is footer.
-</code></pre>
-<p>以下为blade模板中用于布局的语法标签：</p>
-<blockquote>
-<p>@extends('布局文件名')：用于继承一个布局文件</p>
-<p>@parent：用于显示继承的布局模板中的内容</p>
-<p>@section('区块名')：定义一个区块，其可以有不同的结尾标：@show用于显示区块；@stop和@endsection用于结束这个区块；@overwrite用于重写前面的区块。如果在布局模板文件中用@stop或@endsection结束这个区块，则视图文件将无法覆盖这个区块。</p>
-<p>@yield('区块文件', '默认内容')：用于布局文件中显示一个区块。</p>
-<p>@include('子视图名称')：加载子视图文件</p>
-</blockquote>
-<h3 id="blade模板的过程控制语法">blade模板的过程控制语法</h3>
-<p><strong>blade模板变量输出</strong>：</p>
-<pre><code class="language-php">{{ $name }}
-// 效果对应的PHP原生代码
-&lt;?php echo $name; ?&gt;
-</code></pre>
-<p><strong>三目运算符<code>?:</code>的效果</strong>：</p>
-<pre><code class="language-php">{{ $name or 'default' }}
-// 效果对应的PHP原生代码
-&lt;?php echo isset($name) ? $name : 'default'; ?&gt;
-</code></pre>
-<p><strong>禁止花括号被解析</strong>：</p>
-<pre><code class="language-php">@{{ $name }} // 输出{{ $name }}}
-</code></pre>
-<p><strong>条件控制</strong>：</p>
-<pre><code class="language-php">@if($age == 18)
-    i am {{$name}}
-@elseif($age == 19)
-    i am {{$age}}
-@else
-    i am {{$name}}, {{$age}}
-@endif
-</code></pre>
-<p><strong>循环控制</strong>：</p>
-<pre><code class="language-php">// foreach
-@foreach ($data as $key =&gt; $value)
-    &lt;p&gt;{{$key}} =&gt; {{$value}}&lt;/p&gt;
-@endforeach
-
-// for
-@for ($i = 0; $i &lt; count($data); $i++)
-    {{$i}} =&gt; {{$data[$i]}}
-@endfor
-
-// while
-@while (true)
-    While loop
-@endwhile
-</code></pre>
-<p>其中在foreach循环中，可以使用<code>$loop</code>变量获取相应的循环信息。该变量包含的信息有：</p>
-<pre><code class="language-html">object(stdClass)[203]
-  public 'iteration' =&gt; int 1       // 第几个item，范围：1~length
-  public 'index' =&gt; int 0           // 索引，范围：0~length-1
-  public 'remaining' =&gt; int 3       // 倒数，范围：length-1~0
-  public 'count' =&gt; int 4           // 总长度，length
-  public 'first' =&gt; boolean true    // 是否为第一个
-  public 'last' =&gt; boolean false    // 是否为最后一个
-  public 'depth' =&gt; int 1           // 当前循环嵌套层级
-  public 'parent' =&gt; null           // 父级循环的loop变量信息
-</code></pre>
-<h3 id="注释">注释</h3>
-<pre><code class="language-php">{{-- 注释 --}}
-</code></pre>
+<p>以上代码表示，a == 0的可能性更大，即更有可能执行if分支代码，此时，编译器就会将if分支代码放在前面。反之，如果使用<code>UNEXPECTED</code>，就会将else分支代码放在前面。</p>
 
             </div>
             
@@ -782,7 +486,7 @@ This is footer.
     </li>
     <li class="post-copyright-link">
       <strong class="language" data-lan="link">本文链接：</strong>
-      <a href="/post/_w0MPiApJ/" title="初探Laravel---round 9 视图">/post/_w0MPiApJ/</a>
+      <a href="/post/c3xK30m15/" title="PHP扩展开发--EXPECTED与UNEXPECTED">/post/c3xK30m15/</a>
     </li>
     <li class="post-copyright-license">
       <strong class="language" data-lan="copyright">版权声明： </strong>
@@ -791,23 +495,19 @@ This is footer.
   </ul>
   <div class="tags">
     
-      <a href="/tag/x5r9ebt7J/"># Laravel</a>
+      <a href="/tag/lD5hOUlXz/"># php</a>
     
-      <a href="/tag/wKIDH6M-M/"># PHP</a>
+      <a href="/tag/me4rZz0da/"># PHP扩展</a>
     
   </div>
   <div class="nav">
     <div class="nav-prev">
       
-        <i class="fa fa-chevron-left"></i>
-        <a class="nav-pc-next" title="Lumen框架下安装dingo/api和tymon/jwt-auth" href="/post/hjW63kIwP/">Lumen框架下安装dingo/api和tymon/jwt-auth</a class="nav-pc-next">
-        <a class="nav-mobile-prev" title="Lumen框架下安装dingo/api和tymon/jwt-auth" href="/post/hjW63kIwP/">上一篇</a>
-      
     </div>
     <div class="nav-next">
       
-        <a class="nav-pc-next" title="初探Laravel---round 8 控制器" href="/post/GFon-QqN1/">初探Laravel---round 8 控制器</a>
-        <a class="nav-mobile-next" title="初探Laravel---round 8 控制器" href="/post/GFon-QqN1/">下一篇</a>
+        <a class="nav-pc-next" title="autotools的使用" href="/post/jCJO8375A/">autotools的使用</a>
+        <a class="nav-mobile-next" title="autotools的使用" href="/post/jCJO8375A/">下一篇</a>
         <i class="fa fa-chevron-right"></i>
       
     </div>
