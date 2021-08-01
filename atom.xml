@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>/</id>
     <title>anhoder的进阶日志</title>
-    <updated>2021-08-01T06:45:14.710Z</updated>
+    <updated>2021-08-01T09:37:24.839Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="/"/>
     <link rel="self" href="/atom.xml"/>
@@ -11,7 +11,61 @@
     <icon>/favicon.ico</icon>
     <rights>All rights reserved 2021, anhoder的进阶日志</rights>
     <entry>
-        <title type="html"><![CDATA[PHP扩展开发--EXPECTED与UNEXPECTED]]></title>
+        <title type="html"><![CDATA[PHP扩展开发——准备]]></title>
+        <id>/post/2es0g0FAq/</id>
+        <link href="/post/2es0g0FAq/">
+        </link>
+        <updated>2021-08-01T07:37:24.000Z</updated>
+        <summary type="html"><![CDATA[<p>在开发扩展之前，需要做一些准备工作：脚手架使用、环境配置。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>在开发扩展之前，需要做一些准备工作：脚手架使用、环境配置。</p>
+<!-- more -->
+<h2 id="生成基本骨架">生成基本骨架</h2>
+<p>首先，我们需要使用官方提供的<code>ext_skel</code>脚本来生成扩展的大致骨架和基础代码。</p>
+<pre><code class="language-sh">./ext_skel.php --ext ext_test # ext_test为扩展名称
+</code></pre>
+<p>这个脚本在php源码中可以找到，具体路径为<code>php-src/ext/ext_skel</code>。</p>
+<blockquote>
+<p>php 7.3之前是用shell写的脚本，之后是用php写的。</p>
+</blockquote>
+<p>执行完上述命令后，就会生成扩展骨架：</p>
+<pre><code class="language-sh">ext_test/
+├── config.m4       # unix编译配置
+├── config.w32      # windows编译配置
+├── ext_test.c      # 主要c代码
+├── php_ext_test.h  # 主要头文件
+└── tests           # 测试
+    ├── 001.phpt
+    ├── 002.phpt
+    └── 003.phpt
+</code></pre>
+<h2 id="环境配置">环境配置</h2>
+<p>这里我是用JetBrains家的CLion作为开发环境，具体配置步骤为：</p>
+<h3 id="1-创建cmakeliststxt文件">1. 创建<code>CMakeLists.txt</code>文件</h3>
+<figure data-type="image" tabindex="1"><img src="/post-images/1627807380037.png" alt="" loading="lazy"></figure>
+<p>点击<code>Create CMakeLists.txt</code>会生成如下的文件内容：</p>
+<pre><code class="language-c">cmake_minimum_required(VERSION 3.20)
+project(ext_test C)
+
+set(CMAKE_C_STANDARD 11)
+
+include_directories(.)
+
+add_executable(ext_test
+        ext_test.c
+        php_ext_test.h)
+</code></pre>
+<h3 id="2-加载php头文件">2. 加载PHP头文件</h3>
+<p>此时打开C文件<code>ext_test.c</code>会有一些报红，我们需要在CMakeLists.txt中增加如下代码，将PHP的头文件也加载进来即可：</p>
+<pre><code class="language-c">include_directories(/usr/local/include/php)
+include_directories(/usr/local/include/php/main)
+include_directories(/usr/local/include/php/Zend)
+</code></pre>
+<p>准备工作完成了，后面就会开始实现扩展的一些具体功能。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[PHP扩展开发——EXPECTED与UNEXPECTED]]></title>
         <id>/post/c3xK30m15/</id>
         <link href="/post/c3xK30m15/">
         </link>
@@ -663,33 +717,33 @@ func test(c &lt;-chan string) {
 </table>
 <h2 id="todo">TODO</h2>
 <ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9914606"><label class="task-list-item-label" for="task-item-9914606"> 我的歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1085227"><label class="task-list-item-label" for="task-item-1085227"> 每日推荐歌曲</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8315248"><label class="task-list-item-label" for="task-item-8315248"> 每日推荐歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-426065"><label class="task-list-item-label" for="task-item-426065"> 私人FM</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1632443"><label class="task-list-item-label" for="task-item-1632443"> 歌词显示</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3314434"><label class="task-list-item-label" for="task-item-3314434"> 欢迎界面</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4462169"><label class="task-list-item-label" for="task-item-4462169"> 搜索</label>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5422044"><label class="task-list-item-label" for="task-item-5422044"> 我的歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-78606"><label class="task-list-item-label" for="task-item-78606"> 每日推荐歌曲</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5923762"><label class="task-list-item-label" for="task-item-5923762"> 每日推荐歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2511658"><label class="task-list-item-label" for="task-item-2511658"> 私人FM</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-313346"><label class="task-list-item-label" for="task-item-313346"> 歌词显示</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7899015"><label class="task-list-item-label" for="task-item-7899015"> 欢迎界面</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7997033"><label class="task-list-item-label" for="task-item-7997033"> 搜索</label>
 <ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2295620"><label class="task-list-item-label" for="task-item-2295620"> 按歌曲</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7932050"><label class="task-list-item-label" for="task-item-7932050"> 按歌手</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5930674"><label class="task-list-item-label" for="task-item-5930674"> 按歌词</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5687430"><label class="task-list-item-label" for="task-item-5687430"> 按歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5895039"><label class="task-list-item-label" for="task-item-5895039"> 按专辑</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3805623"><label class="task-list-item-label" for="task-item-3805623"> 按用户</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5733804"><label class="task-list-item-label" for="task-item-5733804"> 按歌曲</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7371101"><label class="task-list-item-label" for="task-item-7371101"> 按歌手</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1011716"><label class="task-list-item-label" for="task-item-1011716"> 按歌词</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1915708"><label class="task-list-item-label" for="task-item-1915708"> 按歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5988688"><label class="task-list-item-label" for="task-item-5988688"> 按专辑</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2666752"><label class="task-list-item-label" for="task-item-2666752"> 按用户</label></li>
 </ul>
 </li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4694513"><label class="task-list-item-label" for="task-item-4694513"> 排行榜</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1643723"><label class="task-list-item-label" for="task-item-1643723"> 精选歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3552024"><label class="task-list-item-label" for="task-item-3552024"> 最新专辑</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5532747"><label class="task-list-item-label" for="task-item-5532747"> 热门歌手</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7069813"><label class="task-list-item-label" for="task-item-7069813"> 云盘</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5793770"><label class="task-list-item-label" for="task-item-5793770"> 播放方式切换</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8355772"><label class="task-list-item-label" for="task-item-8355772"> 喜欢/取消喜欢</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2268409"><label class="task-list-item-label" for="task-item-2268409"> 心动模式/智能模式</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4253388"><label class="task-list-item-label" for="task-item-4253388"> 音乐电台</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-1879262"><label class="task-list-item-label" for="task-item-1879262"> 配置文件</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-7182147"><label class="task-list-item-label" for="task-item-7182147"> 通知功能</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2901700"><label class="task-list-item-label" for="task-item-2901700"> 排行榜</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3892230"><label class="task-list-item-label" for="task-item-3892230"> 精选歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9207611"><label class="task-list-item-label" for="task-item-9207611"> 最新专辑</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8846395"><label class="task-list-item-label" for="task-item-8846395"> 热门歌手</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9496388"><label class="task-list-item-label" for="task-item-9496388"> 云盘</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4166789"><label class="task-list-item-label" for="task-item-4166789"> 播放方式切换</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6916674"><label class="task-list-item-label" for="task-item-6916674"> 喜欢/取消喜欢</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7447888"><label class="task-list-item-label" for="task-item-7447888"> 心动模式/智能模式</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1366058"><label class="task-list-item-label" for="task-item-1366058"> 音乐电台</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-768910"><label class="task-list-item-label" for="task-item-768910"> 配置文件</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-7499278"><label class="task-list-item-label" for="task-item-7499278"> 通知功能</label></li>
 </ul>
 ]]></content>
     </entry>
@@ -1107,100 +1161,6 @@ class ClassAnnotationHandler extends AbstractAnnotationHandler
 </ol>
 <h2 id="附">附</h2>
 <p>由于注解需要配合反射来使用，其相比正常代码性能较差，而且在php-fpm模式下，每次请求都需要重新获取注解信息，所以<strong>不推荐在php-fpm下使用注解</strong>，其<strong>更适合一些常驻内存型的项目</strong>，例如：Swoole、WorkerMan等。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Swoft内存泄漏排查]]></title>
-        <id>/post/e-qWPg1ij/</id>
-        <link href="/post/e-qWPg1ij/">
-        </link>
-        <updated>2021-01-16T12:04:00.000Z</updated>
-        <summary type="html"><![CDATA[<p>最近在公司使用swoft写了一个定时爬取数据的项目，上线后跟踪线上日志发现swoft的worker进程会<strong>出现周期性的内存溢出</strong>：</p>
-<pre><code class="language-txt">Fatal error: Uncaught ErrorException: Allowed memory size of 268435456 bytes exhausted (tried to allocate 262144 bytes)
-</code></pre>
-]]></summary>
-        <content type="html"><![CDATA[<p>最近在公司使用swoft写了一个定时爬取数据的项目，上线后跟踪线上日志发现swoft的worker进程会<strong>出现周期性的内存溢出</strong>：</p>
-<pre><code class="language-txt">Fatal error: Uncaught ErrorException: Allowed memory size of 268435456 bytes exhausted (tried to allocate 262144 bytes)
-</code></pre>
-<!-- more -->
-<h2 id="一-分析">一、分析</h2>
-<p>观察到线上worker进程的内存占用是随时间增长而逐渐上升的，所以排除单次执行导致内存溢出的情况，基本可以确定是项目中的某处代码<strong>存在内存泄漏</strong>。</p>
-<p>因此，解决问题的关键就在于<strong>如何定位到项目中产生内存泄漏的位置</strong>。</p>
-<h2 id="二-定位内存泄漏">二、定位内存泄漏</h2>
-<h3 id="1-swoole-tracker">1、Swoole Tracker</h3>
-<p><a href="https://business.swoole.com/tracker/index">Swoole Tracker</a>是Swoole官方提供的分析工具，可以用来检测项目中的内存泄漏问题（<a href="https://mp.weixin.qq.com/s/oAyToE4aNyU3-_PQ5ii3aw">使用方法</a>）。</p>
-<h4 id="安装">安装</h4>
-<p>Swoole Tracker的安装比较简单，因为它本身就是一个php的扩展，而且是已经编译好的，我们只需要将编译好的动态链接库文件(.so)放到php的扩展目录下，然后在php.ini中加上配置即可。</p>
-<h4 id="使用">使用</h4>
-<p>安装完Swoole Tracker扩展后，在相应的代码中加入Swoole Tracker提供的Hook函数，例如：</p>
-<pre><code class="language-php">public function onPipeMessage(Server $server, int $srcWorkerId, $message): void
-{
-    trackerHookMalloc();
-    // ...
-}
-</code></pre>
-<p>接着启动服务，运行一段时间后，在docker容器内执行<code>php -r &quot;trackerAnalyzeLeak();&quot;</code>即可获取到服务运行时的内存申请信息、内存释放信息以及可能存在内存泄漏的位置。</p>
-<h4 id="检测结果">检测结果</h4>
-<p><a href="/post-images/memory_leak.txt">memory_leak.txt</a></p>
-<blockquote>
-<p>文件中含命令行颜色代码，可以在命令行使用<code>cat memory_leak.txt</code>查看</p>
-</blockquote>
-<p>以下是检测结果中可能存在内存泄漏的代码位置：</p>
-<pre><code class="language-txt"> The Possible Leak As Malloc Size Keep Growth:
- /var/www/swoft_marketing_engine/vendor/swoft/server/src/Server.php:544 =&gt;  Growth Times : [29];  Growth Size : [181440]
- /var/www/swoft_marketing_engine/vendor/swoft/stdlib/src/Helper/ArrayHelper.php:959 =&gt;  Growth Times : [8];  Growth Size : [2784]
- /var/www/swoft_marketing_engine/vendor/swoft/stdlib/src/Helper/ArrayHelper.php:997 =&gt;  Growth Times : [12];  Growth Size : [17920]
- /var/www/swoft_marketing_engine/vendor/swoft/bean/src/Container.php:413 =&gt;  Growth Times : [24];  Growth Size : [10752]
- /var/www/swoft_marketing_engine/vendor/swoft/db/src/Database.php:252 =&gt;  Growth Times : [24];  Growth Size : [1536]
- /var/www/swoft_marketing_engine/vendor/swoft/db/src/Connection/Connection.php:370 =&gt;  Growth Times : [24];  Growth Size : [4608]
-</code></pre>
-<p>根据结果，<strong>发现是Swoft框架本身某个位置存在内存泄漏</strong>。</p>
-<p>但是，检测结果中只有产生内存申请时的代码位置，还不能确定具体是什么地方未释放内存。</p>
-<p>因此，只能换一种思路。</p>
-<h3 id="2-valgrind">2、Valgrind</h3>
-<p>尝试另外一款内存泄漏分析神器——valgrind。</p>
-<p>使用后发现分析报告中只会出现相关的C/C++代码，无法定位到具体的PHP代码位置，放弃。</p>
-<h3 id="3-memory_get_usage">3、memory_get_usage()</h3>
-<p>使用几种内存泄漏分析工具都无果后，尝试使用最原始的方式——PHP的内置函数<code>memory_get_usage()</code>。</p>
-<p>大致思路就是在需要调用的函数上下，加上<code>memory_get_usage()</code>函数，例如：</p>
-<pre><code class="language-php">var_dump(memory_get_usage());
-test();
-var_dump(memory_get_usage());
-</code></pre>
-<p>因为，正常情况下，在函数调用完成后，Zend引擎会将对应的函数栈销毁，相应的内存会被释放。</p>
-<blockquote>
-<p>在使用时，有一些需要注意的点：</p>
-<ol>
-<li><code>memory_get_usage()</code>支持一个布尔类型的参数<code>real_usage</code>，表示是否获取真实内存大小，其中包括未被使用的内存空间。因为PHP引擎在申请内存时，会一次申请一大块内存，用于后续使用，以减少系统调用的次数。所以，在这里<strong>不要将它设置为true</strong>。</li>
-<li>如果函数中存在循环引用（如：Swoft中ORM的join方法），在函数执行完成后，变量并不会被及时释放，输出内存占用会增加，但是这是正常的。因为当待释放变量达到一定数量或内存达到一定阈值时，PHP的GC才会统一释放掉这些的内存。</li>
-</ol>
-</blockquote>
-<h4 id="检查结果">检查结果</h4>
-<p>这种方法虽然费时费力，但效果还算不错。经过一段时间排查，成功定位到了两处内存泄漏：</p>
-<ul>
-<li>在协程中使用Redis时，Swoft未在协程结束后释放相应的Redis连接信息；</li>
-<li>Swoft在处理pipeMessage事件结束后未触发协程结束事件，导致协程数据（MySQL、Redis连接信息等）未被释放。</li>
-</ul>
-<h2 id="三-解决方案">三、解决方案</h2>
-<p>既然已经定位到内存泄漏的原因了，解决办法就不难了：</p>
-<ul>
-<li>协程结束后，手动unset Redis的连接信息；</li>
-<li>在pipeMessgae事件结束后，手动触发协程结束事件，销毁对应协程产生的数据。</li>
-</ul>
-<h2 id="四-后续">四、后续</h2>
-<p>经过以上处理后，<strong>截至目前，线上swoft项目的内存占用稳定在50M左右，未出现内存溢出错误</strong>。</p>
-<p>此外，针对这两个问题，我在GitHub上向Swoft团队提交了两个相应的issue及修复PR，目前代码已被合并到master。</p>
-<figure data-type="image" tabindex="1"><img src="/post-images/1617677953995.jpg" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="2"><img src="/post-images/1617677966544.jpg" alt="" loading="lazy"></figure>
-<h2 id="五-总结">五、总结</h2>
-<p>其实，内存溢出、内存泄漏的情况并不容易发生（单次运行直接爆内存的除外emmm...），只要你：</p>
-<ul>
-<li>不轻易使用全局变量、静态变量；</li>
-<li>如果不可避免的需要使用到全局变量、静态变量，一定要在用完后unset掉相应的数据。</li>
-</ul>
-<blockquote>
-<p>另外，在排查过程中，用到的一个挺好用的查看内存占用的工具——smem，可以查看程序的USS、PSS、RSS👍。</p>
-</blockquote>
 ]]></content>
     </entry>
 </feed>

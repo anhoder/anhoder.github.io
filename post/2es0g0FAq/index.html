@@ -8,7 +8,7 @@
 <meta name="keywords" content="anhoder的进阶日志">
 <meta name="description" content="一川烟草，满城风絮。">
 <meta name="theme-color" content="#000">
-<title>黑苹果(Hackintosh)的相关 | anhoder的进阶日志</title>
+<title>PHP扩展开发——准备 | anhoder的进阶日志</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1627810215247">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -61,8 +61,8 @@
 </script>
 
 
-  <meta name="description" content="黑苹果(Hackintosh)的相关" />
-  <meta name="keywords" content="黑苹果,其它" />
+  <meta name="description" content="PHP扩展开发——准备" />
+  <meta name="keywords" content="php,PHP扩展" />
 </head>
 
 <body>
@@ -312,8 +312,13 @@
     <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#1-macos-mojave%E7%9A%84%E5%BC%95%E5%AF%BC">1. macOS Mojave的引导</a></li>
-<li><a href="#2-efi%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">2. EFI目录结构</a></li>
+<li><a href="#%E7%94%9F%E6%88%90%E5%9F%BA%E6%9C%AC%E9%AA%A8%E6%9E%B6">生成基本骨架</a></li>
+<li><a href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE">环境配置</a>
+<ul>
+<li><a href="#1-%E5%88%9B%E5%BB%BAcmakeliststxt%E6%96%87%E4%BB%B6">1. 创建<code>CMakeLists.txt</code>文件</a></li>
+<li><a href="#2-%E5%8A%A0%E8%BD%BDphp%E5%A4%B4%E6%96%87%E4%BB%B6">2. 加载PHP头文件</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -581,8 +586,8 @@
           <div class="section bg-color post post-page">
             <section class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="/post/goEKUdWvk/">
-      黑苹果(Hackintosh)的相关
+    <a class="post-title-link" href="/post/2es0g0FAq/">
+      PHP扩展开发——准备
     </a>
   </h1>
   <div class="post-meta">
@@ -590,7 +595,7 @@
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2018-09-14 18:58:00">2018-09-14</span>
+      <span class="publish-time" data-t="2021-08-01 15:37:24">2021-08-01</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
@@ -599,14 +604,14 @@
       <span class="pc-show language" data-lan="category-in">分类于</span>
       
       
-      <a href="/tag/3xuKKJppt/">
-        <span>黑苹果</span>
+      <a href="/tag/lD5hOUlXz/">
+        <span>php</span>
       </a>、
       
       
       
-      <a href="/tag/Yxu2y8I-l/">
-        <span>其它</span>
+      <a href="/tag/me4rZz0da/">
+        <span>PHP扩展</span>
       </a>
       
       
@@ -620,52 +625,56 @@
     <span class="meta-item">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
-      <span>529<span class="pc-show language" data-lan="words">字数</span></span>
+      <span>319<span class="pc-show language" data-lan="words">字数</span></span>
     </span>
     
   </div>
 </section>
             <div class="post-body next-md-body" id="post_body">
-              <p>玩黑苹果也有一段时间了，从一开始照着别人的教程一步一步安装的小白，到现在知道一些引导文件的、驱动文件的作用，可以自己组合EFI去驱动电脑，从10.12到10.14，这个过程中学到了很多。</p>
-<p>macOS 10.14正式版开始推送了，写个博客放下我的引导。</p>
+              <p>在开发扩展之前，需要做一些准备工作：脚手架使用、环境配置。</p>
 <!-- more -->
-<h2 id="1-macos-mojave的引导">1. macOS Mojave的引导</h2>
-<p>关于EFI是什么我就不多说了，合理利用度娘、Google</p>
-<p><strong>首先说一下电脑的相关信息：</strong></p>
-<blockquote>
-<p>神船K610系列、大麦2S系列*（两个机型主板相同）* <strong>---机型不同可能不能进入mac系统---</strong><br>
-CPU: i5 4210m<br>
-显卡: GT960m*（笔记本的独显驱动不了）*<br>
-网卡：换了TB买的黑苹果免驱的网卡</p>
-</blockquote>
-<p>OK，直接上我使用的黑苹果引导：</p>
-<blockquote>
-<p>**升级时用的引导：**链接: https://pan.baidu.com/s/1F8OG6gQ9gnXb0XcXQ7KmeA 密码: 4dwj</p>
-<p>**升级后日常使用的引导：**链接: https://pan.baidu.com/s/1XkfYyDI8cRWUgShoumuugg 密码: ts8m</p>
-<p><em>这两个引导的区别在于前面一个更精简，删除了一些升级非必需的引导文件，可以提升升级的成功率（在远景论坛找的，不记得是哪个帖子了，当然也可以自己精简第二个引导用于升级，不过我不想搞了，能用就先用着吧😝）</em></p>
-</blockquote>
-<h2 id="2-efi目录结构">2. EFI目录结构</h2>
-<p>说一下efi目录下的各个文件夹的作用：</p>
-<pre><code class="language-shell">$ tree EFI -L 2
-
-EFI
-├── APPLE               // 白果用到的启动固件，由系统自动生成，删除后仍会生成，忽略即可
-│   ├── EXTENSIONS
-│   └── FIRMWARE
-├── BOOT                
-│   └── BOOTX64.efi     // UEFI必需引导文件
-└── CLOVER
-    ├── ACPI            // 必需
-    ├── CLOVERX64.efi   // 四叶草Clover引导文件
-    ├── config.plist    // Clover引导配置文件
-    ├── drivers64UEFI   // 硬盘文件系统的驱动文件
-    ├── kexts           // 硬件驱动文件
-    ├── misc            
-    ├── themes          // Clover引导界面的主题，可自定义
-    └── tools           // 必需
+<h2 id="生成基本骨架">生成基本骨架</h2>
+<p>首先，我们需要使用官方提供的<code>ext_skel</code>脚本来生成扩展的大致骨架和基础代码。</p>
+<pre><code class="language-sh">./ext_skel.php --ext ext_test # ext_test为扩展名称
 </code></pre>
-<p>kexts目录下存放的驱动可以根据自己的需求增删，驱动文件的具体作用直接输入文件名百度就行了。😆</p>
-<p><span style="color:red;"><strong>在安装黑苹果时，ESP分区的大小需要不小于200M，否则会报错。</strong></span></p>
+<p>这个脚本在php源码中可以找到，具体路径为<code>php-src/ext/ext_skel</code>。</p>
+<blockquote>
+<p>php 7.3之前是用shell写的脚本，之后是用php写的。</p>
+</blockquote>
+<p>执行完上述命令后，就会生成扩展骨架：</p>
+<pre><code class="language-sh">ext_test/
+├── config.m4       # unix编译配置
+├── config.w32      # windows编译配置
+├── ext_test.c      # 主要c代码
+├── php_ext_test.h  # 主要头文件
+└── tests           # 测试
+    ├── 001.phpt
+    ├── 002.phpt
+    └── 003.phpt
+</code></pre>
+<h2 id="环境配置">环境配置</h2>
+<p>这里我是用JetBrains家的CLion作为开发环境，具体配置步骤为：</p>
+<h3 id="1-创建cmakeliststxt文件">1. 创建<code>CMakeLists.txt</code>文件</h3>
+<figure data-type="image" tabindex="1"><img src="/post-images/1627807380037.png" alt="" loading="lazy"></figure>
+<p>点击<code>Create CMakeLists.txt</code>会生成如下的文件内容：</p>
+<pre><code class="language-c">cmake_minimum_required(VERSION 3.20)
+project(ext_test C)
+
+set(CMAKE_C_STANDARD 11)
+
+include_directories(.)
+
+add_executable(ext_test
+        ext_test.c
+        php_ext_test.h)
+</code></pre>
+<h3 id="2-加载php头文件">2. 加载PHP头文件</h3>
+<p>此时打开C文件<code>ext_test.c</code>会有一些报红，我们需要在CMakeLists.txt中增加如下代码，将PHP的头文件也加载进来即可：</p>
+<pre><code class="language-c">include_directories(/usr/local/include/php)
+include_directories(/usr/local/include/php/main)
+include_directories(/usr/local/include/php/Zend)
+</code></pre>
+<p>准备工作完成了，后面就会开始实现扩展的一些具体功能。</p>
 
             </div>
             
@@ -678,7 +687,7 @@ EFI
     </li>
     <li class="post-copyright-link">
       <strong class="language" data-lan="link">本文链接：</strong>
-      <a href="/post/goEKUdWvk/" title="黑苹果(Hackintosh)的相关">/post/goEKUdWvk/</a>
+      <a href="/post/2es0g0FAq/" title="PHP扩展开发——准备">/post/2es0g0FAq/</a>
     </li>
     <li class="post-copyright-license">
       <strong class="language" data-lan="copyright">版权声明： </strong>
@@ -687,23 +696,19 @@ EFI
   </ul>
   <div class="tags">
     
-      <a href="/tag/3xuKKJppt/"># 黑苹果</a>
+      <a href="/tag/lD5hOUlXz/"># php</a>
     
-      <a href="/tag/Yxu2y8I-l/"># 其它</a>
+      <a href="/tag/me4rZz0da/"># PHP扩展</a>
     
   </div>
   <div class="nav">
     <div class="nav-prev">
       
-        <i class="fa fa-chevron-left"></i>
-        <a class="nav-pc-next" title="面试问题之计算机网络" href="/post/Qqu8tZkzh/">面试问题之计算机网络</a class="nav-pc-next">
-        <a class="nav-mobile-prev" title="面试问题之计算机网络" href="/post/Qqu8tZkzh/">上一篇</a>
-      
     </div>
     <div class="nav-next">
       
-        <a class="nav-pc-next" title="PHP的浅复制和深复制" href="/post/l9oHb1QpJ/">PHP的浅复制和深复制</a>
-        <a class="nav-mobile-next" title="PHP的浅复制和深复制" href="/post/l9oHb1QpJ/">下一篇</a>
+        <a class="nav-pc-next" title="PHP扩展开发——EXPECTED与UNEXPECTED" href="/post/c3xK30m15/">PHP扩展开发——EXPECTED与UNEXPECTED</a>
+        <a class="nav-mobile-next" title="PHP扩展开发——EXPECTED与UNEXPECTED" href="/post/c3xK30m15/">下一篇</a>
         <i class="fa fa-chevron-right"></i>
       
     </div>
