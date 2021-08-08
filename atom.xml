@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>/</id>
     <title>anhoder的进阶日志</title>
-    <updated>2021-08-07T03:54:27.460Z</updated>
+    <updated>2021-08-08T15:46:31.837Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="/"/>
     <link rel="self" href="/atom.xml"/>
@@ -10,6 +10,166 @@
     <logo>/images/avatar.png</logo>
     <icon>/favicon.ico</icon>
     <rights>All rights reserved 2021, anhoder的进阶日志</rights>
+    <entry>
+        <title type="html"><![CDATA[PHP扩展开发——类]]></title>
+        <id>/post/AeTXbWbCO/</id>
+        <link href="/post/AeTXbWbCO/">
+        </link>
+        <updated>2021-08-08T10:22:10.000Z</updated>
+        <content type="html"><![CDATA[<p>这篇开始在扩展中实现PHP的类，先定个目标，实现如下的PHP类：</p>
+<pre><code class="language-php">&lt;?php
+
+class Person {
+    public const MALE = 1;
+    public const FEMALE = 2;
+
+    private $name;
+    private $age;
+
+    public function __construct(string $name, string $age)
+    {
+        $this-&gt;name = $name;
+        $this-&gt;age = $age;
+    }
+
+    public function setName(string $name)
+    {
+        $this-&gt;name = $name;
+    }
+
+    public function getName(): string
+    {
+        return $this-&gt;name;
+    }
+}
+</code></pre>
+<h2 id="相关结构体-宏及函数">相关结构体、宏及函数</h2>
+<ul>
+<li>zend_class_entry: 类入口</li>
+<li>PHP_METHOD: 声明类的方法</li>
+<li>zend_update_property: 更新类的属性</li>
+<li>zend_read_property: 获取类的属性</li>
+<li>PHP_ME: 类方法的参数信息</li>
+<li>INIT_CLASS_ENTRY: 初始化zend_class_entry</li>
+<li>zend_register_internal_class: 向zend中注册类</li>
+<li>zend_declare_property: 声明属性</li>
+</ul>
+<h2 id="实现person类">实现Person类</h2>
+<h3 id="1-声明类入口-实现类方法">1. 声明类入口、实现类方法</h3>
+<pre><code class="language-c">// 类入口
+zend_class_entry *person_ce;
+
+
+// __construct(string name, int age)
+PHP_METHOD(Person, __construct)
+{
+    zend_string *name;
+    zend_long age;
+
+    ZEND_PARSE_PARAMETERS_START(2, 2)
+        Z_PARAM_STR(name)
+        Z_PARAM_LONG(age)
+    ZEND_PARSE_PARAMETERS_END();
+
+    // 更新属性
+    zend_update_property_str(person_ce, getThis(), &quot;name&quot;, sizeof(&quot;name&quot;)-1, name);
+    zend_update_property_long(person_ce, getThis(), &quot;age&quot;, sizeof(&quot;age&quot;)-1, age);
+
+    zend_string_release(name);
+}
+
+// getName(): string
+PHP_METHOD(Person, getName)
+{
+    zval rv, *name;
+
+    name = zend_read_property(person_ce, getThis(), &quot;name&quot;, sizeof(&quot;name&quot;)-1, 0, &amp;rv);
+
+    RETURN_STR(Z_STR_P(name))
+}
+
+// setName(string name)
+PHP_METHOD(Person, setName)
+{
+    zend_string *name;
+
+    ZEND_PARSE_PARAMETERS_START(1, 1)
+        Z_PARAM_STR(name)
+    ZEND_PARSE_PARAMETERS_END();
+
+    zend_update_property_str(person_ce, getThis(), &quot;name&quot;, sizeof(&quot;name&quot;)-1, name);
+
+    zend_string_release(name);
+}
+</code></pre>
+<h3 id="2-方法参数信息">2. 方法参数信息</h3>
+<pre><code class="language-c">ZEND_BEGIN_ARG_INFO(arginfo_person_construct, 0)
+    ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+    ZEND_ARG_TYPE_INFO(0, age, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(arginfo_person_setname, 0)
+    ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+</code></pre>
+<h3 id="3-方法入口">3. 方法入口</h3>
+<p>与普通函数一样，都是使用<code>zend_function_entry</code>结构体作为入口，不同的只是把宏换成了<code>PHP_ME</code>。</p>
+<pre><code class="language-c">zend_function_entry person_methods[] = {
+    // ZEND_ACC_PUBLIC, 方法访问权限都为public
+    PHP_ME(Person, __construct, arginfo_person_construct, ZEND_ACC_PUBLIC)
+    PHP_ME(Person, getName, NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(Person, setName, arginfo_person_setname, ZEND_ACC_PUBLIC)
+
+    PHP_FE_END
+};
+</code></pre>
+<h3 id="4-向zend注册类">4. 向Zend注册类</h3>
+<p>最后在扩展初始化的Hook中，将类注册到Zend中。</p>
+<pre><code class="language-c">PHP_MINIT_FUNCTION(ext_test)
+{
+    // 初始化zend_class_entry，将方法绑定到类中
+    zend_class_entry ce;
+    INIT_CLASS_ENTRY(ce, &quot;Person&quot;, person_methods)
+
+    // 注册类
+    person_ce = zend_register_internal_class(&amp;ce);
+
+    // 声明类常量
+    zend_declare_class_constant_long(person_ce, &quot;MALE&quot;, sizeof(&quot;MALE&quot;)-1, 1);
+    zend_declare_class_constant_long(person_ce, &quot;FEMALE&quot;, sizeof(&quot;FEMALE&quot;)-1, 2);
+
+    // 声明类的属性及访问权限
+    zend_declare_property_null(person_ce, &quot;name&quot;, sizeof(&quot;name&quot;)-1, ZEND_ACC_PRIVATE);
+    zend_declare_property_null(person_ce, &quot;age&quot;, sizeof(&quot;age&quot;)-1, ZEND_ACC_PRIVATE);
+}
+</code></pre>
+<p>至此，类的实现基本完成，大致步骤为：</p>
+<ol>
+<li>声明类入口</li>
+<li>实现相关的方法</li>
+<li>声明方法参数信息</li>
+<li>声明方法入口</li>
+<li>在扩展初始化的Hook中注册到Zend中</li>
+</ol>
+<h2 id="测试php代码">测试PHP代码</h2>
+<pre><code class="language-php">&lt;?php
+
+$person = new Person('anhoder', 18);
+var_dump($person-&gt;getName());
+$person-&gt;setName('alan');
+var_dump($person);
+</code></pre>
+<p>输出代码：</p>
+<pre><code>string(7) &quot;anhoder&quot;
+object(Person)#1 (2) {
+  [&quot;name&quot;:&quot;Person&quot;:private]=&gt;
+  string(4) &quot;alan&quot;
+  [&quot;age&quot;:&quot;Person&quot;:private]=&gt;
+  int(18)
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[PHP扩展开发——函数]]></title>
         <id>/post/yBxcxmgZ6/</id>
@@ -134,19 +294,21 @@ static const zend_function_entry ext_test_functions[] = {
 PHP_FUNCTION(test_func2)
 {
     zend_long id;
-    zend_string *name = zend_string_init(&quot;anhoder&quot;, strlen(&quot;anhoder&quot;), 0);
+    zend_string *name, *res;
+    name = zend_string_init(&quot;anhoder&quot;, strlen(&quot;anhoder&quot;), 0);
 
     ZEND_PARSE_PARAMETERS_START(1, 2)
         Z_PARAM_LONG(id)
-        Z_PARAM_OPTIONAL    // 可选参数name
+        Z_PARAM_OPTIONAL
         Z_PARAM_STR(name)
     ZEND_PARSE_PARAMETERS_END();
 
-    zend_printf(&quot;%lld: %s&quot;, id, ZSTR_VAL(name));
+    res = zend_strpprintf(0, &quot;%lld: %s\n&quot;, id, ZSTR_VAL(name));
 
-    RETVAL_STR(name);
+    RETVAL_STR(res);
 
     zend_string_release(name);
+    zend_string_release(res);
 }
 
 // ...
@@ -167,22 +329,14 @@ static const zend_function_entry ext_test_functions[] = {
 <pre><code class="language-c">// test_func3(array &amp;$arr): void
 PHP_FUNCTION(test_func3)
 {
-    // 使用ZVAL，与上层PHP对应
     zval *arr;
 
     ZEND_PARSE_PARAMETERS_START(1, 1)
         Z_PARAM_ARRAY_EX2(arr, 0, 1, 0)
     ZEND_PARSE_PARAMETERS_END();
 
-    zend_string *key = zend_string_init(&quot;key&quot;, strlen(&quot;key&quot;), 0);
-    zval num;
-    ZVAL_LONG(&amp;num, 123);
-    zend_hash_add_new(Z_ARR_P(arr), key, &amp;num);
-
-    // 旧版参数解析
-    //    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, &quot;s&quot;, &amp;s1, &amp;s1_len) == FAILURE) {
-    //        return;
-    //    }
+    add_assoc_long(arr, &quot;key&quot;, 123);
+    add_index_string(arr, 4, &quot;name&quot;);
 }
 
 ZEND_BEGIN_ARG_INFO(arginfo_test_func3, 0)
@@ -955,33 +1109,33 @@ func test(c &lt;-chan string) {
 </table>
 <h2 id="todo">TODO</h2>
 <ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-413445"><label class="task-list-item-label" for="task-item-413445"> 我的歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3393695"><label class="task-list-item-label" for="task-item-3393695"> 每日推荐歌曲</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5246681"><label class="task-list-item-label" for="task-item-5246681"> 每日推荐歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6110760"><label class="task-list-item-label" for="task-item-6110760"> 私人FM</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3253913"><label class="task-list-item-label" for="task-item-3253913"> 歌词显示</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8954534"><label class="task-list-item-label" for="task-item-8954534"> 欢迎界面</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8258510"><label class="task-list-item-label" for="task-item-8258510"> 搜索</label>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8040039"><label class="task-list-item-label" for="task-item-8040039"> 我的歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-481246"><label class="task-list-item-label" for="task-item-481246"> 每日推荐歌曲</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7901151"><label class="task-list-item-label" for="task-item-7901151"> 每日推荐歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-338461"><label class="task-list-item-label" for="task-item-338461"> 私人FM</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8602403"><label class="task-list-item-label" for="task-item-8602403"> 歌词显示</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6970385"><label class="task-list-item-label" for="task-item-6970385"> 欢迎界面</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7695799"><label class="task-list-item-label" for="task-item-7695799"> 搜索</label>
 <ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7387192"><label class="task-list-item-label" for="task-item-7387192"> 按歌曲</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5173948"><label class="task-list-item-label" for="task-item-5173948"> 按歌手</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6511690"><label class="task-list-item-label" for="task-item-6511690"> 按歌词</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2859288"><label class="task-list-item-label" for="task-item-2859288"> 按歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3740398"><label class="task-list-item-label" for="task-item-3740398"> 按专辑</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3856279"><label class="task-list-item-label" for="task-item-3856279"> 按用户</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8344844"><label class="task-list-item-label" for="task-item-8344844"> 按歌曲</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8996201"><label class="task-list-item-label" for="task-item-8996201"> 按歌手</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1918333"><label class="task-list-item-label" for="task-item-1918333"> 按歌词</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8007736"><label class="task-list-item-label" for="task-item-8007736"> 按歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7323612"><label class="task-list-item-label" for="task-item-7323612"> 按专辑</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1728971"><label class="task-list-item-label" for="task-item-1728971"> 按用户</label></li>
 </ul>
 </li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4367072"><label class="task-list-item-label" for="task-item-4367072"> 排行榜</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2081115"><label class="task-list-item-label" for="task-item-2081115"> 精选歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4248647"><label class="task-list-item-label" for="task-item-4248647"> 最新专辑</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7623960"><label class="task-list-item-label" for="task-item-7623960"> 热门歌手</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7452086"><label class="task-list-item-label" for="task-item-7452086"> 云盘</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4246562"><label class="task-list-item-label" for="task-item-4246562"> 播放方式切换</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7030120"><label class="task-list-item-label" for="task-item-7030120"> 喜欢/取消喜欢</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6981572"><label class="task-list-item-label" for="task-item-6981572"> 心动模式/智能模式</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7280779"><label class="task-list-item-label" for="task-item-7280779"> 音乐电台</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-9573327"><label class="task-list-item-label" for="task-item-9573327"> 配置文件</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-7733615"><label class="task-list-item-label" for="task-item-7733615"> 通知功能</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5233234"><label class="task-list-item-label" for="task-item-5233234"> 排行榜</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5389640"><label class="task-list-item-label" for="task-item-5389640"> 精选歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4792695"><label class="task-list-item-label" for="task-item-4792695"> 最新专辑</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3949729"><label class="task-list-item-label" for="task-item-3949729"> 热门歌手</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9752608"><label class="task-list-item-label" for="task-item-9752608"> 云盘</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-307131"><label class="task-list-item-label" for="task-item-307131"> 播放方式切换</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7021615"><label class="task-list-item-label" for="task-item-7021615"> 喜欢/取消喜欢</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8830330"><label class="task-list-item-label" for="task-item-8830330"> 心动模式/智能模式</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8077424"><label class="task-list-item-label" for="task-item-8077424"> 音乐电台</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-1662296"><label class="task-list-item-label" for="task-item-1662296"> 配置文件</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-8767722"><label class="task-list-item-label" for="task-item-8767722"> 通知功能</label></li>
 </ul>
 ]]></content>
     </entry>
@@ -1176,31 +1330,6 @@ file_put_contents('a.txt', '789');
 </blockquote>
 <h2 id="7-续">7、续...</h2>
 <p><em>后续补充...</em></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[中文手写体Excalidraw]]></title>
-        <id>/post/8QqIK9WTM/</id>
-        <link href="/post/8QqIK9WTM/">
-        </link>
-        <updated>2021-01-23T12:06:00.000Z</updated>
-        <content type="html"><![CDATA[<!-- more -->
-<h2 id="excalidraw">Excalidraw</h2>
-<p>Excalidraw是一个开源的、用于绘制手绘风格草图的项目，GitHub地址为<a href="https://github.com/excalidraw/excalidraw">https://github.com/excalidraw/excalidraw</a>，用它制作的草图效果如下：</p>
-<figure data-type="image" tabindex="1"><img src="/post-images/1617677708342.png" alt="草图" loading="lazy"></figure>
-<p>看起来还不错，但是由于这个项目诞生于国外，所以并不支持中文字体：</p>
-<figure data-type="image" tabindex="2"><img src="/post-images/1617677730364.png" alt="草图2" loading="lazy"></figure>
-<p>几个汉字可以说是格格不入了😂。</p>
-<h2 id="替换字体">替换字体</h2>
-<p>于是，我找了一些免费的手写字体尝试替换进去，最后找到一个效果还不错的——沐瑶随心手写体。</p>
-<figure data-type="image" tabindex="3"><img src="/post-images/1617677746929.png" alt="草图3" loading="lazy"></figure>
-<p>沐瑶随心手写体是完全免费，即使是商用。</p>
-<blockquote>
-<p>沐瑶是作者女儿的名字 WoW<br>
-字体下载地址: <a href="https://www.zcool.com.cn/work/ZMjg5MjAwMDQ=.html">https://www.zcool.com.cn/work/ZMjg5MjAwMDQ=.html</a></p>
-</blockquote>
-<h2 id="使用">使用</h2>
-<p>如果你想要使用的话，可以访问: <a href="https://danlanhai.gitee.io/excalidraw/">https://danlanhai.gitee.io/excalidraw/</a>或<a href="https://anhoder.github.io/excalidraw/">https://anhoder.github.io/excalidraw/</a>。</p>
 ]]></content>
     </entry>
 </feed>
