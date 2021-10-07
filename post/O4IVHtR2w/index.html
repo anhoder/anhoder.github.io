@@ -9,7 +9,7 @@
 <meta name="description" content="一川烟草，满城风絮。">
 <meta name="theme-color" content="#000">
 <title>使用laravel的方式管理imi的路由 | anhoder的进阶日志</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1630858590639">
+<link rel="shortcut icon" href="/favicon.ico?v=1633617384361">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -1521,7 +1521,7 @@ $router-&gt;group(['prefix' =&gt; 'prefix'], function (Route $router) {
   }
 
   let faSearch = document.querySelector('#fa_search');
-  faSearch.addEventListener('click', function () {
+  faSearch && faSearch.addEventListener('click', function () {
     document.querySelector('#search_mask').style = ''
   })
 
@@ -1768,7 +1768,7 @@ $router-&gt;group(['prefix' =&gt; 'prefix'], function (Route $router) {
       });
     }
 
-    rewardBtn.addEventListener('click', (e) => {
+    rewardBtn && rewardBtn.addEventListener('click', (e) => {
       window.Velocity(mask, 'transition.slideDownIn', {
         duration: 400
       })

@@ -9,7 +9,7 @@
 <meta name="description" content="一川烟草，满城风絮。">
 <meta name="theme-color" content="#000">
 <title>Markdown 语法和 MWeb 写作使用说明 | anhoder的进阶日志</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1630858590639">
+<link rel="shortcut icon" href="/favicon.ico?v=1633617384361">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -745,8 +745,8 @@ __这些文字会生成`&lt;strong&gt;`__
 </code></pre>
 <p>效果如下：</p>
 <ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-4224587"> 任务一 未做任务 <label class="task-list-item-label" for="task-item-4224587"> 任务一 未做任务 `- + 空格 + [ ]`</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1519133"> 任务二 已做任务 <label class="task-list-item-label" for="task-item-1519133"> 任务二 已做任务 `- + 空格 + [x]`</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-5309263"> 任务一 未做任务 <label class="task-list-item-label" for="task-item-5309263"> 任务一 未做任务 `- + 空格 + [ ]`</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4748275"> 任务二 已做任务 <label class="task-list-item-label" for="task-item-4748275"> 任务二 已做任务 `- + 空格 + [x]`</label></li>
 </ul>
 <h2 id="图片">图片</h2>
 <p>Markdown 语法：</p>
@@ -1688,7 +1688,7 @@ s-65,47,-65,47z M834 80H400000v40H845z'/></svg></span></span></span><span class=
   }
 
   let faSearch = document.querySelector('#fa_search');
-  faSearch.addEventListener('click', function () {
+  faSearch && faSearch.addEventListener('click', function () {
     document.querySelector('#search_mask').style = ''
   })
 
@@ -1935,7 +1935,7 @@ s-65,47,-65,47z M834 80H400000v40H845z'/></svg></span></span></span><span class=
       });
     }
 
-    rewardBtn.addEventListener('click', (e) => {
+    rewardBtn && rewardBtn.addEventListener('click', (e) => {
       window.Velocity(mask, 'transition.slideDownIn', {
         duration: 400
       })

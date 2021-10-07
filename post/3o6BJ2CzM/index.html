@@ -9,7 +9,7 @@
 <meta name="description" content="一川烟草，满城风絮。">
 <meta name="theme-color" content="#000">
 <title>PHP扩展编写 | anhoder的进阶日志</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1630858590639">
+<link rel="shortcut icon" href="/favicon.ico?v=1633617384361">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -1556,7 +1556,7 @@ Zend Extension Api No:
   }
 
   let faSearch = document.querySelector('#fa_search');
-  faSearch.addEventListener('click', function () {
+  faSearch && faSearch.addEventListener('click', function () {
     document.querySelector('#search_mask').style = ''
   })
 
@@ -1803,7 +1803,7 @@ Zend Extension Api No:
       });
     }
 
-    rewardBtn.addEventListener('click', (e) => {
+    rewardBtn && rewardBtn.addEventListener('click', (e) => {
       window.Velocity(mask, 'transition.slideDownIn', {
         duration: 400
       })

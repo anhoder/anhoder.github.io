@@ -35,6 +35,8 @@
     i()
   };
   let elem = document.getElementById('binft');
-  let o = elem.textContent.split('\\n');
-  binft(elem, o);
+  if (elem) {
+    let o = elem.textContent.split('\\n');
+    binft(elem, o); 
+  }
 }(window, document);
