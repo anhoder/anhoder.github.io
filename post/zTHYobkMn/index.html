@@ -8,7 +8,7 @@
 <meta name="keywords" content="anhoder的进阶日志">
 <meta name="description" content="一川烟草，满城风絮。">
 <meta name="theme-color" content="#000">
-<title>自己写个包——PHP8 Attribute收集器 | anhoder的进阶日志</title>
+<title>编码原则 | anhoder的进阶日志</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1640405642088">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -61,8 +61,8 @@
 </script>
 
 
-  <meta name="description" content="自己写个包——PHP8 Attribute收集器" />
-  <meta name="keywords" content="PHP" />
+  <meta name="description" content="编码原则" />
+  <meta name="keywords" content="其它" />
 </head>
 
 <body>
@@ -306,16 +306,15 @@
     <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E6%B3%A8%E8%A7%A3">注解</a></li>
-<li><a href="#%E6%94%B6%E9%9B%86%E6%B3%A8%E8%A7%A3attribute">收集注解Attribute</a>
+<li>
 <ul>
-<li><a href="#1-%E8%8E%B7%E5%8F%96%E6%89%80%E6%9C%89%E5%8C%85%E7%9A%84%E6%A0%B9%E7%9B%AE%E5%BD%95%E5%8F%8Anamespace">1. 获取所有包的根目录及namespace</a></li>
-<li><a href="#2-%E5%8A%A0%E8%BD%BD%E6%AF%8F%E4%B8%AA%E5%8C%85%E4%B8%8B%E7%9A%84annotationconfig%E7%B1%BB">2. 加载每个包下的AnnotationConfig类</a></li>
-<li><a href="#3-%E8%A7%A3%E6%9E%90-%E6%94%B6%E9%9B%86%E6%B3%A8%E8%A7%A3">3. 解析、收集注解</a></li>
+<li><a href="#1-%E6%8D%A2%E4%BD%8D%E6%80%9D%E8%80%83">1. 换位思考</a></li>
+<li><a href="#2-%E4%B8%8D%E8%A6%81%E8%BF%87%E5%BA%A6%E4%BE%9D%E8%B5%96%E8%B0%83%E8%AF%95%E5%99%A8">2. 不要过度依赖调试器</a></li>
+<li><a href="#3-%E8%80%83%E8%99%91%E4%BB%A3%E7%A0%81%E6%80%A7%E8%83%BD">3. 考虑代码性能</a></li>
+<li><a href="#4-%E5%B0%BD%E9%87%8F%E5%B0%91%E7%9A%84%E4%BB%A3%E7%A0%81">4. 尽量少的代码</a></li>
+<li><a href="#5-%E5%8F%AF%E8%AF%BB%E6%80%A7">5. 可读性</a></li>
 </ul>
 </li>
-<li><a href="#%E5%B0%81%E8%A3%85%E4%B8%BAcomposer%E5%8C%85">封装为composer包</a></li>
-<li><a href="#%E9%99%84">附</a></li>
 </ul>
 </li>
 </ul>
@@ -583,8 +582,8 @@
           <div class="section bg-color post post-page">
             <section class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="/post/dm-3SDHLz/">
-      自己写个包——PHP8 Attribute收集器
+    <a class="post-title-link" href="/post/zTHYobkMn/">
+      编码原则
     </a>
   </h1>
   <div class="post-meta">
@@ -592,7 +591,7 @@
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2021-01-17 20:05:04">2021-01-17</span>
+      <span class="publish-time" data-t="2021-12-25 12:12:01">2021-12-25</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
@@ -601,8 +600,8 @@
       <span class="pc-show language" data-lan="category-in">分类于</span>
       
       
-      <a href="/tag/wKIDH6M-M/">
-        <span>PHP</span>
+      <a href="/tag/Yxu2y8I-l/">
+        <span>其它</span>
       </a>
       
       
@@ -611,205 +610,54 @@
     
     <span class="meta-item">
       <i class="fa fa-clock-o"></i>
-      <span>4<span class="language" data-lan="minute">分钟</span></span>
+      <span>3<span class="language" data-lan="minute">分钟</span></span>
     </span>
     <span class="meta-item">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
-      <span>839<span class="pc-show language" data-lan="words">字数</span></span>
+      <span>700<span class="pc-show language" data-lan="words">字数</span></span>
     </span>
     
   </div>
 </section>
             <div class="post-body next-md-body" id="post_body">
-              <p>PHP8发布已经有一段时间了，新增了不少特性，其中我觉得比较好用的：一个是函数可以指定参数名传参，另外一个就是<strong>注解Attribute</strong>。</p>
-<!-- more -->
-<h2 id="注解">注解</h2>
-<p>在PHP8之前，PHP语法上是不支持注解的，只能通过反射来获取类、方法或属性的注释，然后通过解析注释来获取需要的元数据。最具代表性的就是注解包<a href="https://github.com/doctrine/annotations">doctrine/annotations</a>，很多框架都有在用。</p>
-<p>使用方法：</p>
-<pre><code class="language-php">use Doctrine\Common\Annotations\Annotation\Attribute;
-use Doctrine\Common\Annotations\Annotation\Attributes;
-use Doctrine\Common\Annotations\Annotation\Target;
-
-/**
- * @Annotation
- * @Target(&quot;CLASS&quot;)
- * @Attributes({
- *     @Attribute(&quot;name&quot;, type=&quot;string&quot;, required=true),
- *     @Attribute(&quot;age&quot;, type=&quot;int&quot;)
- * })
- */
-class Student
-{
-    /**
-     * @var string
-     */
-    private $name;
-    
-    /**
-     * @var int
-     */
-    private $age
-}
-
-/**
- * @Student(name=&quot;anhoder&quot;, age=18)
- */
-class Anhoder
-{
-    
-}
-</code></pre>
-<p>而在PHP8中，注解Attribute是这样的：</p>
-<pre><code class="language-php">#[Attribute(Attribute::TARGET_CLASS)]
-class Student
-{
-    public function __construct(private string $name, private int $age)
-    {
-    }
-}
-
-#[Student('anhoder', 18)]
-class Anhoder
-{
-
-}
-</code></pre>
-<h2 id="收集注解attribute">收集注解Attribute</h2>
-<p>PHP8的Attribute数据也需要通过反射来手动获取：</p>
-<pre><code class="language-php">$reflection = new ReflectionClass(Anhoder::class);
-var_dump($reflection-&gt;getAttributes());
-// array(1) {
-//   [0]=&gt;
-//   object(ReflectionAttribute)#3 (0) {
-//   }
-// }
-</code></pre>
-<p>我们可以实现一个Attribute收集器，用于自动收集项目中或其他composer包中的注解信息。</p>
-<h3 id="1-获取所有包的根目录及namespace">1. 获取所有包的根目录及namespace</h3>
-<p>通过composer提供的ClassLoader自动加载类，我们获取到所有包的命名空间及对应的根目录：</p>
-<pre><code class="language-php">// 获取Composer的自动加载类
-function getComposerLoader()
-{
-    $loaders = spl_autoload_functions();
-
-    foreach ($loaders as $loader) {
-        if (is_array($loader) &amp;&amp; isset($loader[0]) &amp;&amp; $loader[0] instanceof ClassLoader) {
-            return $loader[0];
-        }
-    }
-    
-    throw new NotFoundException('Composer class loader');
-}
-
-$composerLoader = getComposerLoader();
-
-// 获取命令空间及目录
-$composerLoader-&gt;getPrefixesPsr4();
-</code></pre>
-<h3 id="2-加载每个包下的annotationconfig类">2. 加载每个包下的AnnotationConfig类</h3>
-<p>我们约定：在每个需要收集注解的包下，都放一个AnnotationConfig类，并实现AnnotationConfigInterface接口。用于获取该包下需要扫描的目录及命名空间。例如：</p>
-<pre><code class="language-php">class AnnotationConfig implements AnnotationConfigInterface
-{
-
-    /**
-     * @inheritDoc
-     */
-    public static function getAnnotationConfigs(): array
-    {
-
-        return [
-            'scanDirs' =&gt; [
-                __NAMESPACE__ =&gt; __DIR__,
-            ],
-        ];
-    }
-}
-</code></pre>
-<p>在以上约定条件下，我们需要遍历第一步获取到的根目录，判断其目录下是否有AnnotationConfig类，若有则调用getAnnotationConfigs方法获取其配置。</p>
-<h3 id="3-解析-收集注解">3. 解析、收集注解</h3>
-<p>最后一步，就是遍历每个目录下的文件及其对应的类，然后通过反射获取到类、方法、属性及常量的注解信息，并将这些信息存入容器数组中。</p>
-<pre><code class="language-php">$namespace = rtrim($namespace, '\\');
-$iterator = new RecursiveDirectoryIterator($dir);
-
-foreach ($iterator as $splFileInfo) {
-    $basename = $splFileInfo-&gt;getBasename();
-    
-    if (!$splFileInfo-&gt;isFile() || $splFileInfo-&gt;getExtension() != 'php') {
-        // not php file
-        continue;
-    }
-
-    // PHP File
-    $className = $splFileInfo-&gt;getBasename('.' . $splFileInfo-&gt;getExtension());
-    $class = &quot;{$namespace}\\{$className}&quot;;
-    if (class_exists($class)) {
-        $reflection = new ReflectionClass($class);
-        $attributes = $reflection-&gt;getAttributes();
-    }
-}
-</code></pre>
-<h2 id="封装为composer包">封装为composer包</h2>
-<p>以上代码都是简单的示例，实际还需要考虑更多，所以我将其做成了一个composer包——<a href="https://github.com/anhoder/annotations-collector">anhoder/annotations-collector</a>。简单的使用：</p>
-<ol>
+              <h3 id="1-换位思考">1. 换位思考</h3>
+<p>维护别人的代码时，应该站在前人角度考虑为什么这么写，而不是立马抱怨这代码有多丑陋、有多垃圾，有可能你在他的情境里不一定做得更好。</p>
+<p>抱怨只会浪费时间与心情，并不能让代码质量变好，我们应该把时间花在思考如何优化这些代码上。</p>
+<blockquote>
+<p>我们总觉得烂代码是烂程序员写的，其实写这些代码的人本身都很正常，只是所在的环境很差。</p>
+</blockquote>
+<h3 id="2-不要过度依赖调试器">2. 不要过度依赖调试器</h3>
+<p>虽然这与我现在的做法相悖（目前我遇到bug几乎都是打开debugger，打上断点然后单步调试，因为它能更快地帮我定位到问题），但我还是觉得很有道理。</p>
+<p>因为如果线上出现问题，在线上接入debugger是不太现实的，所以在调试时，我们应该确保对这些代码逻辑十分熟悉，而不仅仅只是依赖于调试器。</p>
+<p>我们可以遵守<code>20分钟法则</code>，也就是说，首先应该整理自己的思路，并通过查询日志，把程序的运行流程还原出来，如果20分钟还是找不到问题所在，再借助debugger把问题找出来。</p>
+<p>并且找到问题之后，我们应该思考一下<strong>为什么不依赖调试器不能直接找到问题所在，是不是日志信息不够充分</strong>。</p>
+<blockquote>
+<p>调试器除不掉bug，它们只能把出现bug的过程慢速播放一遍，所以我们还是得通过重构来消除bug。</p>
+</blockquote>
+<h3 id="3-考虑代码性能">3. 考虑代码性能</h3>
+<p>编写程序时，在保证代码逻辑正确的情况下，应该充分考虑代码的性能（时间复杂度、空间复杂度等），不能仅仅依赖增加硬件配置来改善速度。</p>
+<blockquote>
+<p>计算机软件业最大的成就是它一直都在把计算机硬件业努力取得的进步给抵消掉。</p>
+</blockquote>
+<h3 id="4-尽量少的代码">4. 尽量少的代码</h3>
+<p>确保代码逻辑正确的情况下，缩减代码。</p>
+<ul>
 <li>
-<p>安装</p>
-<pre><code class="language-sh">composer require anhoder/annotations-collector
-</code></pre>
+<p>代码越多可能出现bug的数量就越多</p>
 </li>
 <li>
-<p>创建 <code>AnnotationConfig.php</code> 文件到你项目的根目录</p>
-<pre><code class="language-php">class AnnotationConfig implements AnnotationConfigInterface
-{
-
-    public static function getAnnotationConfigs(): array
-    {
-        return [
-            // The dirs need to be scanned
-            'scanDirs' =&gt; [
-                __NAMESPACE__ =&gt; __DIR__,
-            ],
-        ];
-    }
-}
-</code></pre>
+<p>更多的代码意味着测试时需要更多的测试用例去覆盖各个代码分支</p>
 </li>
 <li>
-<p>添加Annotation及AnnotationHandler.</p>
-<pre><code class="language-php">// Annotation
-#[Attribute(Attribute::TARGET_CLASS)]
-class ClassAnnotation
-{
-    public const TEST = 'test';
-
-    private string $test;
-
-    public function __construct(string $test)
-    {
-        $this-&gt;test = $test;
-    }
-}
-
-// AnnotationHandler
-#[AnnotationHandler(ClassAnnotation::class)]
-class ClassAnnotationHandler extends AbstractAnnotationHandler
-{
-    public function handle()
-    {
-        // Your logic.
-        var_dump($this);
-    }
-}
-</code></pre>
+<p>代码越多相应的维护难度就越高，毕竟每个人的精力都是有限的</p>
 </li>
-<li>
-<p>开始扫描</p>
-<pre><code class="language-php">AnnotationHelper::scan();
-</code></pre>
-</li>
-</ol>
-<h2 id="附">附</h2>
-<p>由于注解需要配合反射来使用，其相比正常代码性能较差，而且在php-fpm模式下，每次请求都需要重新获取注解信息，所以<strong>不推荐在php-fpm下使用注解</strong>，其<strong>更适合一些常驻内存型的项目</strong>，例如：Swoole、WorkerMan等。</p>
+</ul>
+<blockquote>
+<p>less is more</p>
+</blockquote>
+<h3 id="5-可读性">5. 可读性</h3>
+<p>思考自己的代码水平，并保证自己的代码风格、代码质量保持在团队的平均水平，让团队大多数人能理解你的代码。更高水平的需要保证代码更通俗，较低水平的需要增强自己的代码能力。</p>
 
             </div>
             
@@ -822,7 +670,7 @@ class ClassAnnotationHandler extends AbstractAnnotationHandler
     </li>
     <li class="post-copyright-link">
       <strong class="language" data-lan="link">本文链接：</strong>
-      <a href="/post/dm-3SDHLz/" title="自己写个包——PHP8 Attribute收集器">/post/dm-3SDHLz/</a>
+      <a href="/post/zTHYobkMn/" title="编码原则">/post/zTHYobkMn/</a>
     </li>
     <li class="post-copyright-license">
       <strong class="language" data-lan="copyright">版权声明： </strong>
@@ -831,21 +679,17 @@ class ClassAnnotationHandler extends AbstractAnnotationHandler
   </ul>
   <div class="tags">
     
-      <a href="/tag/wKIDH6M-M/"># PHP</a>
+      <a href="/tag/Yxu2y8I-l/"># 其它</a>
     
   </div>
   <div class="nav">
     <div class="nav-prev">
       
-        <i class="fa fa-chevron-left"></i>
-        <a class="nav-pc-next" title="中文手写体Excalidraw" href="/post/8QqIK9WTM/">中文手写体Excalidraw</a class="nav-pc-next">
-        <a class="nav-mobile-prev" title="中文手写体Excalidraw" href="/post/8QqIK9WTM/">上一篇</a>
-      
     </div>
     <div class="nav-next">
       
-        <a class="nav-pc-next" title="Swoft内存泄漏排查" href="/post/e-qWPg1ij/">Swoft内存泄漏排查</a>
-        <a class="nav-mobile-next" title="Swoft内存泄漏排查" href="/post/e-qWPg1ij/">下一篇</a>
+        <a class="nav-pc-next" title="PHP扩展开发——类" href="/post/AeTXbWbCO/">PHP扩展开发——类</a>
+        <a class="nav-mobile-next" title="PHP扩展开发——类" href="/post/AeTXbWbCO/">下一篇</a>
         <i class="fa fa-chevron-right"></i>
       
     </div>

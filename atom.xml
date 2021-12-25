@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>/</id>
     <title>anhoder的进阶日志</title>
-    <updated>2021-10-07T14:36:28.217Z</updated>
+    <updated>2021-12-25T04:18:50.308Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="/"/>
     <link rel="self" href="/atom.xml"/>
@@ -10,6 +10,51 @@
     <logo>/images/avatar.png</logo>
     <icon>/favicon.ico</icon>
     <rights>All rights reserved 2021, anhoder的进阶日志</rights>
+    <entry>
+        <title type="html"><![CDATA[编码原则]]></title>
+        <id>/post/zTHYobkMn/</id>
+        <link href="/post/zTHYobkMn/">
+        </link>
+        <updated>2021-12-25T04:12:01.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="1-换位思考">1. 换位思考</h3>
+<p>维护别人的代码时，应该站在前人角度考虑为什么这么写，而不是立马抱怨这代码有多丑陋、有多垃圾，有可能你在他的情境里不一定做得更好。</p>
+<p>抱怨只会浪费时间与心情，并不能让代码质量变好，我们应该把时间花在思考如何优化这些代码上。</p>
+<blockquote>
+<p>我们总觉得烂代码是烂程序员写的，其实写这些代码的人本身都很正常，只是所在的环境很差。</p>
+</blockquote>
+<h3 id="2-不要过度依赖调试器">2. 不要过度依赖调试器</h3>
+<p>虽然这与我现在的做法相悖（目前我遇到bug几乎都是打开debugger，打上断点然后单步调试，因为它能更快地帮我定位到问题），但我还是觉得很有道理。</p>
+<p>因为如果线上出现问题，在线上接入debugger是不太现实的，所以在调试时，我们应该确保对这些代码逻辑十分熟悉，而不仅仅只是依赖于调试器。</p>
+<p>我们可以遵守<code>20分钟法则</code>，也就是说，首先应该整理自己的思路，并通过查询日志，把程序的运行流程还原出来，如果20分钟还是找不到问题所在，再借助debugger把问题找出来。</p>
+<p>并且找到问题之后，我们应该思考一下<strong>为什么不依赖调试器不能直接找到问题所在，是不是日志信息不够充分</strong>。</p>
+<blockquote>
+<p>调试器除不掉bug，它们只能把出现bug的过程慢速播放一遍，所以我们还是得通过重构来消除bug。</p>
+</blockquote>
+<h3 id="3-考虑代码性能">3. 考虑代码性能</h3>
+<p>编写程序时，在保证代码逻辑正确的情况下，应该充分考虑代码的性能（时间复杂度、空间复杂度等），不能仅仅依赖增加硬件配置来改善速度。</p>
+<blockquote>
+<p>计算机软件业最大的成就是它一直都在把计算机硬件业努力取得的进步给抵消掉。</p>
+</blockquote>
+<h3 id="4-尽量少的代码">4. 尽量少的代码</h3>
+<p>确保代码逻辑正确的情况下，缩减代码。</p>
+<ul>
+<li>
+<p>代码越多可能出现bug的数量就越多</p>
+</li>
+<li>
+<p>更多的代码意味着测试时需要更多的测试用例去覆盖各个代码分支</p>
+</li>
+<li>
+<p>代码越多相应的维护难度就越高，毕竟每个人的精力都是有限的</p>
+</li>
+</ul>
+<blockquote>
+<p>less is more</p>
+</blockquote>
+<h3 id="5-可读性">5. 可读性</h3>
+<p>思考自己的代码水平，并保证自己的代码风格、代码质量保持在团队的平均水平，让团队大多数人能理解你的代码。更高水平的需要保证代码更通俗，较低水平的需要增强自己的代码能力。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[PHP扩展开发——类]]></title>
         <id>/post/AeTXbWbCO/</id>
@@ -1109,33 +1154,33 @@ func test(c &lt;-chan string) {
 </table>
 <h2 id="todo">TODO</h2>
 <ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7116361"><label class="task-list-item-label" for="task-item-7116361"> 我的歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-151226"><label class="task-list-item-label" for="task-item-151226"> 每日推荐歌曲</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1169155"><label class="task-list-item-label" for="task-item-1169155"> 每日推荐歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3300317"><label class="task-list-item-label" for="task-item-3300317"> 私人FM</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3587709"><label class="task-list-item-label" for="task-item-3587709"> 歌词显示</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-635494"><label class="task-list-item-label" for="task-item-635494"> 欢迎界面</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-442091"><label class="task-list-item-label" for="task-item-442091"> 搜索</label>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6305889"><label class="task-list-item-label" for="task-item-6305889"> 我的歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9587384"><label class="task-list-item-label" for="task-item-9587384"> 每日推荐歌曲</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5370772"><label class="task-list-item-label" for="task-item-5370772"> 每日推荐歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9764477"><label class="task-list-item-label" for="task-item-9764477"> 私人FM</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6019587"><label class="task-list-item-label" for="task-item-6019587"> 歌词显示</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-165212"><label class="task-list-item-label" for="task-item-165212"> 欢迎界面</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-776526"><label class="task-list-item-label" for="task-item-776526"> 搜索</label>
 <ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7370641"><label class="task-list-item-label" for="task-item-7370641"> 按歌曲</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5796624"><label class="task-list-item-label" for="task-item-5796624"> 按歌手</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-391247"><label class="task-list-item-label" for="task-item-391247"> 按歌词</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7166359"><label class="task-list-item-label" for="task-item-7166359"> 按歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-9220810"><label class="task-list-item-label" for="task-item-9220810"> 按专辑</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4501476"><label class="task-list-item-label" for="task-item-4501476"> 按用户</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4033926"><label class="task-list-item-label" for="task-item-4033926"> 按歌曲</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4041768"><label class="task-list-item-label" for="task-item-4041768"> 按歌手</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5736241"><label class="task-list-item-label" for="task-item-5736241"> 按歌词</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6601854"><label class="task-list-item-label" for="task-item-6601854"> 按歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5563139"><label class="task-list-item-label" for="task-item-5563139"> 按专辑</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6870812"><label class="task-list-item-label" for="task-item-6870812"> 按用户</label></li>
 </ul>
 </li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-7659855"><label class="task-list-item-label" for="task-item-7659855"> 排行榜</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5281564"><label class="task-list-item-label" for="task-item-5281564"> 精选歌单</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-8004136"><label class="task-list-item-label" for="task-item-8004136"> 最新专辑</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1758126"><label class="task-list-item-label" for="task-item-1758126"> 热门歌手</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5811753"><label class="task-list-item-label" for="task-item-5811753"> 云盘</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3835658"><label class="task-list-item-label" for="task-item-3835658"> 播放方式切换</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-1404129"><label class="task-list-item-label" for="task-item-1404129"> 喜欢/取消喜欢</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3348780"><label class="task-list-item-label" for="task-item-3348780"> 心动模式/智能模式</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3684"><label class="task-list-item-label" for="task-item-3684"> 音乐电台</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-3851096"><label class="task-list-item-label" for="task-item-3851096"> 配置文件</label></li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-4251453"><label class="task-list-item-label" for="task-item-4251453"> 通知功能</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4804249"><label class="task-list-item-label" for="task-item-4804249"> 排行榜</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-5820611"><label class="task-list-item-label" for="task-item-5820611"> 精选歌单</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-2381293"><label class="task-list-item-label" for="task-item-2381293"> 最新专辑</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6382509"><label class="task-list-item-label" for="task-item-6382509"> 热门歌手</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-559473"><label class="task-list-item-label" for="task-item-559473"> 云盘</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4346373"><label class="task-list-item-label" for="task-item-4346373"> 播放方式切换</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-3971769"><label class="task-list-item-label" for="task-item-3971769"> 喜欢/取消喜欢</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-4991467"><label class="task-list-item-label" for="task-item-4991467"> 心动模式/智能模式</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox" id="task-item-6433356"><label class="task-list-item-label" for="task-item-6433356"> 音乐电台</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-1488671"><label class="task-list-item-label" for="task-item-1488671"> 配置文件</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox" id="task-item-5224567"><label class="task-list-item-label" for="task-item-5224567"> 通知功能</label></li>
 </ul>
 ]]></content>
     </entry>
@@ -1188,148 +1233,6 @@ func test(c &lt;-chan string) {
 <li>hash-decode</li>
 <li>hash解码</li>
 </ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[PHP中一些好用的技巧]]></title>
-        <id>/post/O933qcq8E/</id>
-        <link href="/post/O933qcq8E/">
-        </link>
-        <updated>2021-02-28T12:06:47.000Z</updated>
-        <summary type="html"><![CDATA[<p>这里主要介绍一些我知道的PHP的使用技巧。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>这里主要介绍一些我知道的PHP的使用技巧。</p>
-<!-- more -->
-<h2 id="1-php内置的web-server">1、PHP内置的Web Server</h2>
-<p>首先，有个问题：</p>
-<blockquote>
-<p>如果你需要快速启动一个HTTP服务来调试PHP代码，你会怎么做？</p>
-</blockquote>
-<p><em>启动php-fpm或php-cgi进程监听9000端口，然后使用Nginx将Http请求通过FastCGI接口转发给php-fpm或php-cgi进程？</em></p>
-<p>这不失为一种方法，但是并不算方便。</p>
-<p>其实，PHP 5.4.0后就提供了一个内置的Web服务器，你可以执行这个命令来启动它:</p>
-<pre><code class="language-sh">php -S 127.0.0.1:8080 a.php
-</code></pre>
-<p>然后就通过 http://127.0.0.1:8080 来进行访问了。</p>
-<h2 id="2-执行php代码时生成debug信息">2、执行PHP代码时生成debug信息</h2>
-<blockquote>
-<p>在执行PHP代码时，你会用什么方法进行调试？</p>
-</blockquote>
-<p><em>var_dump、print_r直接输出？</em></p>
-<p>除了直接输出，你还可以使用debug模式配合IDE来进行调试。在执行PHP代码时，加上<code>-e</code>参数，同时IDE开启debug监听（需要安装xdebug或yasd等调试类扩展，推荐yasd，它可以调试swoole协程）:</p>
-<pre><code class="language-sh">php -e a.php
-
-php -e artisan test:test
-</code></pre>
-<p>这样你就可以使用IDE的debug功能来调试你的PHP命令了。除此之外，还可以配合PHP的内置Web服务器一起使用：</p>
-<pre><code class="language-sh">php -e -S 127.0.0.1:8080 a.php
-</code></pre>
-<h2 id="3-数组迭代">3、数组迭代</h2>
-<blockquote>
-<p>需要获取这个数组所有层级的子元素，你会怎么做？</p>
-<pre><code class="language-php">$arr = [
-  'key1' =&gt; 'value1',
-  'key2' =&gt; [
-      'key3' =&gt; 'value2',
-      'key4' =&gt; [
-          'value3',
-          'value4',
-      ]
-  ],
-  'key5' =&gt; 'value5'
-];
-</code></pre>
-</blockquote>
-<p><em>使用递归？</em></p>
-<p>没错，可以使用递归。你也可以选择另外一种方式：</p>
-<pre><code class="language-php">$arr = [
-    'key1' =&gt; 'value1',
-    'key2' =&gt; [
-        'key3' =&gt; 'value2',
-        'key4' =&gt; [
-            'value3',
-            'value4',
-        ]
-    ],
-    'key5' =&gt; 'value5'
-];
-
-$it = new RecursiveArrayIterator($arr);
-$recursiveIt = new RecursiveIteratorIterator($it);
-foreach ($recursiveIt as $v) {
-    var_dump($v);
-}
-</code></pre>
-<h2 id="4-目录迭代">4、目录迭代</h2>
-<blockquote>
-<p>需要获取一个目录下所有层级的所有文件，你会怎么做？</p>
-</blockquote>
-<p><em>这样使用dir迭代？</em></p>
-<pre><code class="language-php">function test($dir) {
-    $dirHandle = dir($dir);
-    while ($item = $dirHandle-&gt;read()) {
-        if ($item == '.' || $item == '..') continue;
-        $path = &quot;{$dir}/{$item}&quot;;
-        if (is_dir($path)) {
-            test($path);
-        } else {
-            var_dump($item);
-        }
-    }
-}
-</code></pre>
-<p>你还可以用更简单的方法，同样也是PHP内置的迭代器:</p>
-<pre><code class="language-php">$it = new RecursiveDirectoryIterator('./');
-$reIt = new RecursiveIteratorIterator($it);
-
-foreach ($reIt as $value) {
-    var_dump($value);
-}
-</code></pre>
-<h2 id="5-访问对象的私有属性">5、访问对象的私有属性</h2>
-<blockquote>
-<p>在使用一个库的对象时，想要访问该对象的私有属性，你会怎么做？</p>
-</blockquote>
-<p><em>?</em></p>
-<p>可以使用<code>Closure</code>类的静态方法<code>bind</code>或非静态方法<code>bindTo</code>将函数绑定到该类的作用域下：</p>
-<pre><code class="language-php">class A {
-    private $name = 'The name of A';
-}
-
-$a = new A();
-
-// 方法一
-$closure = Closure::bind(function () use ($a) {
-    var_dump($a-&gt;name);
-}, null, A::class);
-
-// 方法二，通过this访问
-//$closure = Closure::bind(function () {
-//    var_dump($this-&gt;name);
-//}, $a, A::class);
-
-$closure();
-</code></pre>
-<h2 id="6-fastcgi_request_finish">6、fastcgi_request_finish</h2>
-<p>fastcgi_request_finish函数是PHP提供的在CGI模式下可用的方法。</p>
-<p>调用此方法会将响应数据立即发送给用户，但不中断后续代码执行。例如：</p>
-<pre><code class="language-php">echo 123;
-echo 456;
-
-fastcgi_finish_request(); // 此时将响应发送给用户
-
-echo 789;
-
-file_put_contents('a.txt', '789');
-</code></pre>
-<p>以上代码在CGI模式下执行，你会得到123456的响应数据，并且会生成a.txt文件，内容为789。</p>
-<p>这个方法的主要用途就是跳过与响应无关的数据处理，提前返回数据给客户端，提高用户体验。</p>
-<blockquote>
-<p>仅在CGI模式下可用，其他模式下会报方法不存在的错误</p>
-<p>Laravel中Response的send方法也是用到了这个函数</p>
-</blockquote>
-<h2 id="7-续">7、续...</h2>
-<p><em>后续补充...</em></p>
 ]]></content>
     </entry>
 </feed>
