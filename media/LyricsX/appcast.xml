@@ -5,6 +5,20 @@
 		<description>Most recent changes with links to updates.</description>
 		<language>en</language>
 		<item>
+			<title>1.6.4</title>
+			<description><![CDATA[<ul>
+  <li>Update for go-msucifox!</li>
+</ul>
+]]></description>
+			<pubDate>Fri, 29 Apr 2022 11:27:18 +0000</pubDate><enclosure
+				url="https://github.com/go-musicfox/LyricsX/releases/download/v1.6.4/LyricsX_1.6.4.zip"
+				sparkle:version="2385"
+				sparkle:shortVersionString="1.6.4"
+				length="13528017"
+				type="application/octet-stream"
+			/>
+		</item>
+		<item>
 			<title>1.6.3</title>
 			<description><![CDATA[<ul>
   <li>Fix NetEase lyrics source (#527). Thanks to @hguandl !</li>
