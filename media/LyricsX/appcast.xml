@@ -1,0 +1,646 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+	<channel>
+		<title>LyricsX</title>
+		<description>Most recent changes with links to updates.</description>
+		<language>en</language>
+		<item>
+			<title>1.6.3</title>
+			<description><![CDATA[<ul>
+  <li>Fix NetEase lyrics source (#527). Thanks to @hguandl !</li>
+</ul>
+]]></description>
+			<pubDate>Fri, 29 Apr 2022 11:27:18 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.6.3/LyricsX_1.6.3%2B2351.zip"
+				sparkle:version="2351"
+				sparkle:shortVersionString="1.6.3"
+				length="15169874"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.6.1</title>
+			<description><![CDATA[<ul>
+  <li>Add Indonesian, Italian and Dutch support. Thanks to Muhammad Fauzi, cencio1952, Zara Drechsler and everyone participated in the translation!</li>
+  <li>Lyrics filter with regex now works as expected. (#468)</li>
+  <li>Fix a bug where LyricsX failed to read local lyrics with “:” or “/” in the file name.</li>
+  <li>Fix layout issue of karaoke lyrics. (#477)</li>
+</ul>
+]]></description>
+			<pubDate>Mon, 31 May 2021 10:52:44 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.6.1/LyricsX_1.6.1%2B2341.zip"
+				sparkle:version="2341"
+				sparkle:shortVersionString="1.6.1"
+				length="15279607"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.6.0</title>
+			<description><![CDATA[<ul>
+  <li>New icon.</li>
+  <li>LyricsX is now a universal app.</li>
+</ul>
+]]></description>
+			<pubDate>Thu, 14 Jan 2021 05:54:26 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.6.0/LyricsX_1.6.0%2B2334.zip"
+				sparkle:version="2334"
+				sparkle:shortVersionString="1.6.0"
+				length="19151991"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.5.6</title>
+			<description><![CDATA[<p>Bug fix.</p>
+]]></description>
+			<pubDate>Sun, 04 Oct 2020 18:29:01 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.5.6/LyricsX_1.5.6%2B2322.zip"
+				sparkle:version="2322"
+				sparkle:shortVersionString="1.5.6"
+				length="13704688"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.5.5</title>
+			<description><![CDATA[<ul>
+  <li>Add Russian and Ukrainian support. Thanks to Yurii Kotov!</li>
+  <li>Fix an bug that LyricsX does not auto quit with music player. (#344)</li>
+  <li>Fix an issue where furigana is not colored correctly on macOS 10.14. (#409)</li>
+</ul>
+]]></description>
+			<pubDate>Sat, 03 Oct 2020 13:12:51 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.5.5/LyricsX_1.5.5%2B2309.zip"
+				sparkle:version="2309"
+				sparkle:shortVersionString="1.5.5"
+				length="13706298"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.5.4</title>
+			<description><![CDATA[<ul>
+  <li>Add Portuguese and Korean support. Thanks to Leo Caseiro, pb29 and everyone participated in the translation!</li>
+  <li>Fix an issue that LyricsX prevent Apple Music from quitting on macOS 10.15.</li>
+</ul>
+]]></description>
+			<pubDate>Fri, 29 May 2020 04:26:44 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.5.4/LyricsX_1.5.4%2B2276.zip"
+				sparkle:version="2276"
+				sparkle:shortVersionString="1.5.4"
+				length="13481022"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.5.3</title>
+			<description><![CDATA[<ul>
+  <li>Add Spanish and Arabic support. Thanks to David M.C., Bilal Faour and everyone participated in the translation!</li>
+  <li>Fix a bug where Apple Music stream is not recognized.</li>
+  <li>Fix a crash when using Audirvana.</li>
+  <li>Fix a bug where lyrics does not write to iTunes automatically.</li>
+</ul>
+]]></description>
+			<pubDate>Thu, 30 Apr 2020 06:30:56 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.5.3/LyricsX_1.5.3%2B2273.zip"
+				sparkle:version="2273"
+				sparkle:shortVersionString="1.5.3"
+				length="13460023"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.5.2</title>
+			<description><![CDATA[<ul>
+  <li>Support Swinsian and system-wide now playing application.</li>
+  <li>Add French and Traditional Chinese support. Thanks to loliboso, OPKW, Jean-Sébastien Trudel, Maya dos Santos, alex00134, Chris Lombardo, Fu and everyone participated in the translation!</li>
+  <li>Bug fix and stability improvement.</li>
+</ul>
+
+<p>To use system now playing application, enable <code class="language-plaintext highlighter-rouge">Preferences</code> -&gt; <code class="language-plaintext highlighter-rouge">Lab</code> -&gt; <code class="language-plaintext highlighter-rouge">Use system wide now playing application</code> and select “Auto” for preferred music player.</p>
+]]></description>
+			<pubDate>Wed, 18 Mar 2020 05:54:22 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.5.2/LyricsX_1.5.2%2B2271.zip"
+				sparkle:version="2271"
+				sparkle:shortVersionString="1.5.2"
+				length="13487808"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.5.1</title>
+			<description><![CDATA[<h2 id="new">New</h2>
+
+<ul>
+  <li>Add German support. (Thanks to <a href="https://crowdin.com/profile/kontakt.timania">timaniaTM</a>)</li>
+  <li>Add Persian support. (Thanks to <a href="https://crowdin.com/profile/devmark88">Mark Karamyar</a>)</li>
+</ul>
+
+<h2 id="fixed">Fixed</h2>
+
+<ul>
+  <li>Fixed launch with Music app does not work. (#285)</li>
+  <li>Fixed automatic writing to iTunes does not work. (#283, #295)</li>
+  <li>Auto Chinese conversion now works as expected. (#278, #290)</li>
+</ul>
+]]></description>
+			<pubDate>Mon, 16 Sep 2019 07:18:33 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.5.1/LyricsX_1.5.1%2B2158.zip"
+				sparkle:version="2158"
+				sparkle:shortVersionString="1.5.1"
+				length="13341399"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.5.0</title>
+			<description><![CDATA[<h2 id="new">New</h2>
+
+<ul>
+  <li>Support Music in macOS 10.15 (#280) and Audirvana 3.5 (#267).</li>
+  <li>Add Polish support. (Thanks to <a href="https://crowdin.com/profile/senseitbk">@senseitbk</a>)</li>
+</ul>
+
+<h2 id="fixed">Fixed</h2>
+
+<ul>
+  <li>Fixed Touch Bar lyrics disappear as the app activate. (#227)</li>
+</ul>
+]]></description>
+			<pubDate>Fri, 28 Jun 2019 04:02:17 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.5.0/LyricsX_1.5.0%2B2139.zip"
+				sparkle:version="2139"
+				sparkle:shortVersionString="1.5.0"
+				length="13289202"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.4.6</title>
+			<description><![CDATA[<p>bug fix</p>
+]]></description>
+			<pubDate>Sun, 12 May 2019 09:02:59 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.4.6/LyricsX_1.4.6%2B2122.zip"
+				sparkle:version="2122"
+				sparkle:shortVersionString="1.4.6"
+				length="13284714"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.4.5</title>
+			<description><![CDATA[<h2 id="new">New</h2>
+
+<ul>
+  <li>You can customize TouchBar lyrics. (#208)</li>
+  <li>Introducing strict search. (#221)</li>
+</ul>
+
+<h2 id="improved">Improved</h2>
+
+<ul>
+  <li>Karaoke lyrics won’t exceed edge of the screen. (#196, #215)</li>
+  <li>Only perform Chinese conversion for Chinese sentences. (#225)</li>
+</ul>
+]]></description>
+			<pubDate>Sat, 09 Feb 2019 04:13:10 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.4.5/LyricsX_1.4.5_2076.zip"
+				sparkle:version="1.4.5"
+				sparkle:shortVersionString="1.4.5"
+				length="14076403"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.4.4</title>
+			<description><![CDATA[<p>bug fixes.</p>
+]]></description>
+			<pubDate>Thu, 20 Dec 2018 07:21:12 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.4.4/LyricsX_1.4.4%2B1986.zip"
+				sparkle:version="1986"
+				sparkle:shortVersionString="1.4.4"
+				length="12356603"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.4.3</title>
+			<description><![CDATA[<h2 id="new">New</h2>
+
+<ul>
+  <li>LyricsX now speaks Japanese. Thanks to @hououinkami.</li>
+</ul>
+
+<h2 id="fixed">Fixed</h2>
+
+<ul>
+  <li>Fixed a crash when adding lyrics filter. (#202)</li>
+  <li>Fixed an issue where selected search result or imported lyrics does not persist. (#203)</li>
+</ul>
+]]></description>
+			<pubDate>Mon, 10 Dec 2018 12:23:33 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.4.3/LyricsX_1.4.3%2B1974.zip"
+				sparkle:version="1974"
+				sparkle:shortVersionString="1.4.3"
+				length="12354747"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.4.2</title>
+			<description><![CDATA[<h2 id="new">New</h2>
+
+<ul>
+  <li>The app is now notarized by Apple.</li>
+  <li>You can drag karaoke lyrics window cross screen.</li>
+  <li>Support iTunes music video. (#166)</li>
+  <li>Add menu item for showing current lyrics in finder.</li>
+</ul>
+
+<h2 id="improved">Improved</h2>
+
+<ul>
+  <li>Optimized for dark mode.</li>
+  <li>Trim leading and trailing Furigana on kanas for Japanese lyrics. (#183)</li>
+</ul>
+
+<h2 id="fixed">Fixed</h2>
+
+<ul>
+  <li>Fixed a bug that Touch Bar doesn’t work on macOS 10.14. (#185)</li>
+  <li>Fixed a crash at launch affecting users on macOS 10.12.2 and earlier. (#177)</li>
+</ul>
+]]></description>
+			<pubDate>Wed, 10 Oct 2018 10:52:50 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.4.2/LyricsX_1.4.2%2B1946.zip"
+				sparkle:version="1946"
+				sparkle:shortVersionString="1.4.2"
+				length="12331123"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.4.1</title>
+			<description><![CDATA[<p><strong>由于无法通过审核，此版本不会在 Mac App Store 发布。</strong>
+<strong>This version won’t be on the Mac App Store. Apple doesn’t approve it.</strong></p>
+
+<h2 id="new">New</h2>
+
+<ul>
+  <li>Add support for Touch Bar lyrics. (#33)</li>
+  <li>Add global lyrics offset. (#146, #168)</li>
+  <li>Automatically generate furigana for Japanese lyrics.</li>
+  <li>Add vertical mode for karaoke lyrics.</li>
+  <li>New shortcut for lyrics display. (#117)</li>
+</ul>
+
+<h2 id="improved">Improved</h2>
+
+<ul>
+  <li>Adjusting lyrics offset no longer triggers an instant disk writing.</li>
+  <li>You can set progress color and shadow color separately. (#155)</li>
+  <li>You can double click search result to apply it. (#162)</li>
+  <li>You can easily open lyrics saving directory in finder.</li>
+</ul>
+
+<h2 id="fixed">Fixed</h2>
+
+<ul>
+  <li>Fix a crash when searching for specific songs. (#163)</li>
+</ul>
+]]></description>
+			<pubDate>Tue, 11 Sep 2018 11:02:16 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.4.1/LyricsX_1.4.1%2B1846.zip"
+				sparkle:version="1846"
+				sparkle:shortVersionString="1.4.1"
+				length="18171034"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.3.1</title>
+			<description><![CDATA[<p>Bug fixes.</p>
+]]></description>
+			<pubDate>Wed, 02 May 2018 05:04:56 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.3.1/LyricsX.app.zip"
+				sparkle:version="1.3.1"
+				sparkle:shortVersionString="1.3.1"
+				length="11799098"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.3.0</title>
+			<description><![CDATA[<h2 id="new">New</h2>
+
+<ul>
+  <li>Karaoke lyrics now features word time tag like a real karaoke machine.</li>
+  <li>Introduce new lyrics file format - LRCX.</li>
+  <li>Support Audirvana Plus. (#109)</li>
+  <li>Support font fallback for karaoke lyrics. Previous selected font is used as font fallback. (#62)</li>
+</ul>
+
+<h2 id="improved">Improved</h2>
+
+<ul>
+  <li>Reduced CPU usage.</li>
+  <li>Redesigned lyrics filter, support regular expression.</li>
+  <li>Disable Chinese translation for non-Chinese user.</li>
+  <li>Focus on search window when click “Search Lyrics…”. (#94)</li>
+  <li>Perform Chinese conversion before write to iTunes. (#77)</li>
+</ul>
+
+<h2 id="fixed">Fixed</h2>
+
+<ul>
+  <li>Fixed a critical crash caused by incompatible version of Xcode. (#120, #123)</li>
+  <li>Fixed a bug that Chinese conversion doesn’t work properly. (#125)</li>
+</ul>
+]]></description>
+			<pubDate>Sat, 21 Apr 2018 05:13:21 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.3.0/LyricsX.app.zip"
+				sparkle:version="1.3.0"
+				sparkle:shortVersionString="1.3.0"
+				length="11808820"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.2.3</title>
+			<description><![CDATA[<h2 id="new">New</h2>
+
+<ul>
+  <li>You can customize font and color of lyrics window. (#107)</li>
+</ul>
+
+<h2 id="improved">Improved</h2>
+
+<ul>
+  <li>Improved lyrics search accuracy.</li>
+</ul>
+
+<h2 id="fixed">Fixed</h2>
+
+<ul>
+  <li>Fixed an issue that menubar lyrics don’t disappear after clicking on wrong lyrics. (#122)</li>
+  <li>Fixed a crash when custom font is not existing. (#121)</li>
+</ul>
+]]></description>
+			<pubDate>Fri, 08 Dec 2017 01:10:48 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.2.3/LyricsX.app.zip"
+				sparkle:version="1.2.3"
+				sparkle:shortVersionString="1.2.3"
+				length="11622216"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.2.2</title>
+			<description><![CDATA[<p>You can get sandboxed version on the <a href="https://itunes.apple.com/cn/app/lyricsx/id1254743014?mt=12">Mac App Store</a>, or download non-sandboxed version below. There is no functional difference between the two version for the moment.</p>
+
+<h2 id="new">New</h2>
+
+<ul>
+  <li>Fetch lyrics translation from QQ Music, Kugou Music, and Xiami Music.</li>
+</ul>
+
+<h2 id="improved">Improved</h2>
+
+<ul>
+  <li><strong>Reduced CPU usage.</strong></li>
+  <li>Change karaoke lyrics screenshot visibility will not require restart application.</li>
+</ul>
+
+<h2 id="fixed">Fixed</h2>
+
+<ul>
+  <li>Stop searching lyrics for stream. (#95)</li>
+  <li>Fixed a bug that combined menu bar lyrics always truncated to “…”.</li>
+  <li>Fixed a crash while selecting font and preferences window was already close.</li>
+  <li>Fixed an issue that program unexpected prevent iTunes from exiting when “Automatically write lyrics to iTunes” was switched on. (#99)</li>
+  <li>You can scroll lyrics window using scroll wheel. (#104)</li>
+  <li>Fixed a bug that lyrics which contains unicode combining characters was wrongly highlighted.</li>
+  <li>Start with iTunes when iTunes was launched as login item. (#96)</li>
+</ul>
+]]></description>
+			<pubDate>Wed, 22 Nov 2017 04:40:36 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.2.2/LyricsX.app.zip"
+				sparkle:version="1.2.2"
+				sparkle:shortVersionString="1.2.2"
+				length="11629739"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.2.1</title>
+			<description><![CDATA[<h1 id="lyricsx-is-now-available-on-the-mac-app-store">LyricsX is now available on the Mac App Store!</h1>
+
+<p><a href="https://itunes.apple.com/cn/app/lyricsx/id1254743014?mt=12"><img src="https://github.com/ddddxxx/LyricsX/raw/dev/docs/img/MAS_badge.svg?sanitize=true" alt="download on the Mac App Store" /></a></p>
+
+<p><del>The direct download links are dropped from GitHub. Please install from Mac App Store.</del></p>
+
+<h2 id="new">New</h2>
+
+<ul>
+  <li>New designed status bar icon.</li>
+  <li>You can hide karaoke lyrics when mouse passing by. (activated by default)</li>
+  <li>Add a new global shortcut for searching lyrics.</li>
+  <li><code class="language-plaintext highlighter-rouge">load lyrics beside music file</code> now works with iTunes. (#66)</li>
+</ul>
+
+<h2 id="improved">Improved</h2>
+
+<ul>
+  <li>LyricsX won’t search lyrics for non-music content. (#86)</li>
+  <li>Lyrics will be formatted when writing to iTunes. (#79)</li>
+</ul>
+
+<h2 id="fixed">Fixed</h2>
+
+<ul>
+  <li>Lyrics file now is saved with the correct name. (#90)</li>
+</ul>
+]]></description>
+			<pubDate>Sun, 03 Sep 2017 05:13:09 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.2.1/LyricsX.app.zip"
+				sparkle:version="1.2.1"
+				sparkle:shortVersionString="1.2.1"
+				length="9619691"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.2.0</title>
+			<description><![CDATA[<h1 id="lyricsx-for-ios">LyricsX for iOS</h1>
+
+<p>LyricsX for iOS is in beta stage.</p>
+
+<p>Fill in <a href="https://goo.gl/forms/yblfWFbsDZDkYqU53">this form</a> for TestFlight invitation, and join the <a href="https://telegram.me/LyricsXTestFlight">Telegram group</a>.</p>
+
+<h2 id="new">New</h2>
+
+<ul>
+  <li>New global shortcut! (#2)</li>
+  <li>LyricsX now can load lyrics beside current track. (only for Vox) (#66)</li>
+</ul>
+
+<h2 id="improved">Improved</h2>
+
+<ul>
+  <li>Improved animation for karaoke lyrics.</li>
+  <li>Reduced network usage.</li>
+</ul>
+
+<h2 id="fixed">Fixed</h2>
+
+<ul>
+  <li>Fixed a crash when searching lyrics.</li>
+  <li>Combined menubar lyrics now works as expected.</li>
+  <li>Fixed an issue about marking wrong lyrics. (#70)</li>
+</ul>
+
+<hr />
+<p>Note: LyricsX now requires macOS 10.11 or above.</p>
+]]></description>
+			<pubDate>Sat, 02 Sep 2017 06:55:59 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.2.0/LyricsX.app.zip"
+				sparkle:version="1.2.0"
+				sparkle:shortVersionString="1.2.0"
+				length="9396064"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.1.4</title>
+			<description><![CDATA[<h2 id="new">New</h2>
+
+<ul>
+  <li>LyricsX Lab - try our new experimental feature!
+    <ul>
+      <li>Automatically Write lyrics to iTunes. (#48)</li>
+      <li>Lyrics source priority. (#53)</li>
+    </ul>
+  </li>
+  <li>Added one line mode for karaoke lyrics. (#37)</li>
+</ul>
+
+<h2 id="improved">Improved</h2>
+
+<ul>
+  <li>Improved performance when locating lyrics line.</li>
+</ul>
+
+<h2 id="fixed">Fixed</h2>
+
+<ul>
+  <li>Fixed auto launch issue. (#47, #55)</li>
+  <li>Fixed an issue that karaoke lyrics always shows on program start. (#56)</li>
+  <li>Fixed an issue that lyrics window stuck when status menu shows.</li>
+  <li>LyricsX now can search lyrics for songs which have no album and artist. (#49)</li>
+</ul>
+]]></description>
+			<pubDate>Fri, 23 Jun 2017 02:59:42 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.1.4/LyricsX.app.zip"
+				sparkle:version="1.1.4"
+				sparkle:shortVersionString="1.1.4"
+				length="8886715"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.1.3</title>
+			<description><![CDATA[<h2 id="new">New</h2>
+
+<ul>
+  <li>You can mark wrong lyrics and never search again. (#24)</li>
+  <li>Karaoke lyrics window can be placed anywhere. (#37)</li>
+  <li>You can write lyrics to iTunes manually. (#48)</li>
+</ul>
+
+<h2 id="improved">Improved</h2>
+
+<ul>
+  <li>Reduced CPU usage when no music played. (#44)</li>
+</ul>
+
+<h2 id="fixed">Fixed</h2>
+
+<ul>
+  <li>Fixed a issue that helper application requires higher system version than main application. (#50)</li>
+  <li>Fixed a crash that could occur when playing track without metadata. (#49)</li>
+  <li>Fixed custom lyrics saving path accessing issue. (#43)</li>
+</ul>
+]]></description>
+			<pubDate>Wed, 24 May 2017 03:02:25 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.1.3/LyricsX.app.zip"
+				sparkle:version="1.1.3"
+				sparkle:shortVersionString="1.1.3"
+				length="8788848"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.1.2</title>
+			<description><![CDATA[<h2 id="features">Features</h2>
+
+<ul>
+  <li>#26 Support macOS 10.10+.</li>
+  <li>#36 Separate menubar icon and lyrics.</li>
+  <li>check for update automatically.</li>
+</ul>
+
+<h2 id="fixes">Fixes</h2>
+
+<ul>
+  <li>#25 LyricsX crash while player is stopped.</li>
+  <li>#35 Disable translation in lyrics window when <code class="language-plaintext highlighter-rouge">prefer bilingual lyrics</code> is off.</li>
+  <li>#12 Search url unsafe characters failed.</li>
+  <li>Surprising search result sorting.</li>
+</ul>
+]]></description>
+			<pubDate>Fri, 05 May 2017 05:45:56 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.1.2/LyricsX.app.zip"
+				sparkle:version="1.1.2"
+				sparkle:shortVersionString="1.1.2"
+				length="8736886"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.1.1</title>
+			<description><![CDATA[<h2 id="features">Features</h2>
+
+<ul>
+  <li>Add lyrics source Kugou.</li>
+  <li>#15 Hide menubar icon 🎵 while displaying menubar lyrics.</li>
+  <li>#9 Music player hot-switching.</li>
+  <li>#17 Auto select now playing application.</li>
+</ul>
+
+<p>Bug fixs</p>
+]]></description>
+			<pubDate>Mon, 24 Apr 2017 02:12:16 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.1.1/LyricsX.app.zip"
+				sparkle:version="1.1.1"
+				sparkle:shortVersionString="1.1.1"
+				length="8672020"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>1.1.0</title>
+			<description><![CDATA[<h2 id="features">Features</h2>
+
+<ul>
+  <li>New designed lyrics window.</li>
+  <li>Double click lyrics to set player position.</li>
+  <li>Drag &amp; Drop to import/export lyrics file.</li>
+</ul>
+]]></description>
+			<pubDate>Mon, 10 Apr 2017 09:31:14 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.1.0/LyricsX.app.zip"
+				sparkle:version="1.1.0"
+				sparkle:shortVersionString="1.1.0"
+				length="8640220"
+				type="application/octet-stream"
+			/>
+		</item><item>
+			<title>LyricsX 1.0.0</title>
+			<description><![CDATA[<h2 id="features">Features</h2>
+
+<ul>
+  <li>Display lyrics on desktop and menubar.</li>
+  <li>Customize font, color and position for desktop lyrics.</li>
+  <li>Show and edit current lyrics.</li>
+  <li>Auto launch &amp; quit with music player.</li>
+  <li>Bilingual lyrics and auto Chinese conversion.</li>
+  <li>Disable lyrics when music player is not playing or taking screen shot.</li>
+  <li>Lyrics filter.</li>
+</ul>
+]]></description>
+			<pubDate>Tue, 28 Mar 2017 08:19:33 +0000</pubDate><enclosure
+				url="https://github.com/ddddxxx/LyricsX/releases/download/v1.0.0/LyricsX.app.zip"
+				sparkle:version="1.0.0"
+				sparkle:shortVersionString="1.0.0"
+				length="8464557"
+				type="application/octet-stream"
+			/>
+		</item>
+	</channel>
+</rss>
+
