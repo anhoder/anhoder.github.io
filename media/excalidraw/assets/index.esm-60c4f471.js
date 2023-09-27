@@ -1,4 +1,4 @@
-import{g as Ei,i as Sh,a as Dh,b as Nh,c as Ah,d as Ch,e as kh,h as X,L as xh,j as Ue,C as Rh,f as Oh}from"./index.esm-25f73b11.js";import{_ as C,n as $,l as g,m}from"./index-5fb6872e.js";/*! *****************************************************************************
+import{g as Ei,i as Sh,a as Dh,b as Nh,c as Ah,d as Ch,e as kh,h as X,L as xh,j as Ue,C as Rh,f as Oh}from"./index.esm-0da88cb1.js";import{_ as C,n as $,l as g,m}from"./index-d46d5c95.js";/*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
 
 Permission to use, copy, modify, and/or distribute this software for any
@@ -1078,4 +1078,4 @@ This typically indicates that your device does not have a healthy Internet conne
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */function Td(e){(function(t,n){t.INTERNAL.registerComponent(new Rh("firestore",function(r){var i=r.getProvider("app").getImmediate();return n(i,r.getProvider("auth-internal"))},"PUBLIC").setServiceProps(Object.assign({},Ed)))})(e,function(t,n){return new bh(t,new Y(t,n),new md)}),e.registerVersion("@firebase/firestore","2.2.3")}Td(Oh);
-//# sourceMappingURL=index.esm-56c5f5b5.js.map
+//# sourceMappingURL=index.esm-60c4f471.js.map
