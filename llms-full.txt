@@ -1,0 +1,52 @@
+# anhoder.com — Full LLM Guide
+> anhoder的进阶日志 —— PHP/Go/PostgreSQL后端开发技术博客，94篇文章，涵盖PHP扩展开发、Go语言、数据库、面试经验等。
+
+## About
+anhoder，PHP后端开发工程师，专注于PHP扩展开发、Go语言、PostgreSQL等技术领域。
+GitHub: https://github.com/anhoder
+Twitter: https://twitter.com/Alan_Albert_
+邮箱: anhoder@88.com
+
+## Core Pages
+- [Home](https://anhoder.com): 最新技术文章列表
+- [Archives](https://anhoder.com/archives/): 全部94篇文章归档，按时间倒序
+- [Tags](https://anhoder.com/tags/): 27个标签分类浏览
+- [About](https://anhoder.com/post/about/): 作者介绍与联系方式
+- [Friends](https://anhoder.com/friends/): 友情链接
+
+## Article Categories
+
+### PHP扩展开发
+- [PHP扩展开发——准备](https://anhoder.com/post/2es0g0FAq/): 脚手架使用、环境配置
+- [PHP扩展开发——EXPECTED与UNEXPECTED](https://anhoder.com/post/c3xK30m15/): 分支预测宏的使用
+- [PHP扩展开发——函数](https://anhoder.com/post/yBxcxmgZ6/): 函数参数解析与返回值
+- [PHP扩展开发——类](https://anhoder.com/post/AeTXbWbCO/): 类的声明与注册
+- [autotools的使用](https://anhoder.com/post/jCJO8375A/): 编译工具链介绍
+
+### PHP内核与底层
+- [PHP内核源码阅读记系列](https://anhoder.com/tag/wKIDH6M-M/): 5篇PHP内核源码分析文章
+- [自己写个包——PHP8 Attribute收集器](https://anhoder.com/post/dm-3SDHLz/)
+
+### Go语言
+- [musicfox 2.0——golang重写版](https://anhoder.com/post/NOO340v6g/): Go语言实战项目，TUI网易云音乐客户端
+
+### PostgreSQL
+- [PostgreSQL的json、jsonb、数组](https://anhoder.com/post/kYHKCQzOh/): 数据类型详解
+
+### Node.js / JavaScript
+- [Node篇系列](https://anhoder.com/tag/Sq0EaZE0z/): 模块、异步编程等
+
+### React Native
+- [React Native篇](https://anhoder.com/tag/QQnZea9Y2/): 组件生命周期等
+
+### 面试经验
+- [2021 PHP部分面经](https://anhoder.com/post/JeWf3QSkh/): 广州深圳多家公司面试题
+
+### 其他技术文章
+- [编码原则](https://anhoder.com/post/zTHYobkMn/): 编程最佳实践
+- [SVN命令的使用](https://anhoder.com/post/tD_-5wiPT/)
+- [让Linux定时执行任务---crontab命令](https://anhoder.com/post/T9uBL2ufM/)
+- [Daemon守护进程](https://anhoder.com/post/J-kvhZen-/)
+
+## Feeds
+- [Atom Feed](https://anhoder.com/atom.xml): RSS订阅
