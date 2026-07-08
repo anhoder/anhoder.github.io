@@ -221,3 +221,102 @@ Plans:
 Plans:
 
 - [ ] TBD (run /gsd-plan-phase 20 to break down)
+
+### Phase 21: Tokenizer分词可视化对比
+
+**Goal:** 并排展示GPT/Claude/Llama/BERT的tokenizer分词结果，色块标注token边界，token数对比
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 21 to break down)
+
+### Phase 22: Transformer前向传播动画
+
+**Goal:** 2层简化Transformer逐步动画，展示QKV/Attention/FFN/Norm每步的张量形状和数值变化
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 22 to break down)
+
+### Phase 23: RAG Chunking策略可视化对比
+
+**Goal:** 并排展示Fixed-size/Sentence/Paragraph/Semantic/Recursive五种分块结果，色带标注边界，块数统计
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 23 to break down)
+
+### Phase 24: LLM采样策略并排演示
+
+**Goal:** 同一prompt，Greedy/Temperature/Top-k/Top-p/Beam Search五种策略并排生成，概率分布柱状图
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 24 to break down)
+
+### Phase 25: AI Agent工具调用泳道图
+
+**Goal:** 粘贴function calling日志，生成User/Agent/Tool泳道图，时间轴展示thought/tool_call/result/final
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 25 to break down)
+
+### Phase 26: 向量相似度算法可视化对比
+
+**Goal:** 2D/3D空间中切换Cosine/Dot/Euclidean/Manhattan四种相似度，排序变化和公式代入过程
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 26 to break down)
+
+### Phase 27: LLM安全：Prompt Injection测试台
+
+**Goal:** 系统prompt+用户输入双栏，内置10+种injection payload，模拟注入行为展示，纯教育用途不调API
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 27 to break down)
+
+### Phase 28: 语义搜索vs关键词搜索对比台
+
+**Goal:** 并排展示BM25排名和Embedding语义排名，Transformers.js本地编码，差异项高亮
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 28 to break down)
+
+### Phase 29: GPU显存计算器
+
+**Goal:** 选模型规模/精度/场景(推理/微调/LoRA)，可视化参数/优化器/激活/KV Cache显存分解，调节batch size和seq len
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 29 to break down)
