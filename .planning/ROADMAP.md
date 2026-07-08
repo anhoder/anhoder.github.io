@@ -111,3 +111,113 @@ Plans:
 Plans:
 
 - [ ] TBD (run /gsd-plan-phase 10 to break down)
+
+### Phase 11: Struct内存对齐可视化
+
+**Goal:** 输入struct定义，逐字节内存布局图，padding高亮，拖拽重排显示优化后内存节省
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 11 to break down)
+
+### Phase 12: JWT调试器（时间线视图）
+
+**Goal:** 解析JWT，iat/exp/nbf时间线绿黄红着色，剩余有效期倒计时，常见问题检测
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 12 to break down)
+
+### Phase 13: B+Tree与LSM-Tree插入动画对比
+
+**Goal:** 并排两棵树插入相同key序列，B+Tree分裂+LSM-Tree compaction动画
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 13 to break down)
+
+### Phase 14: HTTP缓存决策流程图
+
+**Goal:** 交互式决策树，选择场景，逐步生成Cache-Control/ETag/Vary响应头组合
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 14 to break down)
+
+### Phase 15: 正则表达式回溯爆炸探测器
+
+**Goal:** 逐步动画展示NFA回溯路径，实时步数计数器，ReDoS红色警告
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 15 to break down)
+
+### Phase 16: Protobuf Wire Format编码可视化
+
+**Goal:** 粘贴proto定义+JSON，生成hex dump逐字节注释varint/zigzag/字段号
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 16 to break down)
+
+### Phase 17: Raft共识算法交互式模拟
+
+**Goal:** 5节点集群，手动触发宕机/分区/选举，term号递增log复制commit推进
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 17 to break down)
+
+### Phase 18: DNS解析链路追踪器
+
+**Goal:** 输入域名，可视化递归解析树(ROOT→TLD→Auth)，CNAME链，DNSSEC路径
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 18 to break down)
+
+### Phase 19: 锁竞争可视化
+
+**Goal:** N个虚拟线程竞争Mutex/RWMutex/Semaphore，时间轴WAIT/HOLD/RELEASE对比吞吐公平
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 19 to break down)
+
+### Phase 20: 无损压缩算法并排演示
+
+**Goal:** Huffman树构建+LZ77滑动窗口+RLE游程标注，同文本5算法压缩率对比
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 20 to break down)
