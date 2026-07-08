@@ -320,3 +320,113 @@ Plans:
 Plans:
 
 - [ ] TBD (run /gsd-plan-phase 29 to break down)
+
+### Phase 30: IRR真实年化利率计算器
+
+**Goal:** 多还款方式并排对比名义利率vs真实IRR，每期本金/利息瀑布图，支持不规则现金流
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 30 to break down)
+
+### Phase 31: 色觉障碍模拟器
+
+**Goal:** 实时四栏对比原图/红色盲/绿色盲/蓝色盲/全色盲，图片上传+色板高风险色组合标注
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 31 to break down)
+
+### Phase 32: 全球时区死线图
+
+**Goal:** 水平多泳道时间轴，4-6自选时区，拖拽死线同步高亮，DST切换提醒，ISO8601/timestamp副本
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 32 to break down)
+
+### Phase 33: 加权决策矩阵
+
+**Goal:** 定义选项和标准，分配权重打分，自动排名，敏感度分析：调节权重滑条看排名翻转
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 33 to break down)
+
+### Phase 34: 呼吸引导动画
+
+**Goal:** 多模式(4-7-8/盒子/WimHof/自定义)，呼吸球缩放+节拍提示，可设循环和过渡，暗黑模式
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 34 to break down)
+
+### Phase 35: 和弦音阶交互图
+
+**Goal:** 钢琴键盘+吉他指板双视图，正向点音反向查和弦，音阶显示(大调/小调/五声/Blues)
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 35 to break down)
+
+### Phase 36: 像素画转换器
+
+**Goal:** 上传图片调像素块大小，选色板(GameBoy/NES/自定义)，实时预览，抖动算法切换，导出PNG
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 36 to break down)
+
+### Phase 37: 备忘密码生成器
+
+**Goal:** Diceware风格词组密码(中英文词库)，显示熵值和暴力破解时间(RTX4090/集群)，强度条
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 37 to break down)
+
+### Phase 38: 图片EXIF隐私检查器
+
+**Goal:** 拖入图片解析EXIF/IPTC/XMP，GPS地图打点，红色标注敏感字段，一键擦除下载
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 38 to break down)
+
+### Phase 39: HIIT/Tabata自定义计时器
+
+**Goal:** 拖拽排列训练序列，预设Tabata/EMOM/AMRAP，大字倒计时+色块，投屏友好
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 39 to break down)
