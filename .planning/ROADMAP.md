@@ -540,3 +540,113 @@ Plans:
 Plans:
 
 - [ ] TBD (run /gsd-plan-phase 49 to break down)
+
+### Phase 50: 租房检查清单交互工具
+
+**Goal:** 分场景(看房/签合同/入住)逐步引导，逐项打勾拍照留证，退房押金雷区红色标注，生成报告导出
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 50 to break down)
+
+### Phase 51: 五险一金计算器
+
+**Goal:** 输入税前工资+城市，自动算个人/单位各交金额，统筹vs个人账户区别，退休金预估，断缴后果警告
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 51 to break down)
+
+### Phase 52: 个人所得税模拟器
+
+**Goal:** 模拟年度工资+年终奖+副业，两种方案对比(合并/单独计税)，专项附加扣除可视化，退税/补税结果
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 52 to break down)
+
+### Phase 53: 劳动合同关键条款检查器
+
+**Goal:** 逐条对照劳动合同法，红色标出异常条款(试用期过长/竞业无补偿/霸王违约金)，生成谈判话术
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 53 to break down)
+
+### Phase 54: 搬家预算与流程规划器
+
+**Goal:** 输入搬家日期倒推时间线，打包材料按房间自动计算，搬家公司类型对比，费用估算含隐性成本
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 54 to break down)
+
+### Phase 55: 第一套房购房流程模拟器
+
+**Goal:** 互动式时间线从资格审核到交房，贷款对比(公积金/商贷/组合贷)，购房总成本拆解
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 55 to break down)
+
+### Phase 56: 急救流程图
+
+**Goal:** 交互式决策树(CPR/海姆立克/烫伤/骨折/中风)，计时器+按压节奏动画，多场景离线可用
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 56 to break down)
+
+### Phase 57: 冰箱食材做菜生成器
+
+**Goal:** 勾选现有食材+调料，匹配可做菜按难度分级，含新手量化步骤(火候时间/调料克数)
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 57 to break down)
+
+### Phase 58: 证件办理指南
+
+**Goal:** 选证件类型+场景(首次/换领/补办/异地)，生成材料清单+办理地点+时间+费用，支持省市差异
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 58 to break down)
+
+### Phase 59: 基础家电故障排查器
+
+**Goal:** 选家电+故障现象，决策树引导排查，简单图示，三级标注(自己修/需师傅/有风险)，维修费参考
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 59 to break down)
