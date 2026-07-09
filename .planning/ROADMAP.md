@@ -430,3 +430,113 @@ Plans:
 Plans:
 
 - [ ] TBD (run /gsd-plan-phase 39 to break down)
+
+### Phase 40: 建筑施工进度甘特图
+
+**Goal:** 拖拽创建工序条，连线设依赖FS/SS/FF，关键路径红色高亮，延误自动顺推，导出图片
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 40 to break down)
+
+### Phase 41: 面料缩水率计算器
+
+**Goal:** 选面料类型(棉/麻/丝/毛/化纤)，输入成品尺寸，反推裁片尺寸含缩水预留+缝份
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 41 to break down)
+
+### Phase 42: 中药配伍禁忌检查器
+
+**Goal:** 输入方剂药味，实时检测十八反/十九畏/妊娠禁忌/毒性超量，冲突标注古籍出处
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 42 to break down)
+
+### Phase 43: 食谱成本核算表
+
+**Goal:** 输入食材采购价+配方用量，自动换算每份成本，批量缩放，损耗率，毛利滑条调售价
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 43 to break down)
+
+### Phase 44: 木工榫卯结构交互图
+
+**Goal:** 内置20+种经典榫卯，3D WebGL渲染可旋转/缩放/剖面，尺寸标注+适用场景说明
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 44 to break down)
+
+### Phase 45: 农田播种密度计算器
+
+**Goal:** 选作物+行距株距，自动算亩用种量，亩↔公顷换算，N-P-K配比施肥计算器
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 45 to break down)
+
+### Phase 46: 汽车油耗与维护日志
+
+**Goal:** 记录加油算百公里油耗+每公里成本，趋势图，维护提醒(机油/刹车/年检)基于里程倒计时
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 46 to break down)
+
+### Phase 47: 法律诉讼时效计算器
+
+**Goal:** 选案由+输入事发日期，显示时效截止日，标注中断事由影响，生成民法典法条引用
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 47 to break down)
+
+### Phase 48: 古诗词格律检查器
+
+**Goal:** 输入诗句选格式(五绝/七律/词牌)，逐字标注平仄含入声字，韵脚注韵部，错处标红+替换建议
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 48 to break down)
+
+### Phase 49: 用电负荷计算器
+
+**Goal:** 逐个添加电器，同时系数折算，算总功率总电流，推荐空开规格+线径mm²，220V/380V切换
+**Requirements**: TBD
+**Depends on:** Phase 0
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run /gsd-plan-phase 49 to break down)
