@@ -53,9 +53,12 @@ def extract_article_data(post_detail_html, post_id):
 
     # Tags from footer
     tags_start = post_detail_html.find('<div class="tags">')
-    tags_end = post_detail_html.find('</div>', tags_start)
-    tags_section = post_detail_html[tags_start:tags_end]
-    tag_matches = re.findall(r'<a href="(/tag/[^/]+/)"># ([^<]+)</a>', tags_section)
+    if tags_start == -1:
+        tag_matches = []
+    else:
+        tags_end = post_detail_html.find('</div>', tags_start)
+        tags_section = post_detail_html[tags_start:tags_end]
+        tag_matches = re.findall(r'<a href="(/tag/[^/]+/)"># ([^<]+)</a>', tags_section)
 
     if tag_matches:
         parts = []
@@ -145,7 +148,7 @@ def extract_article_data(post_detail_html, post_id):
     return date_short, date_full, post_id, title, article, summary
 
 
-def gen_pagination(current_page, total_pages, is_home):
+def gen_pagination(current_page, total_pages):
     """Generate pagination HTML."""
     lines = [
         '<div class="page bg-color">',
@@ -221,6 +224,7 @@ def gen_sitemap(all_posts, num_pages):
     lines.append(f'  <url><loc>{BASE}/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>')
     lines.append(f'  <url><loc>{BASE}/archives/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>')
     lines.append(f'  <url><loc>{BASE}/tags/</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>')
+    lines.append(f'  <url><loc>{BASE}/archives/page/2/</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>')
     lines.append(f'  <url><loc>{BASE}/friends/</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>')
     lines.append(f'  <url><loc>{BASE}/post/about/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>')
 
@@ -345,6 +349,8 @@ def main():
     hp_header = hp[:sec_start]
     hp_footer = hp[sec_end + len(closing_pat):]
     hp_arts = list(re.finditer(article_pat, hp, re.DOTALL))
+    if not hp_arts:
+        raise RuntimeError(f'No article blocks found in {BLOG_DIR / "index.html"} — cannot extract preamble')
     sec_body_start = hp.find('>', sec_start) + 1
     preamble = hp[sec_body_start : hp_arts[0].start()]
 
@@ -363,7 +369,7 @@ def main():
         end = min(start + POSTS_PER_PAGE, len(all_posts))
         page_articles = '\n'.join([a for _, _, _, _, a, _ in all_posts[start:end]])
         is_home = pn == 1
-        pagination = gen_pagination(pn, num_pages, is_home)
+        pagination = gen_pagination(pn, num_pages)
         header = hp_header if is_home else p2_header
         footer = hp_footer if is_home else p2_footer
         # p2_header/p2_footer should always be set here since num_pages >= 2
@@ -393,13 +399,20 @@ def main():
         + [BLOG_DIR / f"page/{p}/index.html" for p in range(2, num_pages + 1)]
         + [BLOG_DIR / "archives/index.html", BLOG_DIR / "tags/index.html"]
     )
-    # Also tag detail pages
+    # Also tag detail pages (including pagination)
     tags_dir = BLOG_DIR / "tag"
     if tags_dir.exists():
         for td in os.listdir(str(tags_dir)):
             tp = tags_dir / td / "index.html"
             if tp.exists():
                 sidebar_files.append(tp)
+            # Tag pagination pages: tag/<name>/page/<N>/index.html
+            tag_page_dir = tags_dir / td / "page"
+            if tag_page_dir.exists():
+                for pp in sorted(os.listdir(str(tag_page_dir)), key=int):
+                    ppf = tag_page_dir / pp / "index.html"
+                    if ppf.exists():
+                        sidebar_files.append(ppf)
 
     for fp in sidebar_files:
         if fp.exists():
@@ -411,7 +424,7 @@ def main():
     af = BLOG_DIR / "archives/index.html"
     if af.exists():
         c = af.read_text(encoding=_ENCODING)
-        c = re.sub(r'data-count="\d+"', f'data-count="{post_count}"', c)
+        c = re.sub(r'(data-lan="archives" data-count=")\d+(")', rf'\g<1>{post_count}\g<2>', c)
         c = re.sub(r'共计\d+篇', f'共计{post_count}篇', c)
         af.write_text(c, encoding=_ENCODING)
 
