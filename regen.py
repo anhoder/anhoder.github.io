@@ -9,14 +9,16 @@ After adding a new post to post/<id>/index.html, run this to:
   1. Regenerate homepage + pagination pages
   2. Update sidebar article count
   3. Regenerate archives page
-  4. Update sitemap.xml
-  5. Update atom.xml
+  4. Regenerate sitemap.xml
+  5. Regenerate atom.xml
 
 The script reads all post detail pages, extracts metadata (date, title, tags,
 word count), sorts newest-first, and redistributes across pages.
 """
 import os, re, hashlib
 from pathlib import Path
+
+_ENCODING = 'utf-8'
 
 BLOG_DIR = Path(os.path.expanduser("~/Desktop/anhoder_blog"))
 POSTS_PER_PAGE = 10
@@ -66,6 +68,13 @@ def extract_article_data(post_detail_html, post_id):
     # Rotate cover image through 400..409 using hash of post ID
     img_hash = int(hashlib.md5(post_id.encode()).hexdigest()[:8], 16)
     img_num = 400 + (img_hash % 10)
+
+    # Extract meta description for Atom feed
+    desc_m = re.search(
+        r'<meta name="description" content="([^"]+)"',
+        post_detail_html,
+    )
+    summary = desc_m.group(1) if desc_m else ''
 
     article = f'''  <article class="post-list-box  post box-shadow-wrapper">
     <div class="article-wrapper bg-color">
@@ -133,7 +142,7 @@ def extract_article_data(post_detail_html, post_id):
     </div>
   </article>
 '''
-    return date_short, post_id, title, article
+    return date_short, date_full, post_id, title, article, summary
 
 
 def gen_pagination(current_page, total_pages, is_home):
@@ -163,7 +172,7 @@ def gen_pagination(current_page, total_pages, is_home):
             ])
         else:
             active = ' pagination-active' if p == current_page else ' '
-            href = '/' if (p == 1 and is_home) else f'/page/{p}'
+            href = '/' if p == 1 else f'/page/{p}'
             lines.extend([
                 '        ', '          ',
                 f'            <li class="pagination-li{active}">',
@@ -174,7 +183,7 @@ def gen_pagination(current_page, total_pages, is_home):
 
     lines.extend(['      ', '    ', '    '])
     if current_page > 1:
-        prev = '/' if (current_page == 2 and is_home) else f'/page/{current_page - 1}'
+        prev = '/' if current_page == 2 else f'/page/{current_page - 1}'
         lines.extend([
             '      <li class="pagination-dir">',
             f'        <a href="{prev}"><i class="fa fa-angle-left"></i></a>',
@@ -201,6 +210,104 @@ def update_sidebar_count(html, new_count):
     return html
 
 
+def gen_sitemap(all_posts, num_pages):
+    """Generate sitemap.xml."""
+    BASE = 'https://anhoder.com'
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ]
+    # Static pages
+    lines.append(f'  <url><loc>{BASE}/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>')
+    lines.append(f'  <url><loc>{BASE}/archives/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>')
+    lines.append(f'  <url><loc>{BASE}/tags/</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>')
+    lines.append(f'  <url><loc>{BASE}/friends/</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>')
+    lines.append(f'  <url><loc>{BASE}/post/about/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>')
+
+    # Posts
+    for _, _, pid, _, _, _ in all_posts:
+        lines.append(f'  <url><loc>{BASE}/post/{pid}/</loc><priority>0.5</priority></url>')
+
+    # Pagination pages
+    for pn in range(2, num_pages + 1):
+        lines.append(f'  <url><loc>{BASE}/page/{pn}/</loc><priority>0.4</priority></url>')
+
+    # Tag pages
+    tags_dir = BLOG_DIR / "tag"
+    if tags_dir.exists():
+        for td in sorted(os.listdir(str(tags_dir))):
+            tag_home = tags_dir / td / "index.html"
+            if not tag_home.exists():
+                continue
+            tag_pages = [tag_home]
+            tag_page_dir = tags_dir / td / "page"
+            if tag_page_dir.exists():
+                for pp in sorted(os.listdir(str(tag_page_dir)), key=int):
+                    ppf = tag_page_dir / pp / "index.html"
+                    if ppf.exists():
+                        tag_pages.append(ppf)
+            for i in range(len(tag_pages)):
+                path = f'/tag/{td}/' if i == 0 else f'/tag/{td}/page/{i + 1}/'
+                lines.append(f'  <url><loc>{BASE}{path}</loc><priority>0.3</priority></url>')
+
+    lines.append('</urlset>')
+    return '\n'.join(lines) + '\n'
+
+
+def _local_to_atom_time(local_dt_str):
+    """Convert '2026-07-09 20:00:00' (UTC+8) to Atom UTC format '2026-07-09T12:00:00.000Z'."""
+    from datetime import datetime, timezone, timedelta
+    dt = datetime.strptime(local_dt_str, '%Y-%m-%d %H:%M:%S')
+    dt_utc = dt - timedelta(hours=8)  # local is UTC+8
+    return dt_utc.strftime('%Y-%m-%dT%H:%M:%S.000Z')
+
+
+def gen_atom(all_posts):
+    """Generate atom.xml."""
+    BASE = 'https://anhoder.com'
+    TITLE = 'anhoder的进阶日志'
+    SUBTITLE = '一川烟草，满城风絮。'
+
+    # Latest update time from newest post
+    if all_posts:
+        latest_dt = all_posts[0][1]  # date_full of newest post
+    else:
+        latest_dt = '1970-01-01 00:00:00'
+    updated = _local_to_atom_time(latest_dt)
+
+    lines = [
+        '<?xml version="1.0" encoding="utf-8"?>',
+        '<feed xmlns="http://www.w3.org/2005/Atom">',
+        '    <id>/</id>',
+        f'    <title>{TITLE}</title>',
+        f'    <updated>{updated}</updated>',
+        '    <generator>https://github.com/jpmonette/feed</generator>',
+        '    <link rel="alternate" href="/"/>',
+        '    <link rel="self" href="/atom.xml"/>',
+        f'    <subtitle>{SUBTITLE}</subtitle>',
+        '    <logo>/images/avatar.png</logo>',
+        '    <icon>/favicon.ico</icon>',
+        '    <rights>All rights reserved 2021, anhoder的进阶日志</rights>',
+    ]
+
+    for _, date_full, pid, title, _, summary in all_posts:
+        atom_updated = _local_to_atom_time(date_full)
+        lines.extend([
+            '    <entry>',
+            f'        <title type="html"><![CDATA[{title}]]></title>',
+            f'        <id>/post/{pid}/</id>',
+            f'        <link href="/post/{pid}/">',
+            '        </link>',
+            f'        <updated>{atom_updated}</updated>',
+            f'        <summary type="html"><![CDATA[{summary}]]></summary>',
+            '    </entry>',
+            '',
+        ])
+
+    lines.append('</feed>')
+    return '\n'.join(lines)
+
+
 def main():
     posts_dir = BLOG_DIR / "post"
     article_pat = r'(<article class="post-list-box  post box-shadow-wrapper">.*?</article>\n)'
@@ -213,10 +320,10 @@ def main():
             continue
         if d == 'about':
             continue
-        with open(p) as f:
+        with open(p, encoding=_ENCODING) as f:
             content = f.read()
-        date, pid, title, article = extract_article_data(content, d)
-        all_posts.append((date, pid, title, article))
+        date_short, date_full, pid, title, article, summary = extract_article_data(content, d)
+        all_posts.append((date_short, date_full, pid, title, article, summary))
 
     all_posts.sort(key=lambda x: x[0], reverse=True)
     num_pages = (len(all_posts) + POSTS_PER_PAGE - 1) // POSTS_PER_PAGE
@@ -224,35 +331,45 @@ def main():
     print(f"Posts: {post_count}, Pages: {num_pages}")
 
     # ── Read page templates ──
-    with open(BLOG_DIR / "index.html") as f:
+    with open(BLOG_DIR / "index.html", encoding=_ENCODING) as f:
         hp = f.read()
-    with open(BLOG_DIR / "page/2/index.html") as f:
-        p2 = f.read()
+    p2 = None
+    if num_pages >= 2:
+        with open(BLOG_DIR / "page/2/index.html", encoding=_ENCODING) as f:
+            p2 = f.read()
 
     # Homepage template parts
+    closing_pat = '</section>\n        </div>\n      </div>\n    </div>'
     sec_start = hp.find('<section class="section bg-color posts-expand slide-down-in">')
-    sec_end = hp.find('</section>\n        </div>\n      </div>\n    </div>', sec_start)
+    sec_end = hp.find(closing_pat, sec_start)
     hp_header = hp[:sec_start]
-    hp_footer = hp[sec_end:]
+    hp_footer = hp[sec_end + len(closing_pat):]
     hp_arts = list(re.finditer(article_pat, hp, re.DOTALL))
     sec_body_start = hp.find('>', sec_start) + 1
     preamble = hp[sec_body_start : hp_arts[0].start()]
 
     # Non-home page template parts
-    p2_sec_start = p2.find('<section class="section bg-color posts-expand slide-down-in">')
-    p2_sec_end = p2.find('</section>\n        </div>\n      </div>\n    </div>', p2_sec_start)
-    p2_header = p2[:p2_sec_start]
-    p2_footer = p2[p2_sec_end:]
+    p2_header = None
+    p2_footer = None
+    if p2 is not None:
+        p2_sec_start = p2.find('<section class="section bg-color posts-expand slide-down-in">')
+        p2_sec_end = p2.find(closing_pat, p2_sec_start)
+        p2_header = p2[:p2_sec_start]
+        p2_footer = p2[p2_sec_end + len(closing_pat):]
 
     # ── Regenerate pages ──
     for pn in range(1, num_pages + 1):
         start = (pn - 1) * POSTS_PER_PAGE
         end = min(start + POSTS_PER_PAGE, len(all_posts))
-        page_articles = '\n'.join([a for _, _, _, a in all_posts[start:end]])
+        page_articles = '\n'.join([a for _, _, _, _, a, _ in all_posts[start:end]])
         is_home = pn == 1
         pagination = gen_pagination(pn, num_pages, is_home)
         header = hp_header if is_home else p2_header
         footer = hp_footer if is_home else p2_footer
+        # p2_header/p2_footer should always be set here since num_pages >= 2
+        # when we reach non-home pages, but guard just in case:
+        if header is None or footer is None:
+            header, footer = hp_header, hp_footer
 
         section = (
             f'{header}<section class="section bg-color posts-expand slide-down-in">'
@@ -266,7 +383,7 @@ def main():
             (BLOG_DIR / f"page/{pn}").mkdir(parents=True, exist_ok=True)
             out = BLOG_DIR / f"page/{pn}/index.html"
 
-        with open(out, 'w') as f:
+        with open(out, 'w', encoding=_ENCODING) as f:
             f.write(section)
         print(f"  Page {pn}: {end - start} articles → {out.relative_to(BLOG_DIR)}")
 
@@ -286,17 +403,27 @@ def main():
 
     for fp in sidebar_files:
         if fp.exists():
-            c = fp.read_text()
+            c = fp.read_text(encoding=_ENCODING)
             c = update_sidebar_count(c, post_count)
-            fp.write_text(c)
+            fp.write_text(c, encoding=_ENCODING)
 
     # ── Update archives header count ──
     af = BLOG_DIR / "archives/index.html"
     if af.exists():
-        c = af.read_text()
+        c = af.read_text(encoding=_ENCODING)
         c = re.sub(r'data-count="\d+"', f'data-count="{post_count}"', c)
         c = re.sub(r'共计\d+篇', f'共计{post_count}篇', c)
-        af.write_text(c)
+        af.write_text(c, encoding=_ENCODING)
+
+    # ── Regenerate sitemap.xml ──
+    sitemap_content = gen_sitemap(all_posts, num_pages)
+    (BLOG_DIR / "sitemap.xml").write_text(sitemap_content, encoding=_ENCODING)
+    print(f"  sitemap.xml → {len(sitemap_content)} bytes")
+
+    # ── Regenerate atom.xml ──
+    atom_content = gen_atom(all_posts)
+    (BLOG_DIR / "atom.xml").write_text(atom_content, encoding=_ENCODING)
+    print(f"  atom.xml → {len(atom_content)} bytes")
 
     print(f"\nDone. {post_count} posts, {num_pages} pages, sidebar updated.")
 
