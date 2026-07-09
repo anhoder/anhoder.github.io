@@ -15,7 +15,7 @@ After adding a new post to post/<id>/index.html, run this to:
 The script reads all post detail pages, extracts metadata (date, title, tags,
 word count), sorts newest-first, and redistributes across pages.
 """
-import os, re, hashlib
+import os, re
 from pathlib import Path
 
 _ENCODING = 'utf-8'
@@ -25,7 +25,7 @@ POSTS_PER_PAGE = 10
 
 
 def extract_article_data(post_detail_html, post_id):
-    """Extract metadata and generate listing article HTML from a post detail page."""
+    """Extract metadata from a post detail page."""
     title_m = re.search(
         r'<h1 class="post-title">\s*<a[^>]*>\s*([^<]+?)\s*</a>',
         post_detail_html, re.DOTALL,
@@ -68,10 +68,6 @@ def extract_article_data(post_detail_html, post_id):
     else:
         tag_html = '      <a href="/tag/Yxu2y8I-l/">\n        <span>其它</span>\n      </a>'
 
-    # Rotate cover image through 400..409 using hash of post ID
-    img_hash = int(hashlib.md5(post_id.encode()).hexdigest()[:8], 16)
-    img_num = 400 + (img_hash % 10)
-
     # Extract meta description for Atom feed
     desc_m = re.search(
         r'<meta name="description" content="([^"]+)"',
@@ -79,7 +75,12 @@ def extract_article_data(post_detail_html, post_id):
     )
     summary = desc_m.group(1) if desc_m else ''
 
-    article = f'''  <article class="post-list-box  post box-shadow-wrapper">
+    return date_short, date_full, post_id, title, tag_html, reading_time, word_count, summary
+
+
+def render_listing_article(post_id, title, date_full, date_short, tag_html, reading_time, word_count, img_num):
+    """Generate the listing article HTML for a post on homepage/pagination pages."""
+    return f'''  <article class="post-list-box  post box-shadow-wrapper">
     <div class="article-wrapper bg-color">
       <section class="post-header">
   <h1 class="post-title">
@@ -145,7 +146,6 @@ def extract_article_data(post_detail_html, post_id):
     </div>
   </article>
 '''
-    return date_short, date_full, post_id, title, article, summary
 
 
 def gen_pagination(current_page, total_pages):
@@ -229,7 +229,8 @@ def gen_sitemap(all_posts, num_pages):
     lines.append(f'  <url><loc>{BASE}/post/about/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>')
 
     # Posts
-    for _, _, pid, _, _, _ in all_posts:
+    for post in all_posts:
+        pid = post[2]  # (date_short, date_full, pid, title, tag_html, reading_time, word_count, summary)
         lines.append(f'  <url><loc>{BASE}/post/{pid}/</loc><priority>0.5</priority></url>')
 
     # Pagination pages
@@ -266,6 +267,61 @@ def _local_to_atom_time(local_dt_str):
     return dt_utc.strftime('%Y-%m-%dT%H:%M:%S.000Z')
 
 
+def patch_pagination_metadata(html, pn, num_pages):
+    """Update meta description, canonical, og:url, prev/next for pagination page N."""
+    BASE = 'https://anhoder.com'
+
+    def _replace_meta(html, attr_re, new_value):
+        """Replace meta tag content, handling both /> and > endings."""
+        return re.sub(
+            rf'{attr_re} content="[^"]*"\s*/?>',
+            f'{attr_re} content="{new_value}" />',
+            html,
+        )
+
+    html = _replace_meta(html, '<meta name="description"', f'anhoder的进阶日志 — 第{pn}页')
+    html = _replace_meta(html, '<meta property="og:description"', f'anhoder的进阶日志 — 第{pn}页')
+    html = _replace_meta(html, '<meta name="twitter:description"', f'anhoder的进阶日志 — 第{pn}页')
+    html = _replace_meta(html, '<meta property="og:title"', 'anhoder的进阶日志')
+
+    # Canonical
+    html = re.sub(
+        r'<link rel="canonical" href="[^"]*" />',
+        f'<link rel="canonical" href="{BASE}/page/{pn}/" />',
+        html,
+    )
+
+    # og:url
+    html = re.sub(
+        r'<meta property="og:url" content="[^"]*" />',
+        f'<meta property="og:url" content="{BASE}/page/{pn}/" />',
+        html,
+    )
+
+    # rel="prev"
+    if pn == 2:
+        prev_href = f'{BASE}/'
+    else:
+        prev_href = f'{BASE}/page/{pn - 1}/'
+    html = re.sub(
+        r'<link rel="prev" href="[^"]*" />',
+        f'<link rel="prev" href="{prev_href}" />',
+        html,
+    )
+
+    # rel="next" — remove for last page, update for others
+    if pn == num_pages:
+        html = re.sub(r'\s*<link rel="next" href="[^"]*" />', '', html)
+    else:
+        html = re.sub(
+            r'<link rel="next" href="[^"]*" />',
+            f'<link rel="next" href="{BASE}/page/{pn + 1}/" />',
+            html,
+        )
+
+    return html
+
+
 def gen_atom(all_posts):
     """Generate atom.xml."""
     BASE = 'https://anhoder.com'
@@ -294,7 +350,8 @@ def gen_atom(all_posts):
         '    <rights>All rights reserved 2021, anhoder的进阶日志</rights>',
     ]
 
-    for _, date_full, pid, title, _, summary in all_posts:
+    for post in all_posts:
+        _, date_full, pid, title, _, _, _, summary = post
         atom_updated = _local_to_atom_time(date_full)
         lines.extend([
             '    <entry>',
@@ -326,8 +383,8 @@ def main():
             continue
         with open(p, encoding=_ENCODING) as f:
             content = f.read()
-        date_short, date_full, pid, title, article, summary = extract_article_data(content, d)
-        all_posts.append((date_short, date_full, pid, title, article, summary))
+        date_short, date_full, pid, title, tag_html, reading_time, word_count, summary = extract_article_data(content, d)
+        all_posts.append((date_short, date_full, pid, title, tag_html, reading_time, word_count, summary))
 
     all_posts.sort(key=lambda x: x[0], reverse=True)
     num_pages = (len(all_posts) + POSTS_PER_PAGE - 1) // POSTS_PER_PAGE
@@ -367,7 +424,13 @@ def main():
     for pn in range(1, num_pages + 1):
         start = (pn - 1) * POSTS_PER_PAGE
         end = min(start + POSTS_PER_PAGE, len(all_posts))
-        page_articles = '\n'.join([a for _, _, _, _, a, _ in all_posts[start:end]])
+        page_posts = all_posts[start:end]
+        page_articles_list = []
+        for pi, (date_short, date_full, pid, title, tag_html, reading_time, word_count, summary) in enumerate(page_posts):
+            img_num = 400 + pi  # 0..9 → 400..409, unique per page
+            article = render_listing_article(pid, title, date_full, date_short, tag_html, reading_time, word_count, img_num)
+            page_articles_list.append(article)
+        page_articles = '\n'.join(page_articles_list)
         is_home = pn == 1
         pagination = gen_pagination(pn, num_pages)
         header = hp_header if is_home else p2_header
@@ -376,6 +439,10 @@ def main():
         # when we reach non-home pages, but guard just in case:
         if header is None or footer is None:
             header, footer = hp_header, hp_footer
+
+        # Patch pagination metadata for non-home pages
+        if not is_home:
+            header = patch_pagination_metadata(header, pn, num_pages)
 
         section = (
             f'{header}<section class="section bg-color posts-expand slide-down-in">'
@@ -397,7 +464,12 @@ def main():
     sidebar_files = (
         [BLOG_DIR / "index.html"]
         + [BLOG_DIR / f"page/{p}/index.html" for p in range(2, num_pages + 1)]
-        + [BLOG_DIR / "archives/index.html", BLOG_DIR / "tags/index.html"]
+        + [
+            BLOG_DIR / "archives/index.html",
+            BLOG_DIR / "archives/page/2/index.html",
+            BLOG_DIR / "tags/index.html",
+            BLOG_DIR / "friends/index.html",
+        ]
     )
     # Also tag detail pages (including pagination)
     tags_dir = BLOG_DIR / "tag"

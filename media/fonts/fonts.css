@@ -1,0 +1,13 @@
+@font-face {
+  font-family: 'Monda';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/media/fonts/monda-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Rosario';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/media/fonts/rosario-latin-400-normal.woff2') format('woff2');
+}
