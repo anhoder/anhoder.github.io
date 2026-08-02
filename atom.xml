@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>/</id>
     <title>anhoder的进阶日志</title>
-    <updated>2026-07-09T12:00:00.000Z</updated>
+    <updated>2026-08-02T12:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="/"/>
     <link rel="self" href="/atom.xml"/>
@@ -10,6 +10,15 @@
     <logo>/images/avatar.png</logo>
     <icon>/favicon.ico</icon>
     <rights>All rights reserved 2021, anhoder的进阶日志</rights>
+    <entry>
+        <title type="html"><![CDATA[go-musicfox v5.0.0 发布：新增主题系统、桌面歌词、频谱可视化等多项更新]]></title>
+        <id>/post/jjd5l1hmDQ/</id>
+        <link href="/post/jjd5l1hmDQ/">
+        </link>
+        <updated>2026-08-02T12:00:00.000Z</updated>
+        <summary type="html"><![CDATA[go-musicfox v5.0.0 于 2026 年 7 月 31 日发布，带来启动动画、桌面歌词、频谱可视化、主题系统、完整鼠标支持等 13 项更新。]]></summary>
+    </entry>
+
     <entry>
         <title type="html"><![CDATA[做了六年，终于给 go-musicfox 搞了个官网]]></title>
         <id>/post/T6jy0uN3aO/</id>
