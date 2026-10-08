@@ -7,8 +7,9 @@ Usage:
 
 After adding a new post to post/<id>/index.html, run this to:
   1. Regenerate homepage + pagination pages
-  2. Update sidebar article count
-  3. Regenerate archives page
+  2. Update sidebar article count (homepage, pagination, archives, tags,
+     friends, tag pages, post detail pages)
+  3. Update archives header count (index + pagination)
   4. Regenerate sitemap.xml
   5. Regenerate atom.xml
 
@@ -409,7 +410,9 @@ def main():
     if not hp_arts:
         raise RuntimeError(f'No article blocks found in {BLOG_DIR / "index.html"} — cannot extract preamble')
     sec_body_start = hp.find('>', sec_start) + 1
-    preamble = hp[sec_body_start : hp_arts[0].start()]
+    # Trailing indentation of the line holding the first <article> would otherwise
+    # accumulate (the rendered article already carries its own two-space indent).
+    preamble = re.sub(r'[ \t]+$', '', hp[sec_body_start : hp_arts[0].start()])
 
     # Non-home page template parts
     p2_header = None
@@ -486,19 +489,33 @@ def main():
                     if ppf.exists():
                         sidebar_files.append(ppf)
 
+    # Post detail pages carry the same sidebar
+    for d in sorted(os.listdir(str(posts_dir))):
+        pp = posts_dir / d / "index.html"
+        if pp.exists():
+            sidebar_files.append(pp)
+
     for fp in sidebar_files:
         if fp.exists():
             c = fp.read_text(encoding=_ENCODING)
             c = update_sidebar_count(c, post_count)
             fp.write_text(c, encoding=_ENCODING)
 
-    # ── Update archives header count ──
-    af = BLOG_DIR / "archives/index.html"
-    if af.exists():
-        c = af.read_text(encoding=_ENCODING)
-        c = re.sub(r'(data-lan="archives" data-count=")\d+(")', rf'\g<1>{post_count}\g<2>', c)
-        c = re.sub(r'共计\d+篇', f'共计{post_count}篇', c)
-        af.write_text(c, encoding=_ENCODING)
+    # ── Update archives header count (index + pagination) ──
+    archives_files = [BLOG_DIR / "archives/index.html"]
+    archives_page_dir = BLOG_DIR / "archives/page"
+    if archives_page_dir.exists():
+        for pp in sorted(os.listdir(str(archives_page_dir)), key=int):
+            pf = archives_page_dir / pp / "index.html"
+            if pf.exists():
+                archives_files.append(pf)
+
+    for af in archives_files:
+        if af.exists():
+            c = af.read_text(encoding=_ENCODING)
+            c = re.sub(r'(data-lan="archives" data-count=")\d+(")', rf'\g<1>{post_count}\g<2>', c)
+            c = re.sub(r'共计\d+篇', f'共计{post_count}篇', c)
+            af.write_text(c, encoding=_ENCODING)
 
     # ── Regenerate sitemap.xml ──
     sitemap_content = gen_sitemap(all_posts, num_pages)

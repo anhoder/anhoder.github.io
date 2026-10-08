@@ -2191,3 +2191,8 @@ body {
     }.post img {
       cursor: zoom-out;
     }
+/* 纯文字长文版式：给 .post-body 加 class="prose" 启用（首行缩进两字，段间距收紧） */
+.post-body.prose > p {
+  text-indent: 2em;
+  margin-bottom: 0.6em;
+}
